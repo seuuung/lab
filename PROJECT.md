@@ -1,81 +1,35 @@
-# Project: 승민's 실험실 (Seungmin's Lab) 포털 고도화 및 모바일 최적화
+# Project: SPTI 결과 카드 이미지 저장 및 3D 씬 조명/뷰포트 비율 전면 개선
 
 ## Architecture
-- **Tech Stack**: Pure Static Web (HTML5, Vanilla JavaScript ES6+, Tailwind CSS CDN, Canvas 2D API, Three.js WebGL)
-- **Directory Structure**:
-  - `index.html` (메인 쇼케이스 포털)
-  - `game/` (9개 웹 게임 및 인터랙티브 프로젝트)
-    - `game/3D_ minesweeper/` (3D 지뢰찾기 - Three.js)
-    - `game/Magnetic_Orbit/` (궤도 생존 - 2D Canvas)
-    - `game/choi_circle/` (최원형 - Interactive Meme)
-    - `game/hacking/` (해커 CTF - Interactive Terminal)
-    - `game/maze_escape/` (3D 미로 탈출 - Three.js & 가상 조이스틱)
-    - `game/robot/` (로봇 인증 - 10단계 캡차 밈)
-    - `game/shadow_puzzle/` (그림자 퍼즐 - Three.js)
-    - `game/sign_up_for_hell/` (지옥의 회원가입 - 인터랙티브 폼)
-    - `game/slime_jump/` (슬라임 점프 - 2D Canvas Slingshot)
-  - `.agents/` (오케스트레이터 및 하위 에이전트 메타데이터)
+- **Tech Stack**: Pure Static Web (HTML5, Vanilla JavaScript ES6+, CSS3, Tailwind CSS CDN, Three.js r128 WebGL CDN).
+- **Core Module**: `game/shadow_puzzle/`
+  - `game/shadow_puzzle/index.html`: 게임 캔버스, UI 오버레이, SPTI 결과지 모달, 플로팅 공유 바, 모바일 고화질 이미지 저장 롱프레스 모달 UI
+  - `game/shadow_puzzle/script.js`: Three.js 3D 렌더링(조명, 카메라, 큐브 회전, 그림자 투영), 13개 퍼즐 레벨 및 클리어 판정, SPTI 8대 동물 성향 진단서 고화질 2D Canvas 생성, 모바일 인앱 브라우저 감지 및 Web Share API / 롱프레스 모달 연동
+  - `game/shadow_puzzle/style.css`: 캔버스 터치 제스처, 모달 레이아웃 및 롱프레스 터치 최적화 스타일
+- **Test Infrastructure**: `tests/run_all_tests.js` (4-Tier E2E 테스트 러너, 214개 Assertions), `tests/verify_shadow_puzzle.js`, `tests/verify_spti_distribution.js`, `tests/verify_zero_distortion.js`, `tests/challenge_r1_adversarial_suite.js`, `tests/verify_challenger2_viewport_r2.js`
 
 ## Feature Inventory
-| # | Feature | Description | Milestone | Source |
-|---|---------|-------------|-----------|--------|
-| F1 | About Me 프로필 카드 | 아바타, 자기소개, GitHub(`https://github.com/seuuung`) 링크, 기술 스택 뱃지 | M1 | Survey / R1 |
-| F2 | 4단계 카테고리 탭 필터 | 전체, 모바일 앱, 웹 게임, 밈 & 실험실 동적 필터링 바닐라 JS | M1 | Survey / R1 |
-| F3 | [삭제됨] 삼척 기상토토 쇼케이스 카드 | [삭제됨] game/toto 쇼케이스 카드 제거 완료 | M1 | Survey / R1 |
-| F4 | 모던 글래스모피즘 & UI 개선 | Backdrop-filter, 호버 글로우, 배지, 일관된 푸터 브랜딩 | M1 | Survey / R1 |
-| F5 | Viewport-Fit & Safe-Area | 전수 `viewport-fit=cover` 및 CSS `env(safe-area-inset-*)` 적용 | M2 | Survey / R2 |
-| F6 | 320px~480px 모바일 오버플로우 해소 | `choi_circle`, `maze_escape`, `sign_up_for_hell` 고정 픽셀 유동화 | M2 | Survey / R2 |
-| F7 | 44px+ 터치 타겟 최적화 | 지뢰찾기 모드 버튼, 슬라임 점프 시작 버튼, 룰렛/토토 버튼 크기 개선 | M2 | Survey / R2 |
-| F8 | Canvas DPR 스케일링 전수 적용 | `slime_jump`, `Magnetic_Orbit`, `3D_ minesweeper`, `maze_escape`, `shadow_puzzle` 2x DPR | M3 | Survey / R3 |
-| F9 | 슬라임 점프 버그 수정 | 중복 `handleMove` 함수 및 중복 `pointer`/`touch` 이벤트 리스너 통합 | M3 | Survey / R3 |
-| F10 | 3D 지뢰찾기 터치 스크롤 버그 수정 | `style.display !== 'none'` 조건 교정 및 미사용 CDN 정리 | M3 | Survey / R3 |
-| F11 | 궤도 생존 리사이즈 버그 수정 | 화면 회전/리사이즈 시 `player.radius` 비례 갱신 적용 | M3 | Survey / R3 |
-| F12 | 미로 탈출 & 그림자 퍼즐 반응형 최적화 | 가상 조이스틱 활성화 및 모바일 세로 뷰포트 FOV 보정 | M3 | Survey / R3 |
-| F13 | 표준 '홈으로 가기' 내비게이션 전수 적용 | 10개 하위 프로젝트 좌상단 Safe-Area 준수 플로팅 글래스 홈 버튼 적용 | M4 | Survey / R4 |
-| F14 | 런타임 콘솔 에러 및 링크 오타 전수 수정 | `game/robot` OG 링크/수료식 링크 수정 및 콘솔 에러 제거 | M4 | Survey / R4 |
-| F15 | E2E 테스트 및 품질 검증 | 4-Tier Opaque-box 테스트 및 Reviewer/Challenger/Auditor 게이트 통과 | M5 | R1~R4 검증 |
+| # | Feature | Description | Milestone | Source | Status |
+|---|---------|-------------|-----------|--------|--------|
+| F1 | 모바일 인앱 브라우저 감지 및 가짜 알림 차단 | Instagram, KakaoTalk, FB, Naver, Line, TikTok 인앱 웹뷰 감지 시 `<a download>` 호출 및 "다운로드되었습니다" 허위 알림 차단 | M1 | ORIGINAL_REQUEST R1 | DONE |
+| F2 | 고화질 롱프레스 이미지 저장 모달 직결 | 모바일 인앱 브라우저에서 [이미지 저장] 터치 시 즉시 1080x1920 고화질 롱프레스 저장 풀스크린 뷰어 모달 호출 | M1 | ORIGINAL_REQUEST R1 | DONE |
+| F3 | Web Share API 안전 연결 | 모바일 네이티브 브라우저 환경에서 `navigator.canShare({ files })`를 통한 시스템 사진 저장 시트 호출 및 취소(AbortError) 시 안전 처리 | M1 | ORIGINAL_REQUEST R1 | DONE |
+| F4 | 데스크톱 브라우저 다운로드 보존 | 데스크톱 환경에서는 기존 `<a download>` 직접 다운로드 및 정상 완료 토스트 유지 | M1 | ORIGINAL_REQUEST R1 | DONE |
+| F5 | 3D 씬 조명 밝기 및 선명도 대폭 상향 | ambientLight(1.15), directionalLight(2.50), fillLight(1.20), rimLight(0.95), wallMaterial(0x2a3854) 상향으로 화사하고 선명한 렌더링 | M2 | ORIGINAL_REQUEST R2 | DONE |
+| F6 | 카메라 거리 Z=30, 블록 0.82, 쿼터뷰 각도 복원 | 카메라 Z=30 복원, blockSize=0.82 복원, 쿼터뷰 시점(16, 12, 30)으로 꽉 찬 화면 구도 제공 | M2 | ORIGINAL_REQUEST R2 | DONE |
+| F7 | 3D 큐브 및 정답 그림자 분리 & 좌우 40px 안전 여백 | 세로 모바일 basePuzzlePos.x=-0.8, baseFov=49(46~58 clamp) 적용으로 320px~430px 전 기종 겹침 0px 및 좌/우 40px+ 안전 여백 보장 | M2 | ORIGINAL_REQUEST R2 | DONE |
+| F8 | 전체 E2E 회귀 테스트 및 무결성 검증 | 기존 214개 어서션 및 신규 R1/R2 검증 스위트 전원 통과, Forensic Audit 무결성 통과 | M3 | System Verification | DONE |
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| M1 | 포털 UI/UX 고도화 & 카테고리 필터링 | `index.html` About Me, 탭 필터링, `toto` 카드 추가, 글래스모피즘 디자인 | Survey 완료 | DONE |
-| M2 | 모바일 반응형 & Safe-Area & 터치 타겟 | Viewport-fit, `env(safe-area-inset-*)`, 320px 오버플로우 방지, 44px 타겟 | M1 | DONE |
-| M3 | 웹 게임 모바일 터치 & Canvas DPR/리사이즈 왜곡 수정 | 5개 Canvas/WebGL 게임 DPR, 리사이즈 왜곡 수정, 슬라임 점프 버그 수정 | M1 | DONE |
-| M4 | 표준 글로벌 내비게이션 & 버그 전수 수정 | 9개 하위 게임 좌상단 플로팅 홈 버튼 전수 적용 및 콘솔 런타임 에러 제거 | M2, M3 | DONE |
-| M5 | E2E 테스트 검증 & Adversarial Hardening & Audit | 전체 기능 및 모바일 반응형 검증, Reviewer/Challenger/Auditor 게이트 | M1, M2, M3, M4 | DONE |
+| M1 | R1. 모바일 인앱 브라우저 이미지 저장 모달 및 Web Share 연동 | `game/shadow_puzzle/script.js` (Lines 1649~1741), `game/shadow_puzzle/index.html` (Lines 498~518) | none | DONE |
+| M2 | R2. 3D 씬 조명 밝기 및 뷰포트/블록 비율 정상화 | `game/shadow_puzzle/script.js` (Lines 684~717, Lines 821~851, Line 932) | none | DONE |
+| M3 | E2E 통합 검증 & Forensic Audit | `tests/` 신규 테스트 추가 및 4-Tier 전체 러너 실행, 정적 무결성 감사 | M1, M2 | DONE |
 
-## Interface Contracts
-### Floating Home Navigation Contract
-- Target: All 9 subprojects (`game/*/index.html`)
-- UI Element: Floating Glassmorphism Button at top-left (`position: fixed; top: max(16px, env(safe-area-inset-top, 16px)); left: max(16px, env(safe-area-inset-left, 16px)); z-index: 9999;`)
-- HTML Snippet:
-  ```html
-  <a href="../../index.html" class="floating-home-btn" aria-label="실험실 홈으로 이동">
-    <svg ...></svg>
-    <span>실험실 홈</span>
-  </a>
-  ```
-- Touch Target: Minimum height 44px, minimum touch padding, smooth hover/active backdrop effect.
-
-### Category Tab Contract (`index.html`)
-- Tabs: `all` (전체), `app` (모바일 앱), `game` (웹 게임), `lab` (밈 & 실험실)
-- DOM Target: `data-category` attribute on all project cards (`app`, `game`, `lab`).
-- Interactive State: Active tab highlighted with blue-purple gradient glow, inactive tabs semi-transparent glass.
-
-### Canvas DPR Scaling Contract
-- All Canvas/WebGL games must scale canvas buffer size:
-  - 2D Canvas: `canvas.width = rect.width * dpr; canvas.height = rect.height * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);`
-  - Three.js: `renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); renderer.setSize(width, height);`
-
-## Code Layout
-- `index.html`: Main showcase portal
-- `game/3D_ minesweeper/*`: 3D Minesweeper Three.js
-- `game/Magnetic_Orbit/*`: Magnetic Orbit 2D Canvas
-- `game/choi_circle/*`: Choi Circle Meme
-- `game/hacking/*`: Hacker CTF Simulator
-- `game/maze_escape/*`: Maze Escape Three.js
-- `game/robot/*`: Robot Captcha Meme
-- `game/shadow_puzzle/*`: Shadow Puzzle Three.js
-- `game/sign_up_for_hell/*`: Hell Signup Form Meme
-- `game/slime_jump/*`: Slime Jump 2D Canvas
-- `tests/`: E2E verification test suites and runners
+## Code Layout & Write Ownership
+- **Worker 1 (M1 & M2 Implementation)**:
+  - `game/shadow_puzzle/index.html` (모달 UI & 스타일 터치 설정)
+  - `game/shadow_puzzle/script.js` (Lines 680~720: 조명/벽면 재질, Lines 820~860: `adjustLayoutForScreen`, Line 930~940: `blockSize`, Lines 1640~1750: `downloadShareCard`, `openImageSaveModal`)
+- **Reviewer / Challenger / Auditor**:
+  - Independent validation, adversarial suites (`tests/challenge_r1_adversarial_suite.js`, `tests/verify_challenger2_viewport_r2.js`, `tests/forensic_audit_suite.js`), and approval.

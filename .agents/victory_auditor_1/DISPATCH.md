@@ -1,25 +1,25 @@
-## 2026-08-17T04:29:20Z
+## 2026-08-17T08:18:21Z
+
 <USER_REQUEST>
-당신은 독립 사후 승리 감사관(teamwork_preview_victory_auditor)입니다.
+당신은 독립 사후 감사관(teamwork_preview_victory_auditor)입니다.
 
-오케스트레이터가 프로젝트 완수 및 승리 선언(Victory Claim)을 보고하였습니다. 구현팀과 완전히 분리된 0의 공유 컨텍스트 상태에서 3단계 사후 감사(Timeline Analysis, Cheating & Mock Detection, Independent Test & Verification Execution)를 독립적으로 수행하십시오.
+### 작업 디렉토리 및 메타데이터
+- 당신의 작업 디렉토리: c:\Users\figig\Desktop\project\lab\.agents\victory_auditor_1
+- 원본 요구사항 파일: c:\Users\figig\Desktop\project\lab\.agents\ORIGINAL_REQUEST.md
 
-## 작업 환경 및 파일 경로
-- 프로젝트 루트 디렉토리: c:\Users\figig\Desktop\project\lab
-- 메타데이터 디렉토리: c:\Users\figig\Desktop\project\lab\.agents\victory_auditor_1
-- 사용자 원본 요청서: c:\Users\figig\Desktop\project\lab\.agents\ORIGINAL_REQUEST.md
-- 오케스트레이터 인계서: c:\Users\figig\Desktop\project\lab\.agents\orchestrator_1\handoff.md
-- 프로젝트 설계서: c:\Users\figig\Desktop\project\lab\PROJECT.md
+### 지침 및 임무
+프로젝트 팀이 구현 완료를 선언했습니다. 원본 요구사항(`ORIGINAL_REQUEST.md`)과 전체 코드베이스를 바탕으로 독립적인 3단계 사후 감사(타임라인 검증, 조작/부정행위 감지, 독립 테스트 실행)를 수행하십시오.
 
-## 사용자 요구사항 검증 기준 (ORIGINAL_REQUEST.md 준수 여부)
-1. R1. 모던 개인 쇼케이스 포털 UI/UX 고도화 (`index.html`)
-2. R2. 완벽한 모바일 반응형 및 Safe-Area 최적화 (320px~480px)
-3. R3. 개별 웹 게임 모바일 터치 인터랙션 및 캔버스 DPR 2x/리사이즈 왜곡 수정
-4. R4. 전반적인 버그 수정 및 일관된 글로벌 내비게이션 (홈 버튼)
+1. **R1: 모바일 인앱 브라우저(인스타그램, 카카오톡 등) 이미지 롱프레스 저장 모달 및 가짜 알림 차단**
+   - `<a download>` 및 허위 토스트 알림 차단 여부
+   - 롱프레스 모달 UI 및 가이드 문구('이미지를 1초간 길게 눌러 사진에 저장하세요') 노출 확인
+   - Web Share API 연결 및 모달 닫기/배경 터치 이벤트 처리
+2. **R2: 3D 씬 조명 밝기 및 큐브/그림자 뷰포트 비율**
+   - 조명 강도(Directional, Ambient, Fill, Rim) 상향으로 화사하고 선명한 렌더링 확인
+   - 카메라 거리 Z=30, blockSize=0.82, 쿼터뷰 구도 복원 확인
+   - 3D 큐브와 우측 정답 그림자 분리 및 좌/우 40px+ 안전 여백 확인
+3. **독립 테스트 및 무결성 검증**
+   - 테스트를 직접 실행하여 회귀 여부 및 요구사항 충족 여부 확인
 
-## 감사 및 판정 규칙
-- 모든 감사 보고와 평가는 **한국어(Korean)** 로 작성하십시오.
-- 프로젝트 내 실제 코드, 스타일, 스크립트, 테스트 스위트를 직접 실행 및 검사하십시오.
-- 위반 사항(치팅, 더미 코드, 테스트 조작, 미구현 항목 등)이 있는지 엄격히 확인하십시오.
-- 최종 감사 결과는 명확한 구조화된 판정(`VICTORY CONFIRMED` 또는 `VICTORY REJECTED`)과 근거를 담아 Sentinel에게 보고하십시오.
+감사를 완료한 후 구조화된 판정 결과(`VICTORY CONFIRMED` 또는 `VICTORY REJECTED`)와 상세 사유를 `handoff.md`에 작성하고 메시지로 회신해 주십시오. 모든 보고는 한국어로 작성해야 합니다.
 </USER_REQUEST>

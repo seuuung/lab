@@ -23,6 +23,24 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
         rel="stylesheet">
+    <!-- 🧭 인앱 브라우저 감지 즉시 기본 브라우저(Chrome/Safari) 자동 리다이렉트 스크립트 -->
+    <script>
+        (function() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+            const isAndroid = /android/i.test(ua);
+            const isKakao = /KAKAOTALK/i.test(ua);
+            const isOtherInApp = /Instagram|FBAN|FBAV|NAVER|Line|everytimeApp|DaumApps/i.test(ua);
+
+            if (isKakao) {
+                // 카카오톡 -> 기본 외부 브라우저 강제 호출
+                location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+            } else if (isAndroid && isOtherInApp) {
+                // 안드로이드 인앱(인스타그램 등) -> 기본 크롬 브라우저로 즉시 강제 리다이렉트
+                const cleanUrl = location.href.replace(/https?:\/\//i, '');
+                location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+            }
+        })();
+    </script>
 </head>
 
 <body class="bg-slate-950 select-none overflow-hidden touch-none font-['Outfit','Noto_Sans_KR',sans-serif]">
@@ -70,6 +88,46 @@
             </button>
         </div>
     </header>
+
+    <!-- 🧭 iOS 인앱 브라우저 Safari 탈출 가이드 모달 -->
+    <div id="inapp-guide-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-4" style="background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);">
+        <div class="relative max-w-sm w-full glass-panel rounded-3xl p-6 text-center flex flex-col items-center gap-4 border border-cyan-500/50 shadow-2xl scale-in">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-3xl shadow-[0_0_25px_rgba(6,182,212,0.35)]">
+                🧭
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-white tracking-tight mb-1.5">
+                    Safari 기본 브라우저로 열기
+                </h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    인앱 브라우저에서는 3D 렌더링 성능과 <strong class="text-cyan-300">진단서 이미지 저장</strong>이 제한됩니다.
+                </p>
+            </div>
+
+            <!-- Safari 열기 가이드 박스 -->
+            <div class="w-full bg-slate-900/80 rounded-2xl p-4 border border-slate-700/80 text-left flex flex-col gap-2.5 text-xs text-slate-200">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-cyan-500/30 text-cyan-300 font-bold flex items-center justify-center text-[10px] flex-shrink-0">1</span>
+                    <span>우측 상단 <strong>[···]</strong> 버튼을 누르세요.</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-cyan-500/30 text-cyan-300 font-bold flex items-center justify-center text-[10px] flex-shrink-0">2</span>
+                    <span><strong>[Safari로 열기]</strong>를 선택하세요.</span>
+                </div>
+            </div>
+
+            <!-- 액션 버튼들 -->
+            <div class="flex flex-col gap-2 w-full pt-1">
+                <button id="copy-inapp-url-btn" class="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-lg transition-all flex items-center justify-center gap-2">
+                    <span>🔗</span>
+                    <span>Safari용 링크 복사하기</span>
+                </button>
+                <button id="dismiss-inapp-btn" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-medium text-xs transition-colors">
+                    인앱 브라우저에서 계속하기
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 🌟 시작 인트로 모달 (게임 설명 & 유형 검사 안내) -->
     <div id="intro-modal"
@@ -437,8 +495,8 @@
     </div>
 
     <!-- 📱 모바일 이미지 저장 프리뷰 팝업 모달 -->
-    <div id="image-save-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-4" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);">
-        <div class="relative max-w-sm w-full flex flex-col items-center gap-3 scale-in">
+    <div id="image-save-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-4" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);touch-action:auto;-webkit-user-select:auto;user-select:auto;">
+        <div class="relative max-w-sm w-full flex flex-col items-center gap-3 scale-in" style="touch-action:auto;">
             <!-- 상단 안내 바 -->
             <div class="flex items-center justify-between w-full px-2">
                 <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
@@ -450,8 +508,8 @@
                 </button>
             </div>
             <!-- 생성된 이미지 (길게 눌러 저장 가능) -->
-            <div class="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl max-h-[75vh]">
-                <img id="save-preview-img" src="" alt="SPTI 공간 지각력 진단서" class="w-full h-auto object-contain max-h-[75vh] select-auto" style="-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;" />
+            <div class="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl max-h-[75vh]" style="touch-action:auto;">
+                <img id="save-preview-img" src="" alt="SPTI 공간 지각력 진단서" class="w-full h-auto object-contain max-h-[75vh] select-auto" style="-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;touch-action:auto;" />
             </div>
             <p class="text-[11px] text-slate-400 text-center">
                 ※ 인앱 브라우저(인스타그램, 카카오톡 등)에서는 이미지를 길게 누르면 바로 갤러리에 저장할 수 있습니다.

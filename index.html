@@ -15,6 +15,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>승민's 실험실 (Seungmin's Lab)</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        (function() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+            const isAndroid = /android/i.test(ua);
+            const isKakao = /KAKAOTALK/i.test(ua);
+            const isOtherInApp = /Instagram|FBAN|FBAV|NAVER|Line|everytimeApp|DaumApps/i.test(ua);
+
+            if (isKakao) {
+                location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+            } else if (isAndroid && isOtherInApp) {
+                const cleanUrl = location.href.replace(/https?:\/\//i, '');
+                location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+            }
+        })();
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
 

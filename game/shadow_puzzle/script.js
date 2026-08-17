@@ -680,11 +680,11 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-// 조명 설정 (Z축 수직 투영으로 3D 블록 깊이 차이에 의한 그림자 찌그러짐 원천 차단)
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
+// 조명 설정 (Z축 수직 투영으로 3D 블록 깊이 차이에 의한 그림자 찌그러짐 원천 차단 + 적정 밝기)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.35);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2.10);
 directionalLight.position.set(0, 0, 32);
 directionalLight.target.position.set(0, 0, 0);
 scene.add(directionalLight.target);
@@ -701,19 +701,19 @@ directionalLight.shadow.camera.far = 65;
 directionalLight.shadow.bias = -0.0005;
 scene.add(directionalLight);
 
-const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.4);
+const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.90);
 fillLight.position.set(15, 12, 18);
 scene.add(fillLight);
 
-const rimLight = new THREE.DirectionalLight(0xa855f7, 0.3);
+const rimLight = new THREE.DirectionalLight(0xa855f7, 0.75);
 rimLight.position.set(-15, -10, 10);
 scene.add(rimLight);
 
-// 배경 벽 및 바닥
+// 배경 벽 및 바닥 (은은하고 세련된 딥 네이비 슬레이트)
 const wallMaterial = new THREE.MeshStandardMaterial({
-    color: 0x1e293b,
-    roughness: 0.85,
-    metalness: 0.15
+    color: 0x24324a,
+    roughness: 0.55,
+    metalness: 0.10
 });
 
 const wallGeometry = new THREE.PlaneGeometry(140, 140);
@@ -825,23 +825,23 @@ function adjustLayoutForScreen() {
     const isMobile = width < 768 || aspect < 1.0;
 
     if (aspect < 1.0) {
-        // 모바일 세로 화면: 줌 아웃 + 중앙 안전 여백 확보 (큐브 잘림 완전 방지)
-        const baseFov = 48;
-        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 54);
-        camera.position.set(8.5, 7.0, 34);
-        basePuzzlePos = { x: 0.8, y: -0.6, z: 0 };
+        // 모바일 세로 화면: 웅장한 대각선 3D 쿼터뷰 황금비 (화사한 조명 + 적정 크기 + 여백 40px+)
+        const baseFov = 49;
+        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 58);
+        camera.position.set(16, 12, 30);
+        basePuzzlePos = { x: -0.8, y: -0.8, z: 0 };
         camera.lookAt(0, 0, -3);
     } else if (isMobile) {
         // 모바일 가로 화면
         camera.fov = 42;
-        camera.position.set(12, 8.5, 29);
-        basePuzzlePos = { x: -0.5, y: -0.6, z: 0 };
+        camera.position.set(16, 12, 30);
+        basePuzzlePos = { x: -2.0, y: -0.8, z: 0 };
         camera.lookAt(0, 0, -3);
     } else {
-        // 데스크톱: 쾌적한 3D 뷰
+        // 데스크톱: 쾌적한 3D 쿼터뷰
         camera.fov = 42;
-        camera.position.set(12, 8.5, 28);
-        basePuzzlePos = { x: -0.5, y: -0.6, z: 0 };
+        camera.position.set(16, 12, 28);
+        basePuzzlePos = { x: -1.6, y: -0.8, z: 0 };
         camera.lookAt(0, 0, -3);
     }
 
@@ -929,12 +929,12 @@ function loadLevel(index) {
     const grid = levelData.grid;
     const rows = grid.length;
     const cols = grid[0].length;
-    const blockSize = 0.78;
+    const blockSize = 0.82;
 
     const blockMaterial = new THREE.MeshStandardMaterial({
         color: levelData.color,
-        roughness: 0.25,
-        metalness: 0.25
+        roughness: 0.20,
+        metalness: 0.20
     });
     const blockGeometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
 
@@ -947,7 +947,7 @@ function loadLevel(index) {
 
                 const posX = (x - cols / 2 + 0.5) * blockSize;
                 const posY = -(y - rows / 2 + 0.5) * blockSize;
-                const posZ = (Math.random() - 0.5) * 6.0;
+                const posZ = (Math.random() - 0.5) * 5.5;
 
                 mesh.position.set(posX, posY, posZ);
                 puzzleGroup.add(mesh);
@@ -1671,56 +1671,83 @@ async function downloadShareCard() {
         return;
     }
 
-    // 캔버스를 Blob으로 변환
-    cachedMasterCanvas.toBlob(async (blob) => {
-        if (!blob) {
-            // 폴백: DataURL 방식
-            openImageSaveModal(cachedMasterCanvas.toDataURL('image/png'));
-            return;
-        }
+    const dataUrl = cachedMasterCanvas.toDataURL('image/png');
+    const ua = navigator.userAgent || '';
+    const isInApp = /Instagram|FB|KAKAOTALK|NAVER|Line|Snapchat|TikTok|Twitter|Whale/i.test(ua);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(ua);
 
-        const file = new File([blob], fileName, { type: 'image/png' });
+    // 1단계: 인앱 브라우저 -> 가짜 download 시도 및 허위 알림 차단, 즉시 롱프레스 모달 오픈
+    if (isInApp) {
+        openImageSaveModal(dataUrl);
+        return;
+    }
 
-        // 1. 모바일 Web Share API (사진 앱에 저장 / 인스타그램 / 카카오톡 전송)
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-                await navigator.share({
-                    files: [file],
-                    title: 'SPTI 나의 공간 지각력 유형 진단서',
-                    text: `🧩 나의 3D 공간 지각 유형: ${myType.name}!`
-                });
-                showShareStatus('✨ 이미지가 공유/저장되었습니다.');
-                return;
-            } catch (shareErr) {
-                if (shareErr.name === 'AbortError') {
-                    // 사용자가 공유창을 닫은 경우
+    // 2단계: 모바일 네이티브 브라우저 -> Web Share API 시도 및 모달 fallback
+    if (isMobile) {
+        try {
+            cachedMasterCanvas.toBlob(async (blob) => {
+                if (!blob) {
+                    openImageSaveModal(dataUrl);
                     return;
                 }
-                console.warn('Web Share failed, falling back to download/modal:', shareErr);
-            }
-        }
 
-        // 2. 일반 브라우저 Blob URL 다운로드 시도
-        try {
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                if (navigator.canShare && typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'SPTI 나의 공간 지각력 유형 진단서',
+                            text: `🧩 나의 3D 공간 지각 유형: ${myType.name}!`
+                        });
+                        return;
+                    } catch (shareErr) {
+                        if (shareErr.name === 'AbortError') {
+                            return;
+                        }
+                        console.warn('Native Share failed, opening modal fallback:', shareErr);
+                    }
+                }
+
+                openImageSaveModal(dataUrl);
+            }, 'image/png');
+            return;
+        } catch (e) {
+            console.warn('Mobile image share fallback:', e);
+            openImageSaveModal(dataUrl);
+            return;
+        }
+    }
+
+    // 3단계: 데스크톱 브라우저 환경 -> <a download> 직접 다운로드 및 알림 토스트 출력
+    try {
+        cachedMasterCanvas.toBlob((blob) => {
+            if (!blob) {
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showShareStatus('💾 진단서 이미지가 다운로드되었습니다.');
+                return;
+            }
+
             const blobUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.download = fileName;
             link.href = blobUrl;
+            link.target = '_blank';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
-            showShareStatus('💾 결과 카드 이미지가 다운로드되었습니다.');
-        } catch (downloadErr) {
-            console.warn('Direct download failed:', downloadErr);
-        }
-
-        // 3. 인앱 브라우저(인스타그램/카톡) 등 모바일 다운로드 차단 환경 대비: 이미지 팝업 모달 제공
-        const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobileDevice) {
-            openImageSaveModal(cachedMasterCanvas.toDataURL('image/png'));
-        }
-    }, 'image/png');
+            showShareStatus('💾 진단서 이미지가 다운로드되었습니다.');
+        }, 'image/png');
+    } catch (downloadErr) {
+        console.warn('Desktop download failed, opening modal fallback:', downloadErr);
+        openImageSaveModal(dataUrl);
+    }
 }
 
 function openImageSaveModal(imgDataUrl) {
@@ -2001,9 +2028,52 @@ document.getElementById('image-save-modal').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeImageSaveModal();
 });
 
+// 🧭 iOS 인앱 브라우저 탈출 모달 제어
+function checkInAppBrowser() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isOtherInApp = /Instagram|FBAN|FBAV|NAVER|Line|everytimeApp|DaumApps/i.test(ua);
+
+    if (isIOS && isOtherInApp) {
+        const inAppModal = document.getElementById('inapp-guide-modal');
+        if (inAppModal) {
+            inAppModal.classList.remove('hidden');
+            inAppModal.classList.add('flex');
+        }
+    }
+}
+
+const copyInAppBtn = document.getElementById('copy-inapp-url-btn');
+if (copyInAppBtn) {
+    copyInAppBtn.addEventListener('click', () => {
+        const url = window.location.href.split('#')[0];
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(() => {
+                copyInAppBtn.innerHTML = '<span>✅</span><span>주소가 복사되었습니다! Safari에 붙여넣으세요</span>';
+                copyInAppBtn.classList.remove('bg-cyan-500');
+                copyInAppBtn.classList.add('bg-emerald-500');
+            });
+        } else {
+            prompt('Safari에 붙여넣을 주소:', url);
+        }
+    });
+}
+
+const dismissInAppBtn = document.getElementById('dismiss-inapp-btn');
+if (dismissInAppBtn) {
+    dismissInAppBtn.addEventListener('click', () => {
+        const inAppModal = document.getElementById('inapp-guide-modal');
+        if (inAppModal) {
+            inAppModal.classList.remove('flex');
+            inAppModal.classList.add('hidden');
+        }
+    });
+}
+
 document.getElementById('sound-icon').innerText = sound.enabled ? '🔊' : '🔇';
 
 // 초기 가동
 adjustLayoutForScreen();
 loadLevel(0);
+checkInAppBrowser();
 requestAnimationFrame(animate);
