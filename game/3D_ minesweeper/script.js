@@ -1228,6 +1228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     });
 
     /**
@@ -1256,11 +1257,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     document.addEventListener('touchmove', function (e) {
         const startMenu = document.getElementById('start-menu-overlay');
-        const isMenuVisible = startMenu && !startMenu.classList.contains('hidden');
+        const gameHelp = document.getElementById('game-help-overlay');
+        const modalEl = document.getElementById('game-modal');
 
-        // 게임을 플레이 중이거나 메뉴가 닫혀 있는 상태에서는
+        const isStartMenuOpen = startMenu && (startMenu.style.display !== 'none' && window.getComputedStyle(startMenu).display !== 'none');
+        const isHelpOpen = gameHelp && !gameHelp.classList.contains('hidden');
+        const isModalOpen = modalEl && !modalEl.classList.contains('hidden');
+
+        // 시작 메뉴, 도움말, 모달 등이 열려 있는 경우 모달 내부 스크롤 허용
+        if (isStartMenuOpen || isHelpOpen || isModalOpen) {
+            return;
+        }
+
+        // 게임을 플레이 중이거나 캔버스를 터치/드래그하는 상태에서는
         // 스와이프(뒤로가기, 앞으로가기) 및 상하 드래그(당겨서 새로고침, 인앱 브라우저 닫기)를 차단.
-        if (!isMenuVisible) {
+        if (e.cancelable) {
             e.preventDefault();
         }
     }, { passive: false }); // passive: false를 주어야 preventDefault 적용이 가능합니다.

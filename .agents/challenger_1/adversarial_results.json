@@ -1,0 +1,2933 @@
+{
+  "summary": {
+    "total": 236,
+    "passed": 235,
+    "failed": 1,
+    "warnings": 0
+  },
+  "suites": {
+    "Suite 1: Viewport Overflow": [
+      {
+        "id": "S1-OVR-320px-index",
+        "description": "[320px] index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-index",
+        "description": "[320px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_3D_ minesweeper_index",
+        "description": "[320px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_3D_ minesweeper_index",
+        "description": "[320px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_Magnetic_Orbit_index",
+        "description": "[320px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_Magnetic_Orbit_index",
+        "description": "[320px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_choi_circle_index",
+        "description": "[320px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 447px / VP: 320px)",
+        "status": "FAIL",
+        "passed": false,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 447,
+          "hasOverflow": true,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_choi_circle_index",
+        "description": "[320px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_hacking_index",
+        "description": "[320px] game/hacking/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_hacking_index",
+        "description": "[320px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_maze_escape_index",
+        "description": "[320px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_maze_escape_index",
+        "description": "[320px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_robot_index",
+        "description": "[320px] game/robot/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_robot_index",
+        "description": "[320px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_shadow_puzzle_index",
+        "description": "[320px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_shadow_puzzle_index",
+        "description": "[320px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_sign_up_for_hell_index",
+        "description": "[320px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_sign_up_for_hell_index",
+        "description": "[320px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_slime_jump_index",
+        "description": "[320px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_slime_jump_index",
+        "description": "[320px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-320px-game_toto_index",
+        "description": "[320px] game/toto/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 320,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-320px-game_toto_index",
+        "description": "[320px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-index",
+        "description": "[360px] index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-index",
+        "description": "[360px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_3D_ minesweeper_index",
+        "description": "[360px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_3D_ minesweeper_index",
+        "description": "[360px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_Magnetic_Orbit_index",
+        "description": "[360px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_Magnetic_Orbit_index",
+        "description": "[360px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_choi_circle_index",
+        "description": "[360px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_choi_circle_index",
+        "description": "[360px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_hacking_index",
+        "description": "[360px] game/hacking/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_hacking_index",
+        "description": "[360px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_maze_escape_index",
+        "description": "[360px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_maze_escape_index",
+        "description": "[360px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_robot_index",
+        "description": "[360px] game/robot/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_robot_index",
+        "description": "[360px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_shadow_puzzle_index",
+        "description": "[360px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_shadow_puzzle_index",
+        "description": "[360px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_sign_up_for_hell_index",
+        "description": "[360px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_sign_up_for_hell_index",
+        "description": "[360px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_slime_jump_index",
+        "description": "[360px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_slime_jump_index",
+        "description": "[360px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-360px-game_toto_index",
+        "description": "[360px] game/toto/index.html 가로 오버플로우 검증 (Max: 360px / VP: 360px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 360,
+          "maxScrollWidth": 360,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-360px-game_toto_index",
+        "description": "[360px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-index",
+        "description": "[375px] index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-index",
+        "description": "[375px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_3D_ minesweeper_index",
+        "description": "[375px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_3D_ minesweeper_index",
+        "description": "[375px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_Magnetic_Orbit_index",
+        "description": "[375px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_Magnetic_Orbit_index",
+        "description": "[375px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_choi_circle_index",
+        "description": "[375px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_choi_circle_index",
+        "description": "[375px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_hacking_index",
+        "description": "[375px] game/hacking/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_hacking_index",
+        "description": "[375px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_maze_escape_index",
+        "description": "[375px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_maze_escape_index",
+        "description": "[375px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_robot_index",
+        "description": "[375px] game/robot/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_robot_index",
+        "description": "[375px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_shadow_puzzle_index",
+        "description": "[375px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_shadow_puzzle_index",
+        "description": "[375px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_sign_up_for_hell_index",
+        "description": "[375px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_sign_up_for_hell_index",
+        "description": "[375px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_slime_jump_index",
+        "description": "[375px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_slime_jump_index",
+        "description": "[375px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-375px-game_toto_index",
+        "description": "[375px] game/toto/index.html 가로 오버플로우 검증 (Max: 375px / VP: 375px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 375,
+          "maxScrollWidth": 375,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-375px-game_toto_index",
+        "description": "[375px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-index",
+        "description": "[390px] index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-index",
+        "description": "[390px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_3D_ minesweeper_index",
+        "description": "[390px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_3D_ minesweeper_index",
+        "description": "[390px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_Magnetic_Orbit_index",
+        "description": "[390px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_Magnetic_Orbit_index",
+        "description": "[390px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_choi_circle_index",
+        "description": "[390px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_choi_circle_index",
+        "description": "[390px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_hacking_index",
+        "description": "[390px] game/hacking/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_hacking_index",
+        "description": "[390px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_maze_escape_index",
+        "description": "[390px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_maze_escape_index",
+        "description": "[390px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_robot_index",
+        "description": "[390px] game/robot/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_robot_index",
+        "description": "[390px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_shadow_puzzle_index",
+        "description": "[390px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_shadow_puzzle_index",
+        "description": "[390px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_sign_up_for_hell_index",
+        "description": "[390px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_sign_up_for_hell_index",
+        "description": "[390px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_slime_jump_index",
+        "description": "[390px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_slime_jump_index",
+        "description": "[390px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-390px-game_toto_index",
+        "description": "[390px] game/toto/index.html 가로 오버플로우 검증 (Max: 390px / VP: 390px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 390,
+          "maxScrollWidth": 390,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-390px-game_toto_index",
+        "description": "[390px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-index",
+        "description": "[414px] index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-index",
+        "description": "[414px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_3D_ minesweeper_index",
+        "description": "[414px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_3D_ minesweeper_index",
+        "description": "[414px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_Magnetic_Orbit_index",
+        "description": "[414px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_Magnetic_Orbit_index",
+        "description": "[414px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_choi_circle_index",
+        "description": "[414px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_choi_circle_index",
+        "description": "[414px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_hacking_index",
+        "description": "[414px] game/hacking/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_hacking_index",
+        "description": "[414px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_maze_escape_index",
+        "description": "[414px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_maze_escape_index",
+        "description": "[414px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_robot_index",
+        "description": "[414px] game/robot/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_robot_index",
+        "description": "[414px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_shadow_puzzle_index",
+        "description": "[414px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_shadow_puzzle_index",
+        "description": "[414px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_sign_up_for_hell_index",
+        "description": "[414px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_sign_up_for_hell_index",
+        "description": "[414px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_slime_jump_index",
+        "description": "[414px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_slime_jump_index",
+        "description": "[414px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-414px-game_toto_index",
+        "description": "[414px] game/toto/index.html 가로 오버플로우 검증 (Max: 414px / VP: 414px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 414,
+          "maxScrollWidth": 414,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-414px-game_toto_index",
+        "description": "[414px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-index",
+        "description": "[480px] index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-index",
+        "description": "[480px] index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_3D_ minesweeper_index",
+        "description": "[480px] game/3D_ minesweeper/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_3D_ minesweeper_index",
+        "description": "[480px] game/3D_ minesweeper/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_Magnetic_Orbit_index",
+        "description": "[480px] game/Magnetic_Orbit/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_Magnetic_Orbit_index",
+        "description": "[480px] game/Magnetic_Orbit/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_choi_circle_index",
+        "description": "[480px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_choi_circle_index",
+        "description": "[480px] game/choi_circle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_hacking_index",
+        "description": "[480px] game/hacking/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_hacking_index",
+        "description": "[480px] game/hacking/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_maze_escape_index",
+        "description": "[480px] game/maze_escape/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_maze_escape_index",
+        "description": "[480px] game/maze_escape/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_robot_index",
+        "description": "[480px] game/robot/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_robot_index",
+        "description": "[480px] game/robot/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_shadow_puzzle_index",
+        "description": "[480px] game/shadow_puzzle/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_shadow_puzzle_index",
+        "description": "[480px] game/shadow_puzzle/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_sign_up_for_hell_index",
+        "description": "[480px] game/sign_up_for_hell/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_sign_up_for_hell_index",
+        "description": "[480px] game/sign_up_for_hell/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_slime_jump_index",
+        "description": "[480px] game/slime_jump/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_slime_jump_index",
+        "description": "[480px] game/slime_jump/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      },
+      {
+        "id": "S1-OVR-480px-game_toto_index",
+        "description": "[480px] game/toto/index.html 가로 오버플로우 검증 (Max: 480px / VP: 480px)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "winWidth": 480,
+          "maxScrollWidth": 480,
+          "hasOverflow": false,
+          "offendingCount": 0,
+          "offendingElements": []
+        }
+      },
+      {
+        "id": "S1-ERR-480px-game_toto_index",
+        "description": "[480px] game/toto/index.html 런타임 콘솔 에러 부재",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errors": []
+        }
+      }
+    ],
+    "Suite 2: Safe-Area & Floating Nav": [
+      {
+        "id": "S2-BTN-3D__minesweeper-Standard",
+        "description": "[game/3D_ minesweeper] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 16,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-3D__minesweeper",
+        "description": "[game/3D_ minesweeper] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-Magnetic_Orbit-Standard",
+        "description": "[game/Magnetic_Orbit] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-choi_circle-Standard",
+        "description": "[game/choi_circle] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-choi_circle",
+        "description": "[game/choi_circle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-hacking-Standard",
+        "description": "[game/hacking] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-hacking",
+        "description": "[game/hacking] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-maze_escape-Standard",
+        "description": "[game/maze_escape] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-maze_escape",
+        "description": "[game/maze_escape] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-robot-Standard",
+        "description": "[game/robot] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-robot",
+        "description": "[game/robot] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-shadow_puzzle-Standard",
+        "description": "[game/shadow_puzzle] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-shadow_puzzle",
+        "description": "[game/shadow_puzzle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-sign_up_for_hell-Standard",
+        "description": "[game/sign_up_for_hell] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-sign_up_for_hell",
+        "description": "[game/sign_up_for_hell] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-slime_jump-Standard",
+        "description": "[game/slime_jump] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-slime_jump",
+        "description": "[game/slime_jump] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-toto-Standard",
+        "description": "[game/toto] 플로팅 홈 버튼 존재성, Safe-Area(44px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-toto",
+        "description": "[game/toto] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-3D__minesweeper-Dynamic ",
+        "description": "[game/3D_ minesweeper] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 16,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-3D__minesweeper",
+        "description": "[game/3D_ minesweeper] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-Magnetic_Orbit-Dynamic ",
+        "description": "[game/Magnetic_Orbit] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-choi_circle-Dynamic ",
+        "description": "[game/choi_circle] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-choi_circle",
+        "description": "[game/choi_circle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-hacking-Dynamic ",
+        "description": "[game/hacking] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-hacking",
+        "description": "[game/hacking] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-maze_escape-Dynamic ",
+        "description": "[game/maze_escape] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-maze_escape",
+        "description": "[game/maze_escape] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-robot-Dynamic ",
+        "description": "[game/robot] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-robot",
+        "description": "[game/robot] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-shadow_puzzle-Dynamic ",
+        "description": "[game/shadow_puzzle] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-shadow_puzzle",
+        "description": "[game/shadow_puzzle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-sign_up_for_hell-Dynamic ",
+        "description": "[game/sign_up_for_hell] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-sign_up_for_hell",
+        "description": "[game/sign_up_for_hell] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-slime_jump-Dynamic ",
+        "description": "[game/slime_jump] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-slime_jump",
+        "description": "[game/slime_jump] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-toto-Dynamic ",
+        "description": "[game/toto] 플로팅 홈 버튼 존재성, Safe-Area(59px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-toto",
+        "description": "[game/toto] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-3D__minesweeper-Landscap",
+        "description": "[game/3D_ minesweeper] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 16,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-3D__minesweeper",
+        "description": "[game/3D_ minesweeper] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-Magnetic_Orbit-Landscap",
+        "description": "[game/Magnetic_Orbit] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-choi_circle-Landscap",
+        "description": "[game/choi_circle] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-choi_circle",
+        "description": "[game/choi_circle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-hacking-Landscap",
+        "description": "[game/hacking] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-hacking",
+        "description": "[game/hacking] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-maze_escape-Landscap",
+        "description": "[game/maze_escape] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-maze_escape",
+        "description": "[game/maze_escape] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-robot-Landscap",
+        "description": "[game/robot] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-robot",
+        "description": "[game/robot] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-shadow_puzzle-Landscap",
+        "description": "[game/shadow_puzzle] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-shadow_puzzle",
+        "description": "[game/shadow_puzzle] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-sign_up_for_hell-Landscap",
+        "description": "[game/sign_up_for_hell] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-sign_up_for_hell",
+        "description": "[game/sign_up_for_hell] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-slime_jump-Landscap",
+        "description": "[game/slime_jump] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-slime_jump",
+        "description": "[game/slime_jump] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      },
+      {
+        "id": "S2-BTN-toto-Landscap",
+        "description": "[game/toto] 플로팅 홈 버튼 존재성, Safe-Area(0px) 준수 및 터치 영역(>=40px) 검증",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "exists": true,
+          "isVisible": true,
+          "isClickable": true,
+          "topElementTag": "SPAN",
+          "position": "fixed",
+          "zIndex": 9999,
+          "rect": {
+            "top": 15,
+            "left": 16,
+            "width": 100,
+            "height": 44
+          },
+          "colliders": []
+        }
+      },
+      {
+        "id": "S2-NAV-toto",
+        "description": "[game/toto] 홈 버튼 실제 클릭 및 포털 복귀 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "target_url": "http://127.0.0.1:8899/index.html"
+        }
+      }
+    ],
+    "Suite 3: Portal Robustness": [
+      {
+        "id": "S3-TAB-RAPID-100",
+        "description": "포털 100회 고속 탭 전환 스트레스 테스트 및 DOM 정합성 유지",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "errorOccurred": false,
+          "log": [],
+          "totalCards": 12,
+          "visibleCardsAll": 12
+        }
+      },
+      {
+        "id": "S3-TAB-FILTER-all",
+        "description": "카테고리 탭 [all] 필터링 정확도 (일치: 12, 불일치 노출: 0)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "found": true,
+          "category": "all",
+          "matchingCount": 12,
+          "nonMatchingVisibleCount": 0,
+          "nonMatchingVisible": []
+        }
+      },
+      {
+        "id": "S3-TAB-FILTER-app",
+        "description": "카테고리 탭 [app] 필터링 정확도 (일치: 2, 불일치 노출: 0)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "found": true,
+          "category": "app",
+          "matchingCount": 2,
+          "nonMatchingVisibleCount": 0,
+          "nonMatchingVisible": []
+        }
+      },
+      {
+        "id": "S3-TAB-FILTER-game",
+        "description": "카테고리 탭 [game] 필터링 정확도 (일치: 6, 불일치 노출: 0)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "found": true,
+          "category": "game",
+          "matchingCount": 6,
+          "nonMatchingVisibleCount": 0,
+          "nonMatchingVisible": []
+        }
+      },
+      {
+        "id": "S3-TAB-FILTER-lab",
+        "description": "카테고리 탭 [lab] 필터링 정확도 (일치: 4, 불일치 노출: 0)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "found": true,
+          "category": "lab",
+          "matchingCount": 4,
+          "nonMatchingVisibleCount": 0,
+          "nonMatchingVisible": []
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-0",
+        "description": "비정상 해시 [] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-8384",
+        "description": "비정상 해시 [#] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-8388",
+        "description": "비정상 해시 [#all] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-7328",
+        "description": "비정상 해시 [#game] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-1186",
+        "description": "비정상 해시 [#unknown_category_xyz] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-1321",
+        "description": "비정상 해시 [#12345] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-1974",
+        "description": "비정상 해시 [#<script>alert(1)</script>] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-5568",
+        "description": "비정상 해시 [#%20%00%25] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-5757",
+        "description": "비정상 해시 [#!@#$%^&*()] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-8808",
+        "description": "비정상 해시 [#tab-nonexistent] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      },
+      {
+        "id": "S3-HASH-FUZZ-6297",
+        "description": "비정상 해시 [#game/slime_jump] 주입 시 무결성 유지 (노출 카드: 4)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "success": true,
+          "visibleCount": 4,
+          "error": null
+        }
+      }
+    ],
+    "Suite 4: Touch & Canvas DPR": [
+      {
+        "id": "S4-TCH-index",
+        "description": "[index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 17개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 17,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_3D_ minesweeper_index",
+        "description": "[game/3D_ minesweeper/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 13개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 13,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_Magnetic_Orbit_index",
+        "description": "[game/Magnetic_Orbit/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 2개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 2,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_choi_circle_index",
+        "description": "[game/choi_circle/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 2개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 2,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_hacking_index",
+        "description": "[game/hacking/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 1개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 1,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_maze_escape_index",
+        "description": "[game/maze_escape/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 1개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 1,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_robot_index",
+        "description": "[game/robot/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 1개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 1,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_shadow_puzzle_index",
+        "description": "[game/shadow_puzzle/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 2개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 2,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_sign_up_for_hell_index",
+        "description": "[game/sign_up_for_hell/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 8개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 8,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_slime_jump_index",
+        "description": "[game/slime_jump/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 2개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 2,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-TCH-game_toto_index",
+        "description": "[game/toto/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 18개, 미달: 0개)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "totalChecked": 18,
+          "undersizedCount": 0,
+          "undersized": []
+        }
+      },
+      {
+        "id": "S4-DPR-1.0x-slime_jump",
+        "description": "[game/slime_jump/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 375,
+          "bufH": 667,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 1,
+          "ratioW": 1,
+          "ratioH": 1
+        }
+      },
+      {
+        "id": "S4-DPR-1.0x-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 375,
+          "bufH": 667,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 1,
+          "ratioW": 1,
+          "ratioH": 1
+        }
+      },
+      {
+        "id": "S4-DPR-1.0x-3D__minesweeper",
+        "description": "[game/3D_ minesweeper/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 375,
+          "bufH": 667,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 1,
+          "ratioW": 1,
+          "ratioH": 1
+        }
+      },
+      {
+        "id": "S4-DPR-1.0x-maze_escape",
+        "description": "[game/maze_escape/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 375,
+          "bufH": 667,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 1,
+          "ratioW": 1,
+          "ratioH": 1
+        }
+      },
+      {
+        "id": "S4-DPR-1.0x-shadow_puzzle",
+        "description": "[game/shadow_puzzle/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 375,
+          "bufH": 667,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 1,
+          "ratioW": 1,
+          "ratioH": 1
+        }
+      },
+      {
+        "id": "S4-DPR-2.0x-slime_jump",
+        "description": "[game/slime_jump/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 2,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-2.0x-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 2,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-2.0x-3D__minesweeper",
+        "description": "[game/3D_ minesweeper/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 2,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-2.0x-maze_escape",
+        "description": "[game/maze_escape/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 2,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-2.0x-shadow_puzzle",
+        "description": "[game/shadow_puzzle/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 2,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-3.0x-slime_jump",
+        "description": "[game/slime_jump/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 3,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-3.0x-Magnetic_Orbit",
+        "description": "[game/Magnetic_Orbit/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 3,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-3.0x-3D__minesweeper",
+        "description": "[game/3D_ minesweeper/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 3,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-3.0x-maze_escape",
+        "description": "[game/maze_escape/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 3,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-DPR-3.0x-shadow_puzzle",
+        "description": "[game/shadow_puzzle/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "bufW": 750,
+          "bufH": 1334,
+          "clientW": 375,
+          "clientH": 667,
+          "actualDpr": 3,
+          "ratioW": 2,
+          "ratioH": 2
+        }
+      },
+      {
+        "id": "S4-TCH-SLIME",
+        "description": "[game/slime_jump] 터치 슬링샷 드래그 및 발사 이벤트 디스패치 정상 동작",
+        "status": "PASS",
+        "passed": true,
+        "details": {}
+      },
+      {
+        "id": "S4-TCH-MAZE",
+        "description": "[game/maze_escape] 가상 조이스틱 / 터치 컨트롤러 인터페이스 구성 확인",
+        "status": "PASS",
+        "passed": true,
+        "details": {
+          "hasCanvas": true,
+          "hasJoystickOrTouch": true
+        }
+      }
+    ]
+  }
+}

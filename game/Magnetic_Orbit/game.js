@@ -31,18 +31,26 @@ let player = { angle: 0, radius: 0, vR: 0, size: 0, color: '#06b6d4' };
 let enemies = [];
 let particles = [];
 
-// 🎯 캔버스 크기 조절 (줌아웃 효과 적용)
+// 🎯 캔버스 크기 조절 (줌아웃 효과 및 2x DPR / 리사이즈 비례 보정)
+canvas.style.touchAction = 'none';
+
 function resizeCanvas() {
-    dpr = window.devicePixelRatio || 1;
+    const oldBaseSize = baseSize;
+    const oldMinRadius = minRadius;
+    const oldMaxRadius = maxRadius;
+    const oldCx = cx;
+    const oldCy = cy;
+
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     logicalWidth = window.innerWidth;
     logicalHeight = window.innerHeight;
 
-    canvas.width = logicalWidth * dpr;
-    canvas.height = logicalHeight * dpr;
+    canvas.width = Math.round(logicalWidth * dpr);
+    canvas.height = Math.round(logicalHeight * dpr);
     canvas.style.width = `${logicalWidth}px`;
     canvas.style.height = `${logicalHeight}px`;
 
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     cx = logicalWidth / 2;
     cy = logicalHeight / 2;
@@ -55,6 +63,36 @@ function resizeCanvas() {
 
     if (GAME_STATE !== 'PLAYING') {
         player.radius = (minRadius + maxRadius) / 2;
+    } else if (oldBaseSize && oldMaxRadius > oldMinRadius) {
+        // 플레이 중 리사이즈나 모바일 화면 회전 시 궤도 비례 갱신
+        const ratio = (player.radius - oldMinRadius) / (oldMaxRadius - oldMinRadius);
+        const clampedRatio = Math.max(0, Math.min(1, ratio));
+        player.radius = minRadius + clampedRatio * (maxRadius - minRadius);
+
+        const scaleFactor = baseSize / oldBaseSize;
+        player.vR *= scaleFactor;
+
+        // 적 위치 및 속도, 크기 리스케일링 및 중심 이동 보정
+        enemies.forEach(e => {
+            let relX = (e.x - oldCx) * scaleFactor;
+            let relY = (e.y - oldCy) * scaleFactor;
+            e.x = cx + relX;
+            e.y = cy + relY;
+            e.vx *= scaleFactor;
+            e.vy *= scaleFactor;
+            e.size *= scaleFactor;
+        });
+
+        // 파티클 위치 보정
+        particles.forEach(p => {
+            let relX = (p.x - oldCx) * scaleFactor;
+            let relY = (p.y - oldCy) * scaleFactor;
+            p.x = cx + relX;
+            p.y = cy + relY;
+            p.vx *= scaleFactor;
+            p.vy *= scaleFactor;
+            p.size *= scaleFactor;
+        });
     }
     // 월드가 넓어진 만큼 플레이어 크기도 살짝 축소
     player.size = baseSize * 0.012 + 3;

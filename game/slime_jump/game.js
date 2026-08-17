@@ -23,11 +23,18 @@ let MAX_SPEED = 20;
 let SLING_POWER = 0.135;
 let WALL_EDGE_WIDTH = 15;
 
+let dpr = 1;
+canvas.style.touchAction = 'none';
+
 function resizeCanvas() {
     cw = window.innerWidth;
     ch = window.innerHeight;
-    canvas.width = cw;
-    canvas.height = ch;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(cw * dpr);
+    canvas.height = Math.round(ch * dpr);
+    canvas.style.width = `${cw}px`;
+    canvas.style.height = `${ch}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // 기기 화면 크기(800 기준)에 비례하여 동일한 템포가 제공되도록 스케일 계산
     if (typeof GAME_SCALE !== 'undefined') {
@@ -731,6 +738,7 @@ function initGame() {
 
 function handleDown(e) {
     if (state !== 'PLAYING') return;
+    if (!slime || !slime.canJump) return;
     isDragging = true;
     dragStart = { x: e.clientX, y: e.clientY };
     dragCurrent = { ...dragStart };
@@ -745,7 +753,7 @@ function handleUp(e) {
     if (!isDragging || state !== 'PLAYING') return;
     isDragging = false;
 
-    if (slime.canJump) {
+    if (slime && slime.canJump) {
         let dx = dragStart.x - dragCurrent.x;
         let dy = dragStart.y - dragCurrent.y;
 
@@ -761,11 +769,13 @@ function handleUp(e) {
             slime.vy = Math.max(Math.min(dy * SLING_POWER, MAX_SPEED), -MAX_SPEED);
             slime.canJump = false;
             slime.isSticking = false;
+            slime.stickTimer = 0;
             slime.parachuteTimer = 0;
             slime.squishX = 0.5; slime.squishY = 1.5;
 
             // 도약 시 바닥/벽에서 스파크 튀기
-            createParticles(slime.x, slime.y, 8, '#38bdf8');
+            createParticles(slime.x, slime.y, 10, '#38bdf8');
+            screenShake = 3;
         }
     }
 }
@@ -854,6 +864,8 @@ function update() {
 }
 
 function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
     // 배경 그라데이션 (깊은 우주 느낌)
     let bgGrad = ctx.createLinearGradient(0, 0, 0, ch);
     bgGrad.addColorStop(0, '#020617'); // 딥 다크 블루
@@ -989,58 +1001,6 @@ function gameLoop() {
 
 startBtn.addEventListener('click', initGame);
 restartBtn.addEventListener('click', initGame);
-
-// --- 모바일 터치 및 데스크탑 클릭 드래그 이벤트 (슬라임 점프 조작) ---
-function handleStart(e) {
-    if (state !== 'PLAYING' || !slime.canJump) return;
-    isDragging = true;
-    let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    dragStart = { x: clientX, y: clientY };
-    dragCurrent = { x: clientX, y: clientY };
-}
-
-function handleMove(e) {
-    if (!isDragging) return;
-    if (e.cancelable) e.preventDefault(); // 모바일 환경 스크롤 방지
-    let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    dragCurrent = { x: clientX, y: clientY };
-}
-
-function handleEnd(e) {
-    if (!isDragging) return;
-    isDragging = false;
-
-    let dx = dragStart.x - dragCurrent.x;
-    let dy = dragStart.y - dragCurrent.y;
-    let dist = Math.sqrt(dx * dx + dy * dy);
-
-    // 최소 드래그 거리 (5px)
-    if (dist > 5) {
-        if (dist > MAX_DRAG_DIST) {
-            dx = (dx / dist) * MAX_DRAG_DIST;
-            dy = (dy / dist) * MAX_DRAG_DIST;
-        }
-
-        slime.vx = dx * SLING_POWER;
-        slime.vy = dy * SLING_POWER;
-        slime.canJump = false;
-        slime.isSticking = false;
-        slime.stickTimer = 0;
-
-        createParticles(slime.x, slime.y, 10, slime.color);
-        screenShake = 3;
-    }
-}
-
-canvas.addEventListener('mousedown', handleStart);
-window.addEventListener('mousemove', handleMove, { passive: false });
-window.addEventListener('mouseup', handleEnd);
-
-canvas.addEventListener('touchstart', handleStart, { passive: false });
-window.addEventListener('touchmove', handleMove, { passive: false });
-window.addEventListener('touchend', handleEnd);
 
 slime = new Slime();
 walls = [new Wall(0, ch - 50, cw, 100, 'normal')];

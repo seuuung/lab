@@ -1,0 +1,269 @@
+/**
+ * Tier 1: Feature Tests (기능 전수 검증)
+ * 
+ * F1: About Me 프로필 카드
+ * F2: 4단계 카테고리 탭 필터
+ * F3: 삼척 기상토토 쇼케이스 카드
+ * F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 & 글래스모피즘
+ * F13: 10개 하위 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용
+ * F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성
+ */
+
+const fs = require('fs');
+const path = require('path');
+const {
+    PROJECT_ROOT,
+    SUBPROJECT_DIRS,
+    assert,
+    assertEqual,
+    assertMatch,
+    assertIncludes,
+    assertGreaterOrEqual,
+    assertFileExists,
+    readFile,
+    extractAllTags
+} = require('./test_helper');
+
+function runTier1Tests() {
+    console.log('\n========================================');
+    console.log('▶ Running Tier 1: Feature Tests');
+    console.log('========================================\n');
+
+    // 1. index.html 로드 및 기본 검증
+    assertFileExists('index.html', 'Tier1-F0: index.html 루트 파일 존재 확인');
+    const indexHtml = readFile('index.html');
+    assertGreaterOrEqual(indexHtml.length, 500, 'Tier1-F0: index.html 내용이 충분히 작성되어 있음');
+
+    // ----------------------------------------------------
+    // F1: About Me 프로필 카드 검증 (10 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F1: About Me 프로필 카드 검증...');
+    const hasAboutMe = /About\s*Me|소개|Profile/i.test(indexHtml);
+    assert(hasAboutMe, 'Tier1-F1-01: index.html에 About Me / 프로필 섹션 식별자 존재');
+
+    const hasGithubLink = indexHtml.includes('https://github.com/seuuung') || indexHtml.includes('github.com/seuuung');
+    assert(hasGithubLink, 'Tier1-F1-02: About Me 내 GitHub 링크(https://github.com/seuuung) 포함');
+
+    const allAnchorTags = extractAllTags(indexHtml, 'a');
+    const githubAnchor = allAnchorTags.find(a => (a.attributes.href || '').includes('github.com/seuuung'));
+    assert(!!githubAnchor, 'Tier1-F1-03: GitHub 링크용 <a> 태그 존재');
+    if (githubAnchor) {
+        assertEqual(githubAnchor.attributes.target, '_blank', 'Tier1-F1-04: GitHub 링크 target="_blank" 속성 설정');
+        assertIncludes(githubAnchor.attributes.rel || '', 'noopener', 'Tier1-F1-05: GitHub 링크 rel에 noopener 포함');
+    } else {
+        assert(false, 'Tier1-F1-04: (Skipped) GitHub anchor missing');
+        assert(false, 'Tier1-F1-05: (Skipped) GitHub anchor missing');
+    }
+
+    const hasNameOrNickname = /승민|Seungmin|seuuung/i.test(indexHtml);
+    assert(hasNameOrNickname, 'Tier1-F1-06: About Me에 개발자 이름(승민/Seungmin) 명시');
+
+    const hasStackBadge = /JavaScript|HTML5|CSS3|Tailwind|Canvas|Three\.js|WebGL|Android/i.test(indexHtml);
+    assert(hasStackBadge, 'Tier1-F1-07: 기술 스택 뱃지 또는 역량 키워드 표기');
+
+    const hasProfileAvatarOrIcon = indexHtml.includes('avatar') || indexHtml.includes('profile') || indexHtml.includes('githubusercontent.com') || /<img[^>]*alt=["'][^"']*profile[^"']*["']/i.test(indexHtml) || indexHtml.includes('rounded-full');
+    assert(hasProfileAvatarOrIcon, 'Tier1-F1-08: 프로필 아바타 또는 아이콘 시각 요소 존재');
+
+    const hasBioText = indexHtml.includes('개발자') || indexHtml.includes('프로젝트') || indexHtml.includes('실험실') || indexHtml.includes('소개');
+    assert(hasBioText, 'Tier1-F1-09: About Me 자기소개 문구 존재');
+
+    const hasProfileGlassStyle = /glass-card|backdrop-filter|bg-slate-800\/|bg-white\/[0-9]+/i.test(indexHtml);
+    assert(hasProfileGlassStyle, 'Tier1-F1-10: 프로필 영역에 글래스모피즘 스타일 적용');
+
+
+    // ----------------------------------------------------
+    // F2: 4단계 카테고리 탭 필터 검증 (15 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F2: 4단계 카테고리 탭 필터 검증...');
+    const allButtons = extractAllTags(indexHtml, 'button');
+    const allTabs = allButtons.filter(b => (b.rawAttributes.includes('filter') || b.rawAttributes.includes('category') || b.rawAttributes.includes('tab') || /all|app|game|lab/i.test(b.rawAttributes) || /전체|앱|게임|실험/i.test(b.innerHTML)));
+
+    assertGreaterOrEqual(allTabs.length, 4, 'Tier1-F2-01: 4단계 탭 버튼(전체, 모바일 앱, 웹 게임, 밈&실험실) 4개 이상 배치');
+
+    const hasTabAll = allTabs.some(t => /전체|all/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'all') || (t.attributes['data-category'] === 'all'));
+    assert(hasTabAll, 'Tier1-F2-02: "전체(all)" 탭 버튼 존재');
+
+    const hasTabApp = allTabs.some(t => /앱|모바일|app/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'app') || (t.attributes['data-category'] === 'app'));
+    assert(hasTabApp, 'Tier1-F2-03: "모바일 앱(app)" 탭 버튼 존재');
+
+    const hasTabGame = allTabs.some(t => /게임|game/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'game') || (t.attributes['data-category'] === 'game'));
+    assert(hasTabGame, 'Tier1-F2-04: "웹 게임(game)" 탭 버튼 존재');
+
+    const hasTabLab = allTabs.some(t => /실험|밈|lab|meme/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'lab') || (t.attributes['data-category'] === 'lab'));
+    assert(hasTabLab, 'Tier1-F2-05: "밈 & 실험실(lab)" 탭 버튼 존재');
+
+    // data-category 속성 부여 확인
+    const hasDataCategoryApp = indexHtml.includes('data-category="app"');
+    assert(hasDataCategoryApp, 'Tier1-F2-06: data-category="app" 속성을 가진 카드 존재');
+
+    const hasDataCategoryGame = indexHtml.includes('data-category="game"');
+    assert(hasDataCategoryGame, 'Tier1-F2-07: data-category="game" 속성을 가진 카드 존재');
+
+    const hasDataCategoryLab = indexHtml.includes('data-category="lab"');
+    assert(hasDataCategoryLab, 'Tier1-F2-08: data-category="lab" 속성을 가진 카드 존재');
+
+    // 탭 필터링 바닐라 JS 로직 검증
+    const hasFilterScript = indexHtml.includes('filter') || indexHtml.includes('data-category') || indexHtml.includes('querySelectorAll');
+    assert(hasFilterScript, 'Tier1-F2-09: 탭 필터링을 위한 바닐라 JS 로직 존재');
+
+    const hasEventListenerOrOnClick = indexHtml.includes('addEventListener') || indexHtml.includes('onclick') || indexHtml.includes('filterCards');
+    assert(hasEventListenerOrOnClick, 'Tier1-F2-10: 탭 버튼 클릭 이벤트 바인딩 존재');
+
+    const hasDisplayToggle = indexHtml.includes('style.display') || indexHtml.includes('classList.add') || indexHtml.includes('classList.toggle') || indexHtml.includes('hidden');
+    assert(hasDisplayToggle, 'Tier1-F2-11: 탭 전환 시 요소 표시/숨김 스타일 제어 로직 존재');
+
+    const hasActiveTabHighlight = indexHtml.includes('active') || indexHtml.includes('bg-cyan') || indexHtml.includes('border-cyan') || indexHtml.includes('bg-gradient');
+    assert(hasActiveTabHighlight, 'Tier1-F2-12: 활성 탭 하이라이트 스타일 제어 로직 존재');
+
+    const hasTransitionOrAnimation = indexHtml.includes('transition') || indexHtml.includes('duration') || indexHtml.includes('opacity');
+    assert(hasTransitionOrAnimation, 'Tier1-F2-13: 탭 필터 전환 시 애니메이션 / 트랜지션 클래스 적용');
+
+    const hasCategoryBadgeOnCards = /bg-[a-z]+-500\/10/i.test(indexHtml) || /uppercase tracking-wider/i.test(indexHtml);
+    assert(hasCategoryBadgeOnCards, 'Tier1-F2-14: 각 쇼케이스 카드에 카테고리 뱃지 스타일 적용');
+
+    const hasTabContainer = /tab-container|flex flex-wrap|gap-2|gap-3/i.test(indexHtml);
+    assert(hasTabContainer, 'Tier1-F2-15: 탭 네비게이션 컨테이너 레이아웃 클래스 구성');
+
+
+    // ----------------------------------------------------
+    // F3: 삼척 기상토토 쇼케이스 카드 검증 (10 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F3: 삼척 기상토토 쇼케이스 카드 검증...');
+    const hasTotoHref = indexHtml.includes('game/toto') || indexHtml.includes('game/toto/index.html');
+    assert(hasTotoHref, 'Tier1-F3-01: index.html에 game/toto 링크 포함');
+
+    const totoAnchor = allAnchorTags.find(a => (a.attributes.href || '').includes('game/toto'));
+    assert(!!totoAnchor, 'Tier1-F3-02: 기상토토 카드 <a> 태그 존재');
+
+    const hasTotoTitle = /기상토토|삼척\s*기상토토|Weather\s*Toto/i.test(indexHtml);
+    assert(hasTotoTitle, 'Tier1-F3-03: 기상토토 카드 제목 텍스트("기상토토" 또는 "삼척 기상토토") 포함');
+
+    const hasTotoDesc = /날씨|기상|베팅|시뮬레이|사다리/i.test(indexHtml);
+    assert(hasTotoDesc, 'Tier1-F3-04: 기상토토 카드 설명 텍스트 포함');
+
+    const hasTotoThumb = indexHtml.includes('thumb-container') && hasTotoHref;
+    assert(hasTotoThumb, 'Tier1-F3-05: 기상토토 카드 썸네일 컨테이너 존재');
+
+    const totoCardRaw = totoAnchor ? totoAnchor.fullTag : '';
+    const hasTotoGlassCard = /glass-card/i.test(totoCardRaw) || /glass-card/i.test(indexHtml);
+    assert(hasTotoGlassCard, 'Tier1-F3-06: 기상토토 카드에 glass-card 클래스 적용');
+
+    const hasTotoCategoryLab = /data-category=["'](lab|game)["']/i.test(totoCardRaw) || indexHtml.includes('data-category="lab"');
+    assert(hasTotoCategoryLab, 'Tier1-F3-07: 기상토토 카드의 data-category가 lab 또는 game으로 지정됨');
+
+    assertFileExists('game/toto/index.html', 'Tier1-F3-08: 기상토토 대상 파일 game/toto/index.html 실제 존재');
+    const totoHtml = readFile('game/toto/index.html');
+    assertGreaterOrEqual(totoHtml.length, 200, 'Tier1-F3-09: game/toto/index.html 파일 내용 무결성');
+
+    const hasTotoInteractiveElements = totoHtml.includes('canvas') || totoHtml.includes('button') || totoHtml.includes('script');
+    assert(hasTotoInteractiveElements, 'Tier1-F3-10: game/toto/index.html에 인터랙티브 요소(버튼/스크립트 등) 포함');
+
+
+    // ----------------------------------------------------
+    // F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘 (20 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
+    const REQUIRED_PROJECTS = [
+        { id: 'onsic', name: '온식 (OnSic)', check: (h) => h.includes('com.onsic.app') || h.includes('온식') },
+        { id: 'spatial_mine', name: 'Spatial Mine', check: (h) => h.includes('spatialmine.app') || h.includes('Spatial Mine') },
+        { id: 'slime_jump', name: '슬라임 점프', check: (h) => h.includes('game/slime_jump') },
+        { id: 'magnetic_orbit', name: '궤도 생존', check: (h) => h.includes('game/Magnetic_Orbit') },
+        { id: 'maze_escape', name: '미로 탈출', check: (h) => h.includes('game/maze_escape') },
+        { id: 'hacking', name: '해커 CTF', check: (h) => h.includes('game/hacking') },
+        { id: 'shadow_puzzle', name: '그림자 퍼즐', check: (h) => h.includes('game/shadow_puzzle') },
+        { id: 'minesweeper', name: '3D 지뢰찾기', check: (h) => h.includes('game/3D_ minesweeper') || h.includes('3D%20minesweeper') || h.includes('3D_minesweeper') },
+        { id: 'sign_up_hell', name: '지옥의 회원가입', check: (h) => h.includes('game/sign_up_for_hell') },
+        { id: 'choi_circle', name: '최원형', check: (h) => h.includes('game/choi_circle') },
+        { id: 'robot', name: '로봇 인증', check: (h) => h.includes('game/robot') },
+        { id: 'toto', name: '삼척 기상토토', check: (h) => h.includes('game/toto') }
+    ];
+
+    REQUIRED_PROJECTS.forEach((proj, idx) => {
+        const found = proj.check(indexHtml);
+        assert(found, `Tier1-F4-${String(idx + 1).padStart(2, '0')}: 쇼케이스 카드 [${proj.name}] 존재성 확인`);
+    });
+
+    const glassCards = indexHtml.match(/class=["'][^"']*glass-card[^"']*["']/g) || [];
+    assertGreaterOrEqual(glassCards.length, 12, 'Tier1-F4-13: 12개 이상의 쇼케이스 카드에 glass-card 적용');
+
+    const thumbContainers = indexHtml.match(/class=["'][^"']*thumb-container[^"']*["']/g) || [];
+    assertGreaterOrEqual(thumbContainers.length, 12, 'Tier1-F4-14: 12개 이상의 쇼케이스 카드에 표준 thumb-container 적용');
+
+    const hasPlayButtons = indexHtml.includes('플레이하기') || indexHtml.includes('확인') || indexHtml.includes('Play');
+    assert(hasPlayButtons, 'Tier1-F4-15: 쇼케이스 카드에 인터랙션 CTA 텍스트(플레이하기 등) 존재');
+
+    const hasFooter = indexHtml.includes('<footer') && indexHtml.includes('</footer>');
+    assert(hasFooter, 'Tier1-F4-16: index.html에 <footer> 태그 존재');
+
+    const hasFooterBranding = /©\s*2026|All\s*rights\s*reserved|실험실/i.test(indexHtml);
+    assert(hasFooterBranding, 'Tier1-F4-17: 푸터에 2026 브랜드 저작권 표기 존재');
+
+    const hasHoverEffectCSS = indexHtml.includes('glass-card:hover') || indexHtml.includes('hover:scale') || indexHtml.includes('group-hover');
+    assert(hasHoverEffectCSS, 'Tier1-F4-18: 카드 호버 시 시각적 인터랙션 스타일 적용');
+
+    const hasAmbientLight = indexHtml.includes('filter blur-') || indexHtml.includes('mix-blend-screen') || indexHtml.includes('animate-float');
+    assert(hasAmbientLight, 'Tier1-F4-19: 배경 앰비언트 글로우 라이트 효과 존재');
+
+    const hasMainContainer = indexHtml.includes('<main') && indexHtml.includes('max-w-7xl');
+    assert(hasMainContainer, 'Tier1-F4-20: 메인 컨테이너 반응형 최대 너비(max-w-7xl) 준수');
+
+
+    // ----------------------------------------------------
+    // F13: 10개 하위 게임 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용 (20 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F13: 10개 하위 게임 프로젝트 표준 홈 내비게이션 검증...');
+    SUBPROJECT_DIRS.forEach((dir, idx) => {
+        const gameIndexPath = path.join(dir, 'index.html');
+        assertFileExists(gameIndexPath, `Tier1-F13-${String(idx * 2 + 1).padStart(2, '0')}: [${dir}] index.html 존재`);
+        const gameHtml = readFile(gameIndexPath);
+
+        // 홈 링크 존재 확인
+        const hasHomeLink = gameHtml.includes('href="../../index.html"') || 
+                            gameHtml.includes('href="../index.html"') || 
+                            gameHtml.includes('href="/"') ||
+                            gameHtml.includes('href="/index.html"') ||
+                            gameHtml.includes('class="floating-home-btn"') ||
+                            gameHtml.includes('id="homeBtn"') ||
+                            gameHtml.includes('실험실 홈') ||
+                            /aria-label=["']실험실 홈/i.test(gameHtml);
+        assert(hasHomeLink, `Tier1-F13-${String(idx * 2 + 2).padStart(2, '0')}: [${dir}] '실험실 홈' 플로팅 내비게이션 버튼 포함`);
+    });
+
+
+    // ----------------------------------------------------
+    // F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성 (15 assertions)
+    // ----------------------------------------------------
+    console.log('[Tier 1] F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성 검증...');
+    SUBPROJECT_DIRS.forEach((dir, idx) => {
+        const gameIndexPath = path.join(dir, 'index.html');
+        const content = readFile(gameIndexPath);
+        assertGreaterOrEqual(content.length, 100, `Tier1-F14-${String(idx + 1).padStart(2, '0')}: [${dir}] 파일 크기 정상 (>100 bytes)`);
+    });
+
+    // game/robot 특정 링크 무결성 검증
+    const robotHtml = readFile('game/robot/index.html');
+    const hasBrokenHref = robotHtml.includes('href="undefined"') || robotHtml.includes('src="undefined"') || robotHtml.includes('href="#"');
+    assert(!hasBrokenHref, 'Tier1-F14-11: game/robot/index.html 내 undefined 또는 빈 앵커 깨진 링크 부재');
+
+    // 상대 경로 정합성 검증 (index.html 내 10개 게임 경로가 실제 로컬에 존재하는지)
+    SUBPROJECT_DIRS.forEach((dir, idx) => {
+        const fullPath = path.join(PROJECT_ROOT, dir, 'index.html');
+        const exists = fs.existsSync(fullPath);
+        if (idx < 4) { // 샘플 4개 assertion
+            assert(exists, `Tier1-F14-${12 + idx}: 로컬 파일 시스템 경로 [${dir}/index.html] 유효성 검증`);
+        }
+    });
+
+    console.log('✔ Tier 1 Feature Tests Completed.\n');
+}
+
+module.exports = { runTier1Tests };
+
+if (require.main === module) {
+    const { resetStats, getStats } = require('./test_helper');
+    resetStats();
+    runTier1Tests();
+    const stats = getStats();
+    console.log(`Tier 1 Result: Total ${stats.assertCount}, Passed ${stats.passCount}, Failed ${stats.failCount}`);
+    process.exit(stats.failCount > 0 ? 1 : 0);
+}

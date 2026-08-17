@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SAMCHEOK WEATHER TOTTO - 7월 17일 삼척 날씨 기상 배팅</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Inter & Black Han Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden pb-16 lg:pb-0">
+
+    <!-- 실험실 홈으로 돌아가기 표준 플로팅 버튼 -->
+    <a href="../../index.html" class="floating-home-btn" aria-label="실험실 홈으로 이동">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>실험실 홈</span>
+    </a>
+
+    <!-- 가입코드/닉네임 게이트웨이 화면 (사설 감성 보안 로그인) -->
+    <div id="gate-overlay">
+        <div class="gate-card relative">
+            <button onclick="closeGateOverlay()" class="absolute top-3.5 right-4 text-slate-500 hover:text-slate-200 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div class="mb-4">
+                <span
+                    class="bg-red-600 text-white font-black text-[10px] px-2 py-0.5 rounded tracking-widest uppercase">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> SECURE GATEWAY
+                </span>
+            </div>
+            <h2 class="text-xl font-extrabold text-slate-100 mb-2 font-mono tracking-wider neon-text-red">
+                SAMCHEOK WEATHER 717
+            </h2>
+            <p class="text-[11px] text-slate-400 mb-6 leading-relaxed font-mono">
+                비인가 IP 및 비회원 접근이 전면 제한되었습니다.<br>
+                추천인 코드 및 베팅 닉네임 인증 후 입장하십시오.<br>
+                <span class="text-yellow-500 font-extrabold">(CODE: SAMCHEOK)</span>
+            </p>
+            <div class="space-y-3.5 text-left">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1.5">가입 코드 (REFERRAL CODE) <span
+                            class="text-slate-600 font-normal">(신규 가입 시에만 기입)</span></label>
+                    <input type="text" id="gate-code-input"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-sm text-slate-250 outline-none focus:border-red-500 font-bold"
+                        placeholder="신규 코드: SAMCHEOK">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1.5">베팅 닉네임 (NICKNAME)</label>
+                    <input type="text" id="gate-nick-input"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-sm text-slate-250 outline-none focus:border-red-500 font-bold"
+                        placeholder="사용할 닉네임 (기존 회원은 로그인)">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1.5">🔒 접속 비밀번호 (PASSWORD)</label>
+                    <input type="password" id="gate-password-input"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-sm text-slate-250 outline-none focus:border-red-500 font-bold"
+                        placeholder="설정할 비번 또는 기존 비번 입력">
+                </div>
+                <button onclick="attemptLogin()"
+                    class="w-full mt-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-black py-3 rounded-xl shadow-lg shadow-red-950/40 transition active:scale-95 text-xs tracking-wider min-h-[44px] flex items-center justify-center">
+                    실시간 회원 보안 인증 (ENTER PORTAL)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 좌측 날개 윙 배너 -->
+    <div id="wing-left" class="wing-banner wing-banner-left hidden xl:block">
+        <button onclick="toggleBanner('left', true)"
+            class="absolute top-1.5 right-1.5 text-slate-500 hover:text-yellow-500 font-bold text-[10px] transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="banner-title">⚡ 보증금 1억 예치</div>
+        <div class="banner-item text-rose-400">WEATHER-TOTO<br>검증 완료</div>
+        <div class="banner-item text-yellow-400">첫충 30% 매충 15%<br>실시간 정산</div>
+        <div class="banner-item text-slate-400">지인 추천시<br>10만 포인트 지급</div>
+        <div class="text-[10px] text-slate-500 font-bold mt-2">가입코드: SAMCHEOK</div>
+    </div>
+    <button id="toggle-btn-left" onclick="toggleBanner('left', false)" class="wing-toggle-btn wing-toggle-btn-left">광고
+        펼치기 ▶</button>
+
+    <!-- 우측 날개 윙 배너 -->
+    <div id="wing-right" class="wing-banner wing-banner-right hidden xl:block">
+        <button onclick="toggleBanner('right', true)"
+            class="absolute top-1.5 right-1.5 text-slate-500 hover:text-yellow-500 font-bold text-[10px] transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="banner-title">📞 24H 고객센터</div>
+        <div class="banner-item text-cyan-400">텔레그램 고객센터<br>@samcheok717</div>
+        <div class="banner-item text-emerald-400">기상 이변 제보<br>100% 포상</div>
+        <div class="banner-item text-slate-400">단폴더 / 크로스<br>무제한 제재 없음</div>
+        <div class="text-[9px] text-slate-500 font-bold mt-2">2026 삼척 챔피언십</div>
+    </div>
+    <button id="toggle-btn-right" onclick="toggleBanner('right', false)" class="wing-toggle-btn wing-toggle-btn-right">◀
+        광고 펼치기</button>
+
+    <!-- 상단 유저 정보 및 메인 네비게이션 -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- 로고 영역 -->
+            <div class="flex items-center space-x-3">
+                <div
+                    class="bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black p-2 rounded-lg tracking-wider text-sm flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-cloud-bolt mr-1 text-base animate-bounce"></i> SAMCHEOK 717
+                </div>
+                <span
+                    class="font-extrabold text-lg tracking-tight hidden sm:inline bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">삼척기상토토™</span>
+            </div>
+
+            <!-- 실시간 지갑 정보 및 칩 충전 / 로그인 영역 -->
+            <div class="flex items-center space-x-4">
+                <!-- 비로그인 시 노출되는 로그인 활성화 버튼 -->
+                <button id="header-login-btn" onclick="openGateOverlay()"
+                    class="bg-gradient-to-r from-red-600 to-rose-600 border border-red-500 animate-pulse text-white font-extrabold px-4 py-2 rounded-full text-xs transition duration-200 active:scale-95 shadow-md shadow-red-950/50 flex items-center justify-center space-x-1.5 min-h-[44px] min-w-[44px]">
+                    <i class="fa-solid fa-right-to-bracket text-[10px]"></i>
+                    <span>🔥 보안 로그인 / 회원가입</span>
+                </button>
+
+                <!-- 로그인 성공 시 노출되는 구역 -->
+                <div id="header-user-info" class="hidden flex items-center space-x-4">
+                    <div class="bg-slate-950 border border-slate-800 rounded-full px-4 py-1.5 flex items-center space-x-2 min-h-[44px]">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest"><i
+                                class="fa-solid fa-wallet mr-1"></i> WALLET</span>
+                        <span id="user-balance"
+                            class="font-extrabold text-slate-100 text-sm md:text-base tracking-wider text-emerald-400">1,000,000 ₩</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="openTransactionModal('withdraw')"
+                            class="bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-400 hover:to-red-400 text-white font-bold px-3 py-1.5 rounded-full text-xs transition duration-200 active:scale-95 flex items-center justify-center shadow-md min-h-[44px] min-w-[44px]">
+                            <i class="fa-solid fa-arrow-up-long mr-1"></i> 환전신청
+                        </button>
+                        <button onclick="logout()"
+                            class="border border-slate-850 hover:border-slate-700 bg-slate-950 text-slate-400 hover:text-slate-200 font-bold px-3 py-1.5 rounded-full text-xs transition duration-200 active:scale-95 flex items-center justify-center shadow-md min-h-[44px] min-w-[44px]">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> 로그아웃
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 실시간 속보 전광판 마키 (Marquee) -->
+    <div class="bg-slate-950 border-b border-slate-900 py-1 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 flex items-center whitespace-nowrap text-xs text-slate-400">
+            <span class="bg-rose-600 text-white font-extrabold px-2 py-0.5 rounded mr-3 flex items-center"><i
+                    class="fa-solid fa-circle-exclamation mr-1 animate-ping text-[6px]"></i> 기상특보</span>
+            <div class="w-full overflow-hidden relative">
+                <div class="marquee-content font-semibold space-x-8 text-slate-300">
+                    <span>[단독] 강원특별자치도 삼척시 갈남항 기상 슈퍼컴퓨터 가동 개시! 7월 17일 제헌절 맞이 강수 배당률 전격 업데이트!</span>
+                    <span class="text-yellow-400">[실시간 분석] 7월 17일 삼척 고기압 팽창 감지 - 기온 30°C 초과 배당률 하락 기조!</span>
+                    <span class="text-blue-400">[속보] 맹방해수욕장 기상 관측소 "폭우 가능성 배당 6.5배 설정" 화제!</span>
+                    <span class="text-emerald-400">[공지] 실시간 위성 관측 데이터 동기화 완료. 각 마켓 정상 정산 대기 상태입니다.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메인 대시보드 구조 -->
+    <main class="max-w-7xl mx-auto p-4 md:p-6 flex-grow">
+        <!-- 인트로 및 날씨 상황판 정보 -->
+        <div
+            class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 rounded-2xl p-6 mb-8 relative overflow-hidden">
+            <div class="absolute -top-16 -right-16 w-56 h-56 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-16 -left-16 w-56 h-56 bg-indigo-500/10 rounded-full blur-3xl"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <!-- 날씨 예측 이벤트 소개 -->
+                <div class="md:col-span-2 space-y-3">
+                    <div
+                        class="inline-flex items-center space-x-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+                        <span>7월 17일 삼척 기상 예측 챔피언십 ⚡</span>
+                    </div>
+                    <h1 class="text-2xl md:text-4xl font-black tracking-tight leading-tight">
+                        7/17 삼척 날씨 스페셜 매치 <span
+                            class="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">[단폴·조합
+                            무제한]</span>
+                    </h1>
+                    <p class="text-slate-400 text-xs md:text-sm leading-relaxed font-semibold">
+                        삼척 공식 관측소 및 기상 위성 실시간 레이더 데이터 반영. 마틴·루틴 무제한 제재 없음. 적중 시 즉시 100% 자동 포인트 지급 및 정산 처리 완료.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs font-medium"><i
+                                class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> 강원특별자치도 삼척시</span>
+                        <span class="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs font-medium"><i
+                                class="fa-solid fa-calendar-days text-emerald-400 mr-1"></i> 2026년 7월 17일 (금)</span>
+                        <span class="bg-slate-800 text-slate-300 px-3 py-1 rounded-lg text-xs font-medium"><i
+                                class="fa-solid fa-gavel text-emerald-400 mr-1"></i> 배당 변동 주기: 실시간 적용</span>
+                    </div>
+                </div>
+
+                <!-- 우측 사이드 상황판 콤보 -->
+                <div class="space-y-3">
+                    <!-- 미니 기상 통계 카드 -->
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2.5 shadow-inner">
+                        <h3
+                            class="font-bold text-xs uppercase tracking-widest text-slate-400 border-b border-slate-800 pb-1.5 flex items-center">
+                            <i class="fa-solid fa-chart-line mr-1.5 text-teal-400"></i> 기상청 과거 10개년 데이터
+                        </h3>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center text-[11px]">
+                                <span class="text-slate-400">맑을 확률 (맑음/흐림)</span>
+                                <span class="font-bold text-emerald-400">72.3%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 72.3%"></div>
+                            </div>
+                            <div class="flex justify-between items-center text-[11px] pt-1">
+                                <span class="text-slate-400">최고 기온 / 강수량 평균</span>
+                                <span class="font-extrabold text-slate-200">28.9 °C / 4.5 mm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 실시간 삼척시 API 연동 현황판 -->
+                    <div
+                        class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2.5 shadow-inner relative overflow-hidden">
+                        <div class="absolute top-1 right-2 flex items-center space-x-1">
+                            <span class="animate-pulse inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                            <span class="text-[8px] text-emerald-400 font-bold tracking-widest">LIVE</span>
+                        </div>
+                        <h3
+                            class="font-bold text-xs uppercase tracking-widest text-slate-400 border-b border-slate-800 pb-1.5 flex items-center">
+                            <i class="fa-solid fa-satellite-dish mr-1.5 text-emerald-400 animate-pulse"></i> 7/17 삼척 기상 공식
+                            예보
+                        </h3>
+                        <div class="grid grid-cols-3 gap-1 text-center">
+                            <div class="bg-slate-900/60 p-1.5 rounded border border-slate-850">
+                                <span class="text-[8px] text-slate-500 block mb-0.5">기온</span>
+                                <span id="real-temp" class="font-black text-xs text-amber-400">-- °C</span>
+                            </div>
+                            <div class="bg-slate-900/60 p-1.5 rounded border border-slate-850">
+                                <span class="text-[8px] text-slate-500 block mb-0.5">강수</span>
+                                <span id="real-rain" class="font-black text-xs text-cyan-400">-- mm</span>
+                            </div>
+                            <div class="bg-slate-900/60 p-1.5 rounded border border-slate-850">
+                                <span class="text-[8px] text-slate-500 block mb-0.5">풍속</span>
+                                <span id="real-wind" class="font-black text-xs text-slate-300">-- m/s</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-slate-400 font-semibold flex justify-between items-center pt-0.5">
+                            <span>상태: <span id="real-summary" class="text-emerald-400 font-bold">로딩 중...</span></span>
+                            <button onclick="fetchRealSamcheokWeather()"
+                                class="text-slate-500 hover:text-emerald-400 transition font-bold text-[10px] min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-2 py-1"><i
+                                    class="fa-solid fa-arrows-rotate mr-1"></i> 갱신</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 본문 레이아웃 그리드 (마켓 리스트 vs 배팅 슬립 & 친구 랭킹) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- 좌측: 배팅 마켓 (Col Span 8) -->
+            <div class="lg:col-span-8 space-y-6">
+
+                <!-- 마켓 탭 전환기 -->
+                <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+                    <button onclick="switchMarketTab('ladder')" id="tab-ladder"
+                        class="market-tab w-full px-4 py-2.5 rounded-lg text-sm font-black whitespace-nowrap bg-gradient-to-r from-red-600 to-rose-600 border border-red-500 animate-pulse text-white shadow-lg shadow-red-950/50 hover:from-red-500 hover:to-rose-500 transition flex items-center justify-center space-x-1.5 min-h-[44px]">
+                        <i class="fa-solid fa-fire text-[10px]"></i>
+                        <span>🔥 [실시간 30초 승부] 초고속 수익 사다리 바로가기</span>
+                    </button>
+                    <button onclick="switchMarketTab('all')" id="tab-all"
+                        class="market-tab px-4 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap bg-emerald-500 text-slate-950 transition min-h-[44px] inline-flex items-center justify-center">
+                        🔥 전체 마켓
+                    </button>
+                    <button onclick="switchMarketTab('main')" id="tab-main"
+                        class="market-tab px-4 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition min-h-[44px] inline-flex items-center justify-center">
+                        ☀️ 기상 형태
+                    </button>
+                    <button onclick="switchMarketTab('temp')" id="tab-temp"
+                        class="market-tab px-4 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition min-h-[44px] inline-flex items-center justify-center">
+                        🌡️ 기온 O/U
+                    </button>
+                    <button onclick="switchMarketTab('rain')" id="tab-rain"
+                        class="market-tab px-4 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition min-h-[44px] inline-flex items-center justify-center">
+                        🌧️ 강수량 예측
+                    </button>
+                    <button onclick="switchMarketTab('wind')" id="tab-wind"
+                        class="market-tab px-4 py-2.5 rounded-lg text-sm font-bold whitespace-nowrap bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition min-h-[44px] inline-flex items-center justify-center">
+                        💨 바람/기타
+                    </button>
+                </div>
+
+                <!-- 실시간 배당률 안내 배너 -->
+                <div
+                    class="bg-emerald-950/20 border border-emerald-800/30 rounded-xl p-3 flex justify-between items-center text-xs text-emerald-400">
+                    <div class="flex items-center space-x-2">
+                        <span class="animate-pulse inline-block w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+                        <span class="font-bold">LIVE 배당률 변동 반영 중</span>
+                    </div>
+                    <span>과거 데이터 및 기상 모형 위성 관측 시뮬레이션 기반</span>
+                </div>
+
+                <!-- 마켓 리스트 -->
+                <div id="markets-container" class="space-y-6">
+                    <!-- 날씨 마켓 템플릿들이 여기에 동적으로 삽입됨 -->
+                </div>
+
+            </div>
+
+            <!-- 우측: 배팅 슬립 & 리더보드 (Col Span 4) -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- 배팅 슬립 카드 (Bet Slip) - PC 해상도 전용 -->
+                <div id="sidebar-bet-slip"
+                    class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+                        <span class="font-black text-sm tracking-wider uppercase text-slate-200 flex items-center">
+                            <i class="fa-solid fa-ticket-alt mr-2 text-emerald-400"></i> BET SLIP <span id="slip-count"
+                                class="ml-2 bg-emerald-500 text-slate-950 text-xs px-1.5 py-0.5 rounded-full font-black">0</span>
+                        </span>
+                        <button onclick="clearBetSlip()"
+                            class="text-xs text-slate-500 hover:text-rose-400 transition font-bold min-h-[44px] min-w-[44px] inline-flex items-center justify-center"><i
+                                class="fa-solid fa-trash mr-1"></i> 전체 비우기</button>
+                    </div>
+
+                    <div class="p-4 space-y-4 min-h-[160px] flex flex-col justify-between">
+                        <!-- 선택된 배팅 마켓 정보 -->
+                        <div id="bet-slip-content" class="space-y-3">
+                            <!-- 슬립이 비었을 때 화면 -->
+                            <div id="bet-slip-empty" class="text-center py-8 space-y-2">
+                                <i class="fa-solid fa-cloud-sun text-slate-700 text-4xl animate-pulse"></i>
+                                <p class="text-xs text-slate-500 font-bold">배팅 마켓의 배당률을 클릭하여<br>토토 배팅을 시작하세요!</p>
+                            </div>
+                        </div>
+
+                        <!-- 금액 입력 및 예상 배당금 (비지 않고 슬립이 채워졌을때 노출) -->
+                        <div id="bet-slip-footer" class="hidden space-y-4 pt-3 border-t border-slate-800">
+                            <!-- 예치금 입력 -->
+                            <div>
+                                <div class="flex justify-between items-center text-xs text-slate-400 mb-1.5">
+                                    <span>베팅 포인트 입력</span>
+                                    <span class="text-slate-500">최소 1,000₩ | <button onclick="setStakeMax()"
+                                            class="text-emerald-400 font-bold hover:underline min-h-[44px] min-w-[44px] inline-flex items-center justify-center">올인(ALL
+                                            IN)</button></span>
+                                </div>
+                                <div
+                                    class="relative bg-slate-950 border border-slate-800 rounded-xl p-2 flex items-center justify-between focus-within:border-emerald-500 transition">
+                                    <input type="number" id="bet-stake-input" oninput="calculatePayout()"
+                                        class="bg-transparent border-0 outline-none text-right font-extrabold text-lg text-emerald-400 w-full pr-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none min-h-[44px]"
+                                        placeholder="0">
+                                    <span
+                                        class="text-sm font-bold text-slate-400 pl-1 border-l border-slate-800">₩</span>
+                                </div>
+                                <!-- 칩 퀵 입력 버튼 -->
+                                <div class="grid grid-cols-4 gap-1 mt-2">
+                                    <button onclick="adjustStake(10000)"
+                                        class="bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">+1만</button>
+                                    <button onclick="adjustStake(50000)"
+                                        class="bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">+5만</button>
+                                    <button onclick="adjustStake(100000)"
+                                        class="bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">+10만</button>
+                                    <button onclick="adjustStake(500000)"
+                                        class="bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">+50만</button>
+                                </div>
+                            </div>
+
+                            <!-- 최종 배당률 정보 및 예상 지급액 -->
+                            <div class="bg-slate-950 rounded-xl p-3 border border-slate-800 space-y-2">
+                                <div class="flex justify-between items-center text-xs text-slate-400">
+                                    <span>적용 배당률</span>
+                                    <span id="slip-final-odd" class="font-bold text-white text-base">2.10</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs text-slate-400">
+                                    <span>예상 배당금 (적중 시)</span>
+                                    <span id="slip-estimated-payout" class="font-extrabold text-emerald-400 text-lg">0
+                                        ₩</span>
+                                </div>
+                            </div>
+
+                            <button onclick="placeBet()"
+                                class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black py-3 rounded-xl shadow-lg shadow-emerald-950/30 transition transform duration-150 active:scale-[0.98] flex items-center justify-center space-x-2 min-h-[44px]">
+                                <i class="fa-solid fa-signature"></i> <span>베팅 완료 (PLACE BET)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 실시간 입출금 롤링 현황판 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden pulse-red">
+                    <div
+                        class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 px-4 py-2.5 flex justify-between items-center">
+                        <span class="font-black text-xs tracking-wider uppercase text-rose-400 flex items-center">
+                            <i class="fa-solid fa-signal mr-1.5 animate-pulse text-red-500"></i> 실시간 충전/환전 정산 현황
+                        </span>
+                        <span class="text-[9px] bg-red-950 text-red-400 px-1.5 py-0.5 rounded font-bold">LIVE</span>
+                    </div>
+                    <div class="p-3" id="transactions-rolling">
+                        <!-- 스크립트가 3초마다 위로 스크롤하여 추가함 -->
+                    </div>
+                </div>
+
+                <!-- 리더보드 (친구들과 겨루는 순위판) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 px-4 py-3 flex justify-between items-center">
+                        <span class="font-black text-sm tracking-wider uppercase text-slate-200 flex items-center">
+                            <i class="fa-solid fa-trophy mr-2 text-yellow-400"></i> 삼척 토토 기상 타짜 랭킹
+                        </span>
+                    </div>
+                    <div class="p-4 space-y-3" id="leaderboard-list">
+                        <!-- 리더보드 목록 동적 로드 -->
+                    </div>
+                </div>
+
+                <!-- 나의 베팅 현황 기록판 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+                    <div
+                        class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+                        <span class="font-black text-sm tracking-wider uppercase text-slate-200 flex items-center">
+                            <i class="fa-solid fa-receipt mr-2 text-indigo-400"></i> 마이 베팅 내역 (<span
+                                id="my-bets-count">0</span>)
+                        </span>
+                        <span class="text-xs font-semibold text-slate-400">결과 판정 대기중</span>
+                    </div>
+                    <div class="p-4 space-y-3 max-h-[300px] overflow-y-auto" id="my-bets-container">
+                        <!-- 마이 베팅 목록 동적 로드 -->
+                        <div id="my-bets-empty" class="text-center py-6 text-slate-500 text-xs font-bold">
+                            기록된 베팅 내역이 없습니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 실시간 익명 대화방 (로컬 모드 비활성화) -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col h-[380px] opacity-75">
+                    <div class="bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+                        <span class="font-black text-sm tracking-wider uppercase text-slate-400 flex items-center">
+                            <i class="fa-solid fa-comments mr-2 text-slate-500"></i> 라이브 대화방 (비활성)
+                        </span>
+                        <span class="text-[9px] bg-slate-950 text-slate-500 px-1.5 py-0.5 rounded font-bold">LOCAL</span>
+                    </div>
+                    <div id="chat-messages" class="flex-1 p-4 space-y-3 overflow-y-auto flex flex-col bg-slate-950/40 justify-center items-center">
+                        <i class="fa-solid fa-plug-circle-xmark text-slate-650 text-3xl mb-2"></i>
+                        <p class="text-xs text-slate-500 text-center font-bold">로컬 싱글 플레이 모드에서는<br>채팅 서비스를 이용할 수 없습니다.</p>
+                    </div>
+                    <div class="p-3 border-t border-slate-800 bg-slate-900 flex space-x-2 items-center">
+                        <input type="text" id="chat-input" disabled
+                            class="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-650 outline-none font-semibold cursor-not-allowed min-h-[44px]"
+                            placeholder="로컬 모드 채팅 사용 불가">
+                        <button disabled
+                            class="bg-slate-800 text-slate-600 font-black px-4 py-2 rounded-xl text-xs cursor-not-allowed min-h-[44px] min-w-[44px] flex items-center justify-center">
+                            전송
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 관리자 모드: 기상 정산 시뮬레이터 (매우 중요 - 배팅 테스트를 바로 해볼 수 있음!) -->
+        <div
+            class="mt-8 bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div
+                class="absolute top-0 right-0 bg-yellow-500/10 text-yellow-500 border-l border-b border-yellow-500/20 px-3 py-1 rounded-bl-xl text-[10px] font-black uppercase tracking-wider">
+                <i class="fa-solid fa-screwdriver-wrench mr-1"></i> 친구 대항용 결과 판정 패널
+            </div>
+            <div class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-lg font-black text-slate-200 flex items-center">
+                        <i class="fa-solid fa-broadcast-tower mr-2 text-yellow-400 animate-pulse"></i> 7월 17일 삼척 기상청 공식
+                        결과 시뮬레이터
+                    </h2>
+                    <p class="text-xs text-slate-400">
+                        실제 7월 17일 당일 기상청 발표 날씨를 아래 설정하고 '결과 정산하기'를 클릭하면, 모든 배팅 내역이 즉시 정산 및 분배되어 지갑과 친구 리더보드 순위가 반영됩니다!
+                    </p>
+                </div>
+
+                <div
+                    class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-950/60 border border-slate-800 p-4 rounded-xl">
+                    <!-- 1. 기상 형태 선택 -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-400">1. 기상 형태</label>
+                        <select id="sim-weather"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 outline-none focus:border-yellow-500 min-h-[44px]">
+                            <option value="sunny">☀️ 맑음 (Sunny)</option>
+                            <option value="cloudy">☁️ 흐림 (Cloudy)</option>
+                            <option value="rainy">🌧️ 비 (Rainy)</option>
+                            <option value="storm">⛈️ 천둥번개/폭우 (Storm)</option>
+                        </select>
+                    </div>
+                    <!-- 2. 기온 선택 -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-400">2. 삼척 최고 기온</label>
+                        <select id="sim-temp"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 outline-none focus:border-yellow-500 min-h-[44px]">
+                            <option value="under29">29.0°C 이하 (Under)</option>
+                            <option value="over29">29.1°C 이상 (Over)</option>
+                        </select>
+                    </div>
+                    <!-- 3. 강수량 선택 -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-400">3. 삼척 일 강수량</label>
+                        <select id="sim-rain"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 outline-none focus:border-yellow-500 min-h-[44px]">
+                            <option value="norain">0 mm (비 안옴)</option>
+                            <option value="under10">0.1~10.0 mm 이하</option>
+                            <option value="over10">10.1 mm 이상 (폭우)</option>
+                        </select>
+                    </div>
+                    <!-- 4. 풍속 선택 -->
+                    <div class="space-y-1.5">
+                        <label class="block text-xs font-bold text-slate-400">4. 최대 풍속</label>
+                        <select id="sim-wind"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 outline-none focus:border-yellow-500 min-h-[44px]">
+                            <option value="under5">5.0 m/s 이하</option>
+                            <option value="over5">5.1 m/s 이상 (태풍급 바닷바람)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2 justify-end pt-1">
+                    <button onclick="resolveSimulationBets()"
+                        class="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs transition active:scale-95 flex items-center justify-center shadow-lg shadow-yellow-950/20 min-h-[44px] min-w-[44px]">
+                        <i class="fa-solid fa-gavel mr-1.5"></i> 기상 결과 수동 정산
+                    </button>
+                    <button onclick="resolveRealWeatherBets()"
+                        class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs transition active:scale-95 flex items-center justify-center shadow-lg shadow-emerald-950/20 min-h-[44px] min-w-[44px]">
+                        <i class="fa-solid fa-satellite-dish mr-1.5 animate-pulse"></i> 삼척 실제 날씨로 즉시 정산
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- 모달 레이어: 충/환전 신청 팝업 -->
+    <div id="transaction-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                <h3 class="font-bold text-base text-slate-200" id="tx-modal-title">
+                    <i class="fa-solid fa-arrow-up-long text-rose-400 mr-1.5"></i> 포인트 환전 신청
+                </h3>
+                <button onclick="closeTransactionModal()" class="text-slate-400 hover:text-slate-200 min-h-[44px] min-w-[44px] flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3.5">
+                <div class="bg-slate-950 rounded-xl p-3 border border-slate-850 text-xs flex justify-between">
+                    <span class="text-slate-400">현재 보유 머니</span>
+                    <span id="tx-modal-current" class="font-bold text-emerald-400">1,000,000 ₩</span>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1.5" id="tx-label-amount">신청 포인트 입력</label>
+                    <div
+                        class="relative bg-slate-950 border border-slate-800 rounded-xl p-2 flex items-center justify-between focus-within:border-emerald-500 transition">
+                        <input type="number" id="tx-amount-input"
+                            class="bg-transparent border-0 outline-none text-right font-extrabold text-base text-white w-full pr-2 min-h-[44px]"
+                            placeholder="0">
+                        <span class="text-sm font-bold text-slate-400 pl-1 border-l border-slate-800">₩</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1 mt-2">
+                        <button onclick="adjustTxAmount(10000)"
+                            class="bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded transition min-h-[44px] flex items-center justify-center">+1만</button>
+                        <button onclick="adjustTxAmount(50000)"
+                            class="bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded transition min-h-[44px] flex items-center justify-center">+5만</button>
+                        <button onclick="adjustTxAmount(100000)"
+                            class="bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded transition min-h-[44px] flex items-center justify-center">+10만</button>
+                        <button onclick="adjustTxAmount(500000)"
+                            class="bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 text-[10px] font-bold py-2 rounded transition min-h-[44px] flex items-center justify-center">+50만</button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeTransactionModal()"
+                    class="w-1/3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs transition min-h-[44px] flex items-center justify-center">
+                    취소
+                </button>
+                <button onclick="submitTransaction()" id="btn-tx-submit"
+                    class="w-2/3 bg-rose-500 hover:bg-rose-400 text-white font-black py-2.5 rounded-xl text-xs transition flex items-center justify-center min-h-[44px]">
+                    환전 신청 완료 (WITHDRAW)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 레이어: 환전 정산 농락/농담 팝업 -->
+    <div id="mock-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+        <div
+            class="bg-slate-900 border-2 border-red-600 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl shadow-red-950/50">
+            <div class="text-red-500 text-5xl animate-bounce">
+                <i class="fa-solid fa-face-grin-tongue-squint"></i>
+            </div>
+            <h3 class="font-black text-lg text-slate-100 font-mono tracking-widest text-red-500">EXCHANGE DENIED</h3>
+            <p
+                class="text-xs text-slate-300 leading-relaxed font-mono font-bold bg-slate-950 p-3 rounded-lg border border-slate-850">
+                "진짜 날씨 맞추기로 딴 포인트를 실제 돈으로 바꿀 수 있을 줄 알았냐 멍청아? ㅋㅋㅋ 꿈 깨라!"
+            </p>
+            <button onclick="closeMockModal()"
+                class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2.5 rounded-xl text-xs transition active:scale-95 shadow-md shadow-red-950 min-h-[44px] flex items-center justify-center">
+                눈물을 머금고 확인하기 (CLOSE)
+            </button>
+        </div>
+    </div>
+
+    <!-- 모달 레이어: 모바일 전용 플로팅 슬립 바 -->
+    <div id="mobile-slip-bar" onclick="openMobileSlipSheet()">
+        <div class="flex items-center space-x-2">
+            <div class="bg-emerald-500 text-slate-950 font-black text-[10px] px-1.5 py-0.5 rounded-full"
+                id="m-slip-count">0</div>
+            <span class="text-xs font-bold text-slate-300" id="m-slip-title">선택된 예측 항목이 없습니다</span>
+        </div>
+        <div class="flex items-center space-x-2.5">
+            <span class="text-xs font-black text-emerald-400" id="m-slip-odd">0.00 배</span>
+            <button
+                class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-1.5 rounded-lg text-[10px] uppercase shadow-lg shadow-emerald-950/20 min-h-[44px] min-w-[44px] inline-flex items-center justify-center">
+                배팅입력
+            </button>
+        </div>
+    </div>
+
+    <!-- 모바일 바텀 시트 암전 백드롭 -->
+    <div id="mobile-slip-backdrop" onclick="closeMobileSlipSheet()"></div>
+
+    <!-- 모바일 전용 베팅 바텀 시트 -->
+    <div id="mobile-slip-sheet">
+        <div class="sheet-close-bar" onclick="closeMobileSlipSheet()"></div>
+        <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+            <span class="font-black text-sm tracking-wider uppercase text-slate-200 flex items-center">
+                <i class="fa-solid fa-ticket-alt mr-2 text-emerald-400"></i> BET SLIP (모바일)
+            </span>
+            <button onclick="clearBetSlip(); closeMobileSlipSheet();"
+                class="text-xs text-slate-500 hover:text-rose-400 transition font-bold min-h-[44px] min-w-[44px] inline-flex items-center justify-center">
+                <i class="fa-solid fa-trash mr-1"></i> 비우기
+            </button>
+        </div>
+        <div id="m-slip-content" class="space-y-4">
+            <!-- JS가 동적으로 슬립 상세 정보를 밀어넣음 -->
+        </div>
+    </div>
+
+    <!-- 알림 토스트 (Toast) 메시지 박스 -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none">
+        <!-- 동적 알림창들이 생성되어 아래로 차곡차곡 쌓임 -->
+    </div>
+
+    <!-- 푸터 정보 영역 -->
+    <footer class="border-t border-slate-900 bg-slate-950/90 py-5 text-center text-xs text-slate-600">
+        <p class="font-extrabold tracking-widest text-slate-500 uppercase">© 2026 SAMCHEOK WEATHER TOTO CHAMPIONSHIP.
+            ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script src="app.js" defer></script>
+</body>
+
+</html>

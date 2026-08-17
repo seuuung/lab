@@ -30,7 +30,9 @@
         #instructions {
             text-align: center;
             cursor: pointer;
-            padding: 50px 60px;
+            padding: clamp(24px, 5vw, 50px) clamp(16px, 5vw, 60px);
+            max-width: 90vw;
+            box-sizing: border-box;
             background: rgba(10, 20, 30, 0.6);
             border: 1px solid rgba(0, 240, 255, 0.2);
             border-radius: 8px;
@@ -44,7 +46,7 @@
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: clamp(1.75rem, 5vw, 3.5rem);
             margin-bottom: 10px;
             color: #fff;
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
@@ -106,7 +108,7 @@
         /* HUD 타이머 */
         #hud {
             position: absolute;
-            top: 20px;
+            top: max(20px, env(safe-area-inset-top, 20px));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -178,8 +180,8 @@
 
         #action-btn {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
+            bottom: max(30px, env(safe-area-inset-bottom, 30px));
+            right: max(30px, env(safe-area-inset-right, 30px));
             width: 70px;
             height: 70px;
             background: rgba(255, 0, 85, 0.2);
@@ -192,6 +194,7 @@
             pointer-events: auto;
             box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
             transition: background 0.1s;
+            touch-action: manipulation;
         }
 
         #action-btn:active {
@@ -217,11 +220,15 @@
             justify-content: center;
             color: white;
             z-index: 30;
+            padding: 1rem;
+            box-sizing: border-box;
         }
 
         .win-panel {
             text-align: center;
-            padding: 60px 80px;
+            padding: clamp(30px, 6vw, 60px) clamp(20px, 6vw, 80px);
+            max-width: 90vw;
+            box-sizing: border-box;
             border: 1px solid rgba(0, 240, 255, 0.3);
             background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
             border-radius: 12px;
@@ -232,10 +239,12 @@
             color: #fff;
             text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
             margin-bottom: 20px;
+            font-size: clamp(1.8rem, 5vw, 3rem);
         }
 
         button {
             padding: 15px 40px;
+            min-height: 44px;
             font-size: 1.2rem;
             letter-spacing: 1px;
             background: transparent;
@@ -247,6 +256,7 @@
             margin-top: 30px;
             box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.2), 0 0 10px rgba(0, 240, 255, 0.1);
             transition: all 0.3s ease;
+            touch-action: manipulation;
         }
 
         button:hover {
@@ -271,3 +281,66 @@
                 opacity: 0.3;
             }
         }
+
+        /* 표준 플로팅 홈 버튼 스타일 */
+        .floating-home-btn {
+            position: fixed;
+            top: max(16px, env(safe-area-inset-top, 16px));
+            left: max(16px, env(safe-area-inset-left, 16px));
+            z-index: 9999;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 44px;
+            min-width: 44px;
+            padding: 8px 14px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 9999px;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .floating-home-btn:hover {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(96, 165, 250, 0.6);
+            color: #60a5fa;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.35);
+        }
+
+        .floating-home-btn:active {
+            transform: scale(0.95);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .floating-home-btn svg {
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .floating-home-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 480px) {
+            .floating-home-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                gap: 4px;
+                min-height: 44px;
+            }
+        }
+

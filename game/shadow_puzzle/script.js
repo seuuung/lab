@@ -1,7 +1,12 @@
-// --- 레벨 데이터 (디테일과 인지도를 대폭 높인 10개의 레벨) ---
+// ============================================================================
+// 섀도우 퍼즐 (Shadow Puzzle) - 18개 레벨 및 모바일 UI 최적화 스크립트
+// ============================================================================
+
+// --- 1. 레벨 데이터 (18개 레벨 전수 정의 및 대칭성/정답 쿼터니언 매핑) ---
 const levels = [
     {
-        name: "하트", // Level 1: 튜토리얼 성격의 직관적인 모양
+        name: "하트 (Heart)",
+        description: "사랑스럽고 포근한 하트 형상",
         grid: [
             [0, 1, 1, 0, 1, 1, 0],
             [1, 1, 1, 1, 1, 1, 1],
@@ -10,10 +15,13 @@ const levels = [
             [0, 0, 1, 1, 1, 0, 0],
             [0, 0, 0, 1, 0, 0, 0]
         ],
-        color: 0xef4444, symmetricY: true, symmetricX: false
+        color: 0xf43f5e,
+        allowYFlip: true,
+        allowQuarterTurn: false
     },
     {
-        name: "고양이", // Level 2: 귀여운 동물
+        name: "고양이 (Cat)",
+        description: "쫑긋 솟은 귀가 매력적인 고양이",
         grid: [
             [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
             [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -25,10 +33,49 @@ const levels = [
             [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
             [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
         ],
-        color: 0x8b5cf6, symmetricY: true, symmetricX: false
+        color: 0x8b5cf6,
+        allowYFlip: true,
+        allowQuarterTurn: false
     },
     {
-        name: "사과", // Level 3: 잎사귀가 있어 비대칭인 과일
+        name: "나비 (Butterfly)",
+        description: "우아하게 날갯짓하는 푸른 나비",
+        grid: [
+            [1, 1, 0, 0, 1, 0, 0, 1, 1],
+            [1, 1, 1, 0, 1, 0, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 0, 1, 0, 1, 1, 1],
+            [1, 1, 0, 0, 1, 0, 0, 1, 1],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0]
+        ],
+        color: 0x06b6d4,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "오리 (Rubber Duck)",
+        description: "귀여운 부리를 뽐내는 러버덕",
+        grid: [
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 1, 1, 1, 1, 0, 0, 0]
+        ],
+        color: 0xfacc15,
+        allowYFlip: false,
+        allowQuarterTurn: false
+    },
+    {
+        name: "사과 (Apple)",
+        description: "잎사귀가 돋아난 싱그러운 사과",
         grid: [
             [0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
             [0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
@@ -41,10 +88,33 @@ const levels = [
             [0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
             [0, 0, 1, 1, 1, 1, 1, 0, 0, 0]
         ],
-        color: 0x10b981, symmetricY: false, symmetricX: false
+        color: 0x10b981,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "머그컵", // Level 4: 손잡이 때문에 뚜렷한 비대칭
+        name: "소나무 (Pine Tree)",
+        description: "푸르고 웅장한 침엽수 나무",
+        grid: [
+            [0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0]
+        ],
+        color: 0x22c55e,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "머그컵 (Mug)",
+        description: "손잡이가 달린 따뜻한 머그잔",
         grid: [
             [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
             [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -56,26 +126,29 @@ const levels = [
             [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
             [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0]
         ],
-        color: 0x3b82f6, symmetricY: false, symmetricX: false
+        color: 0x38bdf8,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "검 (Sword)", // Level 5: 길쭉한 형태
+        name: "열쇠 (Magic Key)",
+        description: "비밀을 여는 앤틱 황금 열쇠",
         grid: [
-            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+            [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [1, 1, 0, 1, 1, 0, 0, 0, 0, 0],
+            [1, 1, 0, 1, 1, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 0, 1, 1],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
         ],
-        color: 0x94a3b8, symmetricY: true, symmetricX: false
+        color: 0xeab308,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "우산", // Level 6: 곡선이 들어간 우산
+        name: "우산 (Umbrella)",
+        description: "비 오는 날을 지켜주는 클래식 우산",
         grid: [
             [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
@@ -88,10 +161,13 @@ const levels = [
             [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
             [0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0]
         ],
-        color: 0xf43f5e, symmetricY: false, symmetricX: false
+        color: 0xf43f5e,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "음표", // Level 7: 음악 기호
+        name: "음표 (Music Note)",
+        description: "경쾌한 멜로디의 8분 음표",
         grid: [
             [0, 0, 0, 0, 1, 1, 1, 1, 1],
             [0, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -104,10 +180,66 @@ const levels = [
             [1, 1, 1, 1, 0, 0, 0, 0, 0],
             [0, 1, 1, 0, 0, 0, 0, 0, 0]
         ],
-        color: 0xec4899, symmetricY: false, symmetricX: false
+        color: 0xec4899,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "집", // Level 8: 굴뚝이 있는 집
+        name: "모래시계 (Hourglass)",
+        description: "시간의 흐름을 담은 모래시계",
+        grid: [
+            [1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1]
+        ],
+        color: 0xf59e0b,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "검 (Sword)",
+        description: "날렵하고 웅장한 용사의 검",
+        grid: [
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        ],
+        color: 0x94a3b8,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "방패 (Shield)",
+        description: "십자 문양이 새겨진 수호자의 방패",
+        grid: [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 0, 1, 0, 1, 1, 1],
+            [1, 1, 0, 0, 1, 0, 0, 1, 1],
+            [1, 1, 1, 0, 1, 0, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0]
+        ],
+        color: 0x6366f1,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "집 (Sweet Home)",
+        description: "굴뚝에서 온기가 피어나는 집",
         grid: [
             [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
@@ -120,10 +252,13 @@ const levels = [
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
             [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0]
         ],
-        color: 0x84cc16, symmetricY: false, symmetricX: false
+        color: 0x84cc16,
+        allowYFlip: false,
+        allowQuarterTurn: false
     },
     {
-        name: "비행기", // Level 9: 날개가 넓은 비행기
+        name: "비행기 (Airplane)",
+        description: "하늘을 가르는 웅장한 비행기",
         grid: [
             [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
@@ -136,10 +271,46 @@ const levels = [
             [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
             [0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0]
         ],
-        color: 0x0ea5e9, symmetricY: true, symmetricX: false
+        color: 0x38bdf8,
+        allowYFlip: true,
+        allowQuarterTurn: false
     },
     {
-        name: "별", // Level 10: 최종 보스 느낌의 꽉 찬 별
+        name: "로켓 (Space Rocket)",
+        description: "우주로 날아오르는 탐사 로켓",
+        grid: [
+            [0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 1, 1, 1, 0, 0],
+            [0, 0, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0],
+            [0, 1, 1, 0, 1, 1, 0],
+            [0, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 0, 1, 0, 0, 1]
+        ],
+        color: 0xef4444,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "다이아몬드 (Diamond)",
+        description: "영롱하게 빛나는 최고급 보석",
+        grid: [
+            [0, 0, 1, 1, 1, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 1, 1, 1, 1, 1, 0],
+            [0, 0, 1, 1, 1, 1, 0, 0],
+            [0, 0, 0, 1, 1, 0, 0, 0]
+        ],
+        color: 0x06b6d4,
+        allowYFlip: true,
+        allowQuarterTurn: false
+    },
+    {
+        name: "별 (Twinkle Star)",
+        description: "밤하늘을 밝히는 빛나는 별",
         grid: [
             [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
@@ -152,36 +323,241 @@ const levels = [
             [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0],
             [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]
         ],
-        color: 0xeab308, symmetricY: true, symmetricX: false
+        color: 0xfbbf24,
+        allowYFlip: true,
+        allowQuarterTurn: false
     }
 ];
 
+// --- 2. 사운드 신디사이저 (Web Audio API) ---
+class SoundSynthesizer {
+    constructor() {
+        this.ctx = null;
+        this.enabled = localStorage.getItem('shadow_puzzle_sound') !== 'false';
+        this.lastTickTime = 0;
+    }
+
+    init() {
+        if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+                this.ctx = new AudioCtx();
+            }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    }
+
+    toggle() {
+        this.enabled = !this.enabled;
+        localStorage.setItem('shadow_puzzle_sound', this.enabled.toString());
+        return this.enabled;
+    }
+
+    playTick() {
+        if (!this.enabled) return;
+        const now = Date.now();
+        if (now - this.lastTickTime < 70) return;
+        this.lastTickTime = now;
+
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.03);
+
+        gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.035);
+    }
+
+    playNearTone() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(659.25, this.ctx.currentTime + 0.15);
+
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.16);
+    }
+
+    playSnap() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.04);
+
+            gain.gain.setValueAtTime(0.08, this.ctx.currentTime + idx * 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.04 + 0.35);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(this.ctx.currentTime + idx * 0.04);
+            osc.stop(this.ctx.currentTime + idx * 0.04 + 0.36);
+        });
+    }
+
+    playFanfare() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const notes = [
+            { f: 523.25, d: 0.12, t: 0.0 },
+            { f: 659.25, d: 0.12, t: 0.12 },
+            { f: 783.99, d: 0.12, t: 0.24 },
+            { f: 1046.50, d: 0.4, t: 0.36 }
+        ];
+
+        notes.forEach(note => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(note.f, this.ctx.currentTime + note.t);
+
+            gain.gain.setValueAtTime(0.12, this.ctx.currentTime + note.t);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + note.t + note.d);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start(this.ctx.currentTime + note.t);
+            osc.stop(this.ctx.currentTime + note.t + note.d + 0.02);
+        });
+    }
+
+    playHint() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1320, this.ctx.currentTime + 0.2);
+
+        gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.26);
+    }
+}
+
+const sound = new SoundSynthesizer();
+
+// --- 3. 로컬스토리지 진행도 관리 ---
+class ProgressManager {
+    constructor() {
+        this.key = 'shadow_puzzle_cleared_levels';
+        this.cleared = this.load();
+    }
+
+    load() {
+        try {
+            const data = localStorage.getItem(this.key);
+            return data ? JSON.parse(data) : [];
+        } catch {
+            return [];
+        }
+    }
+
+    save(levelIndex) {
+        if (!this.cleared.includes(levelIndex)) {
+            this.cleared.push(levelIndex);
+            try {
+                localStorage.setItem(this.key, JSON.stringify(this.cleared));
+            } catch {}
+        }
+    }
+
+    isCleared(levelIndex) {
+        return this.cleared.includes(levelIndex);
+    }
+
+    reset() {
+        this.cleared = [];
+        try {
+            localStorage.removeItem(this.key);
+        } catch {}
+    }
+}
+
+const progress = new ProgressManager();
+
+// --- 4. 게임 상태 및 Three.js 씬 초기화 ---
 let currentLevelIndex = 0;
 let gameState = 'playing';
 let currentTargetQuaternions = [];
 let activeTargetQuaternion = null;
 let correctStartTime = null;
+let nearSoundPlayed = false;
+let hintTimeoutId = null;
+
+// 회전 관성 (Momentum Inertia)
+let isDragging = false;
+let previousPointerPos = { x: 0, y: 0 };
+let angularVelocity = { x: 0, y: 0 };
+const ROTATION_SPEED = 0.0065;
+const FRICTION = 0.92;
 
 const canvas = document.getElementById('game-canvas');
+canvas.style.touchAction = 'none';
+
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a202c);
-scene.fog = new THREE.Fog(0x1a202c, 15, 60);
+scene.background = new THREE.Color(0x0b0f19);
+scene.fog = new THREE.Fog(0x0b0f19, 20, 70);
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+// 조명 설정
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
 scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-directionalLight.position.set(0, 0, 30);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.35);
+directionalLight.position.set(0, 0, 32);
 directionalLight.castShadow = true;
-
-// 배열 크기가 커졌으므로 그림자 생성 영역(Frustum)을 더 넉넉하게 확장
 directionalLight.shadow.mapSize.width = 2048;
 directionalLight.shadow.mapSize.height = 2048;
 directionalLight.shadow.camera.left = -25;
@@ -189,114 +565,242 @@ directionalLight.shadow.camera.right = 25;
 directionalLight.shadow.camera.top = 25;
 directionalLight.shadow.camera.bottom = -25;
 directionalLight.shadow.camera.near = 0.5;
-directionalLight.shadow.camera.far = 60;
+directionalLight.shadow.camera.far = 65;
+directionalLight.shadow.bias = -0.0005;
 scene.add(directionalLight);
 
-const fillLight = new THREE.DirectionalLight(0x90b0d0, 0.6);
-fillLight.position.set(15, 10, 15);
+const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.4);
+fillLight.position.set(15, 12, 18);
 scene.add(fillLight);
 
-const environmentMaterial = new THREE.MeshStandardMaterial({
-    color: 0x2d3748,
-    roughness: 0.9,
-    metalness: 0.1
+const rimLight = new THREE.DirectionalLight(0xa855f7, 0.3);
+rimLight.position.set(-15, -10, 10);
+scene.add(rimLight);
+
+// 배경 벽 및 바닥
+const wallMaterial = new THREE.MeshStandardMaterial({
+    color: 0x1e293b,
+    roughness: 0.85,
+    metalness: 0.15
 });
 
-const wallGeometry = new THREE.PlaneGeometry(120, 120); // 벽도 조금 넓힘
-const wall = new THREE.Mesh(wallGeometry, environmentMaterial);
+const wallGeometry = new THREE.PlaneGeometry(140, 140);
+const wall = new THREE.Mesh(wallGeometry, wallMaterial);
 wall.position.z = -15;
 wall.receiveShadow = true;
 scene.add(wall);
 
-const floor = new THREE.Mesh(wallGeometry, environmentMaterial);
+const floor = new THREE.Mesh(wallGeometry, wallMaterial);
 floor.rotation.x = -Math.PI / 2;
-floor.position.y = -10;
+floor.position.y = -12;
 floor.receiveShadow = true;
 scene.add(floor);
 
-let puzzleGroup = new THREE.Group();
+// 퍼즐 및 파티클 그룹
+const puzzleGroup = new THREE.Group();
 scene.add(puzzleGroup);
 
-function adjustLayoutForScreen() {
-    const isMobile = window.innerWidth < 768;
+const particleGroup = new THREE.Group();
+scene.add(particleGroup);
 
-    // 블록이 커졌으므로 오프셋과 카메라 거리 재조정
-    puzzleGroup.position.x = isMobile ? -4.0 : -2.0;
-
-    if (isMobile) {
-        camera.position.set(20, 15, 28);
-    } else {
-        camera.position.set(18, 14, 25);
+// --- 5. 3D 폭죽 파티클 시스템 (Confetti FX) ---
+class ParticleEmitter {
+    constructor() {
+        this.particles = [];
+        this.colors = [0x38bdf8, 0x06b6d4, 0x10b981, 0xfbbf24, 0xf43f5e, 0xa855f7];
+        this.geom = new THREE.BoxGeometry(0.25, 0.25, 0.25);
     }
+
+    explode(origin, count = 90) {
+        this.clear();
+        for (let i = 0; i < count; i++) {
+            const mat = new THREE.MeshBasicMaterial({
+                color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                transparent: true,
+                opacity: 1
+            });
+            const mesh = new THREE.Mesh(this.geom, mat);
+            mesh.position.copy(origin);
+
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI;
+            const speed = 4 + Math.random() * 8;
+
+            const velocity = new THREE.Vector3(
+                Math.sin(phi) * Math.cos(theta) * speed,
+                Math.sin(phi) * Math.sin(theta) * speed + 3,
+                Math.cos(phi) * speed
+            );
+
+            const rotSpeed = new THREE.Vector3(
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 10
+            );
+
+            particleGroup.add(mesh);
+            this.particles.push({
+                mesh,
+                velocity,
+                rotSpeed,
+                life: 1.0,
+                decay: 0.015 + Math.random() * 0.01
+            });
+        }
+    }
+
+    update(delta = 0.016) {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            p.life -= p.decay;
+
+            p.mesh.position.addScaledVector(p.velocity, delta);
+            p.velocity.y -= 9.8 * delta;
+            p.mesh.rotation.x += p.rotSpeed.x * delta;
+            p.mesh.rotation.y += p.rotSpeed.y * delta;
+            p.mesh.rotation.z += p.rotSpeed.z * delta;
+
+            p.mesh.material.opacity = Math.max(0, p.life);
+
+            if (p.life <= 0) {
+                particleGroup.remove(p.mesh);
+                p.mesh.geometry.dispose();
+                p.mesh.material.dispose();
+                this.particles.splice(i, 1);
+            }
+        }
+    }
+
+    clear() {
+        while (this.particles.length > 0) {
+            const p = this.particles.pop();
+            particleGroup.remove(p.mesh);
+            p.mesh.geometry.dispose();
+            p.mesh.material.dispose();
+        }
+    }
+}
+
+const confetti = new ParticleEmitter();
+
+// --- 6. 뷰포트 레이아웃 및 반응형 카메라 보정 ---
+function adjustLayoutForScreen() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const aspect = width / height;
+    const isMobile = width < 768 || aspect < 1.0;
+
+    if (aspect < 1.0) {
+        const baseFov = 46;
+        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 64);
+        camera.position.set(16, 15, 30);
+        puzzleGroup.position.x = -2.2;
+    } else if (isMobile) {
+        camera.fov = 45;
+        camera.position.set(18, 14, 27);
+        puzzleGroup.position.x = -3.0;
+    } else {
+        camera.fov = 45;
+        camera.position.set(17, 13, 24);
+        puzzleGroup.position.x = -2.0;
+    }
+
+    camera.aspect = aspect;
+    camera.updateProjectionMatrix();
     camera.lookAt(0, 0, 0);
 }
 
+// --- 7. 레벨 로드 및 쿼터니언 정밀 매핑 ---
 function loadLevel(index) {
     if (index >= levels.length) {
         gameState = 'ended';
-        const endingModal = document.getElementById('ending-modal');
-        endingModal.classList.remove('hidden');
-        endingModal.classList.add('flex');
+        showEndingModal();
         return;
     }
 
     gameState = 'playing';
     correctStartTime = null;
+    nearSoundPlayed = false;
+    currentLevelIndex = index;
+    angularVelocity = { x: 0, y: 0 };
+    confetti.clear();
+    hideHint();
+
     const levelData = levels[index];
+
+    // UI 헤더 업데이트
     document.getElementById('level-text').innerText = `레벨 ${index + 1} / ${levels.length}`;
-
-    const instruction = document.getElementById('instruction');
-    instruction.innerText = "모양을 맞추고 2초 동안 기다리세요!";
-    instruction.className = "pointer-events-auto text-lg text-white/80 animate-pulse transition-all duration-300 bg-black/30 px-6 py-2 rounded-full backdrop-blur-sm shadow-md";
-
-    const nextContainer = document.getElementById('next-btn-container');
-    nextContainer.classList.add('h-0', 'opacity-0');
-    nextContainer.classList.remove('h-[52px]', 'opacity-100');
-
-    currentTargetQuaternions = [];
-    // 상하좌우 모든 방향(90도 단위) 및 뒤집어진 상태를 정답으로 인정
-    for (let i = 0; i < 4; i++) {
-        const qZ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), i * Math.PI / 2);
-        currentTargetQuaternions.push(qZ);
-
-        const qFlip = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
-        const qFlippedZ = new THREE.Quaternion().multiplyQuaternions(qZ, qFlip);
-        currentTargetQuaternions.push(qFlippedZ);
+    const levelBadge = document.getElementById('level-badge');
+    if (progress.isCleared(index)) {
+        levelBadge.className = "w-2 h-2 rounded-full bg-emerald-400";
+    } else {
+        levelBadge.className = "w-2 h-2 rounded-full bg-cyan-400 animate-pulse";
     }
 
+    // 하단 안내 배너
+    const instruction = document.getElementById('instruction');
+    instruction.innerHTML = `<span class="text-white font-bold">${levelData.name}</span> 그림자를 완성해보세요!`;
+    document.getElementById('instruction-card').className = "pointer-events-auto glass-panel px-5 py-2 sm:px-6 sm:py-2.5 rounded-full shadow-2xl transition-all duration-300 text-center max-w-md";
+
+    // 일치율 HUD 초기화
+    updateProximityHUD(0, false);
+
+    // 다음 버튼 숨기기
+    const nextContainer = document.getElementById('next-btn-container');
+    nextContainer.classList.add('h-0', 'opacity-0');
+    nextContainer.classList.remove('h-[46px]', 'opacity-100');
+
+    // 정답 쿼터니언 정밀 매핑
+    currentTargetQuaternions = [];
+
+    const qIdentity = new THREE.Quaternion().identity();
+    currentTargetQuaternions.push(qIdentity);
+
+    if (levelData.allowYFlip) {
+        const qYFlip = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+        currentTargetQuaternions.push(qYFlip);
+    }
+
+    if (levelData.allowQuarterTurn) {
+        for (let i = 1; i < 4; i++) {
+            const qZ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), i * Math.PI / 2);
+            currentTargetQuaternions.push(qZ);
+        }
+    }
+
+    // 기존 블록 제거
     while (puzzleGroup.children.length > 0) {
         const child = puzzleGroup.children[0];
-        child.geometry.dispose();
-        child.material.dispose();
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) child.material.dispose();
         puzzleGroup.remove(child);
     }
 
     puzzleGroup.quaternion.identity();
 
+    // 3D 블록 조립
     const grid = levelData.grid;
     const rows = grid.length;
     const cols = grid[0].length;
-    const blockSize = 1;
+    const blockSize = 1.0;
 
-    const material = new THREE.MeshStandardMaterial({
+    const blockMaterial = new THREE.MeshStandardMaterial({
         color: levelData.color,
-        roughness: 0.3,
-        metalness: 0.2
+        roughness: 0.25,
+        metalness: 0.25
     });
-    const geometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
+    const blockGeometry = new THREE.BoxGeometry(blockSize, blockSize, blockSize);
 
     for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
             if (grid[y][x] === 1) {
-                const mesh = new THREE.Mesh(geometry, material);
+                const mesh = new THREE.Mesh(blockGeometry, blockMaterial);
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
 
                 const posX = (x - cols / 2 + 0.5) * blockSize;
                 const posY = -(y - rows / 2 + 0.5) * blockSize;
-
-                // 블록 개수가 많아졌으므로 깊이(Z축)를 더 넓게 퍼뜨려 뭉침을 방지하고 난이도를 유지
-                const posZ = (Math.random() - 0.5) * 10;
+                const posZ = (Math.random() - 0.5) * 8.5;
 
                 mesh.position.set(posX, posY, posZ);
                 puzzleGroup.add(mesh);
@@ -309,15 +813,15 @@ function loadLevel(index) {
 
 function randomizeRotation() {
     const euler = new THREE.Euler(
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2
+        (Math.random() * 0.8 + 0.2) * Math.PI,
+        (Math.random() * 0.8 + 0.2) * Math.PI,
+        (Math.random() * 0.8 + 0.2) * Math.PI
     );
     puzzleGroup.quaternion.setFromEuler(euler);
 
     let tooClose = false;
     for (let tq of currentTargetQuaternions) {
-        if (Math.abs(puzzleGroup.quaternion.dot(tq)) > 0.85) {
+        if (Math.abs(puzzleGroup.quaternion.dot(tq)) > 0.82) {
             tooClose = true;
             break;
         }
@@ -328,42 +832,85 @@ function randomizeRotation() {
     }
 }
 
-let isDragging = false;
-let previousMousePosition = { x: 0, y: 0 };
-
+// --- 8. 포인터 입력 및 관성 모멘텀 (Momentum) 인터랙션 ---
 window.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('#next-btn-container')) return;
-    if (e.target.closest('#restart-btn')) return; // 리스타트 버튼 예외 처리
+    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('#level-modal') || e.target.closest('#ending-modal') || e.target.closest('#hint-card-panel')) {
+        return;
+    }
 
     if (gameState !== 'playing') return;
+
+    sound.init();
     isDragging = true;
-    previousMousePosition = { x: e.clientX, y: e.clientY };
+    previousPointerPos = { x: e.clientX, y: e.clientY };
+    angularVelocity = { x: 0, y: 0 };
+
+    if (canvas.setPointerCapture && e.pointerId) {
+        try { canvas.setPointerCapture(e.pointerId); } catch {}
+    }
 });
 
 window.addEventListener('pointermove', (e) => {
     if (!isDragging || gameState !== 'playing') return;
 
-    const deltaMove = {
-        x: e.clientX - previousMousePosition.x,
-        y: e.clientY - previousMousePosition.y
-    };
+    const deltaX = e.clientX - previousPointerPos.x;
+    const deltaY = e.clientY - previousPointerPos.y;
 
-    const rotationSpeed = 0.006;
+    if (Math.abs(deltaX) > 0 || Math.abs(deltaY) > 0) {
+        angularVelocity.x = deltaX * ROTATION_SPEED;
+        angularVelocity.y = deltaY * ROTATION_SPEED;
+
+        applyRotation(angularVelocity.x, angularVelocity.y);
+        sound.playTick();
+    }
+
+    previousPointerPos = { x: e.clientX, y: e.clientY };
+});
+
+window.addEventListener('pointerup', (e) => {
+    isDragging = false;
+    if (canvas.releasePointerCapture && e.pointerId) {
+        try { canvas.releasePointerCapture(e.pointerId); } catch {}
+    }
+});
+
+window.addEventListener('pointercancel', () => {
+    isDragging = false;
+});
+
+function applyRotation(velX, velY) {
     const camRight = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
     const camUp = new THREE.Vector3(0, 1, 0).applyQuaternion(camera.quaternion);
 
-    const qX = new THREE.Quaternion().setFromAxisAngle(camUp, deltaMove.x * rotationSpeed);
-    const qY = new THREE.Quaternion().setFromAxisAngle(camRight, deltaMove.y * rotationSpeed);
+    const qX = new THREE.Quaternion().setFromAxisAngle(camUp, velX);
+    const qY = new THREE.Quaternion().setFromAxisAngle(camRight, velY);
 
     const qTotal = new THREE.Quaternion().multiplyQuaternions(qX, qY);
     puzzleGroup.quaternion.premultiply(qTotal);
+}
 
-    previousMousePosition = { x: e.clientX, y: e.clientY };
-});
+// --- 9. 실시간 승리 판정 & 자석 인력 & HUD 업데이트 ---
+function updateProximityHUD(percentage, isHigh, isSnap = false) {
+    const bar = document.getElementById('proximity-bar');
+    const pctText = document.getElementById('proximity-pct');
+    const dot = document.getElementById('proximity-dot');
 
-window.addEventListener('pointerup', () => {
-    isDragging = false;
-});
+    if (!bar || !pctText) return;
+
+    pctText.innerText = `${Math.min(100, Math.max(0, percentage))}%`;
+    bar.style.width = `${Math.min(100, Math.max(0, percentage))}%`;
+
+    if (isSnap) {
+        bar.className = 'proximity-meter-bar snap';
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping';
+    } else if (isHigh) {
+        bar.className = 'proximity-meter-bar high';
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
+    } else {
+        bar.className = 'proximity-meter-bar';
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-cyan-400';
+    }
+}
 
 function checkWinCondition() {
     if (gameState !== 'playing') return;
@@ -379,64 +926,244 @@ function checkWinCondition() {
         }
     }
 
-    // 각도 허용 범위를 더욱 타이트하게 줄였습니다 (0.975).
-    if (maxDot > 0.980) {
+    const rawPct = (maxDot - 0.72) / (0.992 - 0.72);
+    const proximityPct = Math.round(Math.max(0, Math.min(1, rawPct)) * 100);
+
+    const isNear = proximityPct >= 90;
+    const isReady = maxDot > 0.985 || proximityPct >= 96;
+
+    updateProximityHUD(proximityPct, isNear, isReady);
+
+    if (isNear && !isDragging) {
+        puzzleGroup.quaternion.slerp(bestTarget, 0.045);
+        if (!nearSoundPlayed) {
+            sound.playNearTone();
+            nearSoundPlayed = true;
+        }
+    } else if (!isNear) {
+        nearSoundPlayed = false;
+    }
+
+    if (isReady) {
         if (correctStartTime === null) {
             correctStartTime = Date.now();
-        } else if (Date.now() - correctStartTime >= 2000) {
-            // 2초(2000ms)가 경과하면
-            // 부드러운 자석 애니메이션 연출을 위해 snapping 상태로 전환합니다.
+        } else if (Date.now() - correctStartTime >= 800) {
             gameState = 'snapping';
             activeTargetQuaternion = bestTarget;
+            sound.playSnap();
         }
     } else {
         correctStartTime = null;
     }
 }
 
-function animate() {
+// --- 10. 💡 힌트(Hint) 시스템 - 자동 회전 제거 및 독립 프리뷰 HUD 렌더링 ---
+function drawHintPreview() {
+    const hintCanvas = document.getElementById('hint-preview-canvas');
+    if (!hintCanvas) return;
+
+    const ctx = hintCanvas.getContext('2d');
+    const width = hintCanvas.width;
+    const height = hintCanvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const levelData = levels[currentLevelIndex];
+    const grid = levelData.grid;
+    const rows = grid.length;
+    const cols = grid[0].length;
+
+    // 110x110 캔버스에 최적화된 콤팩트 패딩 및 셀 크기
+    const cellSize = Math.min((width - 16) / cols, (height - 16) / rows);
+    const startX = (width - cols * cellSize) / 2;
+    const startY = (height - rows * cellSize) / 2;
+
+    ctx.save();
+    ctx.shadowColor = '#facc15';
+    ctx.shadowBlur = 6;
+    ctx.fillStyle = '#facc15';
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === 1) {
+                ctx.beginPath();
+                ctx.rect(startX + c * cellSize + 0.5, startY + r * cellSize + 0.5, cellSize - 1, cellSize - 1);
+                ctx.fill();
+            }
+        }
+    }
+    ctx.restore();
+}
+
+function showHint() {
+    if (gameState !== 'playing') return;
+
+    sound.playHint();
+    
+    // 1. 현재 레벨명 업데이트 및 프리뷰 캔버스 드로잉
+    const levelName = levels[currentLevelIndex].name;
+    const nameEl = document.getElementById('hint-level-name');
+    if (nameEl) nameEl.innerText = levelName;
+
+    drawHintPreview();
+
+    // 2. 힌트 프리뷰 카드 표시 (퍼즐 블록과 안 겹치며 또렷하게 보임)
+    const hintPanel = document.getElementById('hint-card-panel');
+    if (hintPanel) {
+        hintPanel.classList.add('show');
+    }
+
+    // 3. 사용자 요청 반영: 퍼즐 블록을 자동으로 회전시키지 않음 (slerp 코드 삭제)
+
+    // 4. 하단 안내 배너 갱신
+    const instruction = document.getElementById('instruction');
+    instruction.innerHTML = `💡 <span class="text-yellow-300 font-bold">'${levelName}'</span> 목표 그림자를 확인하세요!`;
+
+    // 5. 4.5초 후 자동 닫기 (이전 타이머가 있다면 리셋)
+    if (hintTimeoutId) clearTimeout(hintTimeoutId);
+    hintTimeoutId = setTimeout(() => {
+        hideHint();
+    }, 4500);
+}
+
+function hideHint() {
+    const hintPanel = document.getElementById('hint-card-panel');
+    if (hintPanel) {
+        hintPanel.classList.remove('show');
+    }
+    if (hintTimeoutId) {
+        clearTimeout(hintTimeoutId);
+        hintTimeoutId = null;
+    }
+}
+
+// --- 11. 모달 및 레벨 선택기 UI 컨트롤 ---
+function renderLevelGrid() {
+    const grid = document.getElementById('level-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    let clearedCount = 0;
+
+    levels.forEach((lvl, idx) => {
+        const isCleared = progress.isCleared(idx);
+        const isCurrent = idx === currentLevelIndex;
+        if (isCleared) clearedCount++;
+
+        const card = document.createElement('button');
+        card.className = `level-card rounded-2xl p-2.5 sm:p-3 flex flex-col items-center gap-1 text-left transition-all ${
+            isCurrent ? 'current' : isCleared ? 'cleared' : ''
+        }`;
+
+        card.innerHTML = `
+            <div class="flex items-center justify-between w-full">
+                <span class="text-[10px] sm:text-xs font-mono font-bold text-slate-400">#${idx + 1}</span>
+                <span class="text-xs sm:text-sm">${isCleared ? '✅' : isCurrent ? '📍' : '🔒'}</span>
+            </div>
+            <div class="text-xs sm:text-sm font-bold text-white truncate w-full text-center">${lvl.name.split(' ')[0]}</div>
+        `;
+
+        card.addEventListener('click', () => {
+            sound.init();
+            closeLevelModal();
+            loadLevel(idx);
+        });
+
+        grid.appendChild(card);
+    });
+
+    const clearedCountEl = document.getElementById('cleared-count');
+    if (clearedCountEl) {
+        clearedCountEl.innerText = `${clearedCount} / ${levels.length}`;
+    }
+}
+
+function openLevelModal() {
+    renderLevelGrid();
+    const modal = document.getElementById('level-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeLevelModal() {
+    const modal = document.getElementById('level-modal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+}
+
+function showEndingModal() {
+    const modal = document.getElementById('ending-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    confetti.explode(new THREE.Vector3(0, 0, 10), 140);
+    sound.playFanfare();
+}
+
+// --- 12. 메인 애니메이션 루프 ---
+let lastTime = performance.now();
+
+function animate(currentTime) {
     requestAnimationFrame(animate);
+
+    const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
+    lastTime = currentTime;
+
+    if (!isDragging && gameState === 'playing') {
+        if (Math.abs(angularVelocity.x) > 0.0001 || Math.abs(angularVelocity.y) > 0.0001) {
+            applyRotation(angularVelocity.x, angularVelocity.y);
+            angularVelocity.x *= FRICTION;
+            angularVelocity.y *= FRICTION;
+        }
+    }
 
     checkWinCondition();
 
-    if (gameState === 'snapping') {
-        // 부드럽게 정답 각도로 회전 (자석 효과)
-        puzzleGroup.quaternion.slerp(activeTargetQuaternion, 0.1);
+    if (gameState === 'snapping' && activeTargetQuaternion) {
+        puzzleGroup.quaternion.slerp(activeTargetQuaternion, 0.14);
 
-        // 거의 완벽하게 각도가 맞춰지면 정답 UI 표시
         if (Math.abs(puzzleGroup.quaternion.dot(activeTargetQuaternion)) > 0.999) {
             puzzleGroup.quaternion.copy(activeTargetQuaternion);
             gameState = 'success';
 
+            progress.save(currentLevelIndex);
+
+            confetti.explode(puzzleGroup.position, 100);
+            sound.playFanfare();
+
             const levelName = levels[currentLevelIndex].name;
             const instruction = document.getElementById('instruction');
+            instruction.innerHTML = `🎉 정답입니다! <strong class="text-white ml-1">('${levelName}')</strong>`;
+            document.getElementById('instruction-card').className = "pointer-events-auto glass-panel px-6 py-2.5 rounded-full shadow-2xl transition-all duration-300 text-center max-w-md border border-emerald-500/50 bg-emerald-950/70 text-emerald-300 font-bold";
 
-            instruction.innerHTML = `정답입니다! 👏 <span class="text-white ml-2 opacity-90">('${levelName}')</span>`;
-            instruction.className = "pointer-events-auto text-xl text-green-400 font-bold transition-all duration-300 bg-black/60 px-8 py-3 rounded-full backdrop-blur-md shadow-lg shadow-green-500/20";
+            updateProximityHUD(100, true, true);
 
             const nextContainer = document.getElementById('next-btn-container');
             nextContainer.classList.remove('h-0', 'opacity-0');
-            nextContainer.classList.add('h-[52px]', 'opacity-100');
+            nextContainer.classList.add('h-[46px]', 'opacity-100');
         }
     }
 
-    puzzleGroup.position.y = Math.sin(Date.now() * 0.002) * 0.2;
+    confetti.update(delta);
+    puzzleGroup.position.y = Math.sin(currentTime * 0.002) * 0.25;
+
     renderer.render(scene, camera);
 }
 
+// --- 13. 이벤트 리스너 바인딩 ---
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     adjustLayoutForScreen();
 });
 
 document.getElementById('next-btn').addEventListener('click', () => {
+    sound.init();
     currentLevelIndex++;
     loadLevel(currentLevelIndex);
 });
 
 document.getElementById('restart-btn').addEventListener('click', () => {
+    sound.init();
     const endingModal = document.getElementById('ending-modal');
     endingModal.classList.remove('flex');
     endingModal.classList.add('hidden');
@@ -445,6 +1172,45 @@ document.getElementById('restart-btn').addEventListener('click', () => {
     loadLevel(currentLevelIndex);
 });
 
+document.getElementById('hint-btn').addEventListener('click', () => {
+    sound.init();
+    showHint();
+});
+
+document.getElementById('close-hint-btn').addEventListener('click', () => {
+    hideHint();
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    sound.init();
+    randomizeRotation();
+});
+
+document.getElementById('sound-btn').addEventListener('click', () => {
+    sound.init();
+    const isEnabled = sound.toggle();
+    document.getElementById('sound-icon').innerText = isEnabled ? '🔊' : '🔇';
+});
+
+document.getElementById('level-select-btn').addEventListener('click', () => {
+    sound.init();
+    openLevelModal();
+});
+
+document.getElementById('close-level-modal').addEventListener('click', () => {
+    closeLevelModal();
+});
+
+document.getElementById('reset-progress-btn').addEventListener('click', () => {
+    if (confirm('모든 레벨 클리어 진행도를 초기화하시겠습니까?')) {
+        progress.reset();
+        renderLevelGrid();
+        loadLevel(currentLevelIndex);
+    }
+});
+
+document.getElementById('sound-icon').innerText = sound.enabled ? '🔊' : '🔇';
+
 adjustLayoutForScreen();
 loadLevel(currentLevelIndex);
-animate();
+requestAnimationFrame(animate);

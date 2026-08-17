@@ -1,8 +1,8 @@
         // 모바일 환경 감지
-        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-            isMobile = true;
-        }
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ||
+            ('ontouchstart' in window && window.innerWidth <= 1024) ||
+            (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
 
         const MAZE_SIZE = 35;
         const CELL_SIZE = 10;
@@ -143,6 +143,7 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             document.body.appendChild(renderer.domElement);
 
             const blocker = document.getElementById('blocker');
@@ -256,13 +257,20 @@
             const joyThumb = document.getElementById('joystick-thumb');
             const actionBtn = document.getElementById('action-btn');
 
+            if (joyZone) joyZone.style.touchAction = 'none';
+            if (lookZone) lookZone.style.touchAction = 'none';
+            if (actionBtn) actionBtn.style.touchAction = 'none';
+
             let joyId = null, lookId = null;
             let joyStart = { x: 0, y: 0 }, lastLook = { x: 0, y: 0 };
 
-            actionBtn.addEventListener('touchstart', (e) => { e.preventDefault(); handleMarkerAction(); });
+            actionBtn.addEventListener('touchstart', (e) => {
+                if (e.cancelable) e.preventDefault();
+                handleMarkerAction();
+            }, { passive: false });
 
             joyZone.addEventListener('touchstart', (e) => {
-                e.preventDefault();
+                if (e.cancelable) e.preventDefault();
                 const touch = e.changedTouches[0];
                 joyId = touch.identifier;
                 joyStart = { x: touch.clientX, y: touch.clientY };
@@ -272,12 +280,19 @@
                 joyBase.style.top = touch.clientY + 'px';
                 joyThumb.style.transform = `translate(-50%, -50%)`;
                 joyDelta = { x: 0, y: 0 };
-            });
+            }, { passive: false });
 
-            joyZone.addEventListener('touchmove', (e) => {
-                e.preventDefault();
+            lookZone.addEventListener('touchstart', (e) => {
+                if (e.cancelable) e.preventDefault();
+                const touch = e.changedTouches[0];
+                lookId = touch.identifier;
+                lastLook = { x: touch.clientX, y: touch.clientY };
+            }, { passive: false });
+
+            window.addEventListener('touchmove', (e) => {
                 for (let touch of e.changedTouches) {
                     if (touch.identifier === joyId) {
+                        if (e.cancelable) e.preventDefault();
                         let dx = touch.clientX - joyStart.x;
                         let dy = touch.clientY - joyStart.y;
                         const maxDist = 40;
@@ -293,33 +308,8 @@
                         joyDelta.x = dx / maxDist;
                         joyDelta.y = dy / maxDist;
                     }
-                }
-            });
-
-            const endJoy = (e) => {
-                e.preventDefault();
-                for (let touch of e.changedTouches) {
-                    if (touch.identifier === joyId) {
-                        joyId = null;
-                        joyBase.style.display = 'none';
-                        joyDelta = { x: 0, y: 0 };
-                    }
-                }
-            };
-            joyZone.addEventListener('touchend', endJoy);
-            joyZone.addEventListener('touchcancel', endJoy);
-
-            lookZone.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const touch = e.changedTouches[0];
-                lookId = touch.identifier;
-                lastLook = { x: touch.clientX, y: touch.clientY };
-            });
-
-            lookZone.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                for (let touch of e.changedTouches) {
                     if (touch.identifier === lookId) {
+                        if (e.cancelable) e.preventDefault();
                         const deltaX = touch.clientX - lastLook.x;
                         const deltaY = touch.clientY - lastLook.y;
                         lastLook = { x: touch.clientX, y: touch.clientY };
@@ -335,16 +325,23 @@
                         camera.quaternion.setFromEuler(euler);
                     }
                 }
-            });
+            }, { passive: false });
 
-            const endLook = (e) => {
-                e.preventDefault();
+            const endTouch = (e) => {
                 for (let touch of e.changedTouches) {
-                    if (touch.identifier === lookId) lookId = null;
+                    if (touch.identifier === joyId) {
+                        joyId = null;
+                        joyBase.style.display = 'none';
+                        joyDelta = { x: 0, y: 0 };
+                    }
+                    if (touch.identifier === lookId) {
+                        lookId = null;
+                    }
                 }
             };
-            lookZone.addEventListener('touchend', endLook);
-            lookZone.addEventListener('touchcancel', endLook);
+
+            window.addEventListener('touchend', endTouch, { passive: false });
+            window.addEventListener('touchcancel', endTouch, { passive: false });
         }
 
         function startTimer() {
@@ -462,6 +459,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }
 
         function animate() {
