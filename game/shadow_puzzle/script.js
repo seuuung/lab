@@ -680,22 +680,22 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-// 조명 설정
+// 조명 설정 (Z축 수직 투영으로 3D 블록 깊이 차이에 의한 그림자 찌그러짐 원천 차단)
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.35);
 scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.35);
-directionalLight.position.set(0, -7.5, 30);
+directionalLight.position.set(0, 0, 32);
 directionalLight.target.position.set(0, 0, 0);
 scene.add(directionalLight.target);
 
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.width = 2048;
 directionalLight.shadow.mapSize.height = 2048;
-directionalLight.shadow.camera.left = -28;
-directionalLight.shadow.camera.right = 28;
-directionalLight.shadow.camera.top = 30;
-directionalLight.shadow.camera.bottom = -30;
+directionalLight.shadow.camera.left = -25;
+directionalLight.shadow.camera.right = 25;
+directionalLight.shadow.camera.top = 25;
+directionalLight.shadow.camera.bottom = -25;
 directionalLight.shadow.camera.near = 0.5;
 directionalLight.shadow.camera.far = 65;
 directionalLight.shadow.bias = -0.0005;
@@ -825,27 +825,29 @@ function adjustLayoutForScreen() {
     const isMobile = width < 768 || aspect < 1.0;
 
     if (aspect < 1.0) {
-        // 모바일 세로 화면: 초기의 깊은 공간감 원근 뷰
+        // 모바일 세로 화면: 깊은 공간감 원근 뷰 (큐브와 그림자 시선 분리)
         const baseFov = 46;
-        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 64);
-        camera.position.set(16, 15, 30);
+        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 62);
+        camera.position.set(16, 14, 28);
         basePuzzlePos = { x: -2.2, y: 0, z: 0 };
+        camera.lookAt(0, 0, -4);
     } else if (isMobile) {
         // 모바일 가로 화면
         camera.fov = 45;
         camera.position.set(18, 14, 27);
         basePuzzlePos = { x: -3.0, y: 0, z: 0 };
+        camera.lookAt(0, 0, 0);
     } else {
-        // 데스크톱: 초기의 웅장한 원근감
+        // 데스크톱: 웅장한 원근감
         camera.fov = 45;
         camera.position.set(17, 13, 24);
         basePuzzlePos = { x: -2.0, y: 0, z: 0 };
+        camera.lookAt(0, 0, 0);
     }
 
     puzzleGroup.position.set(basePuzzlePos.x, basePuzzlePos.y, basePuzzlePos.z);
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
-    camera.lookAt(0, 0, 0);
 }
 
 // --- 8. 레벨 로드 및 쿼터니언 정밀 대칭 매핑 ---
