@@ -1767,12 +1767,17 @@ function closeImageSaveModal() {
     }
 }
 
+function getCleanBaseUrl() {
+    let path = window.location.pathname.replace(/\/index\.html$/i, '');
+    if (!path.endsWith('/')) path += '/';
+    return window.location.origin + path;
+}
+
 function copyChallengeLink() {
     trackEvent('viral_share', { action_type: 'copy_challenge' });
     const totalSec = progress.stats.totalTime || 135;
 
-    const baseUrl = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
-    const challengeUrl = `${baseUrl}#c=${totalSec}`;
+    const challengeUrl = `${getCleanBaseUrl()}#c=${totalSec}`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(challengeUrl).then(() => {
@@ -1989,7 +1994,7 @@ document.getElementById('copy-story-btn').addEventListener('click', () => {
     sound.init();
     trackEvent('viral_share', { action_type: 'copy_link' });
 
-    const shareUrl = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
+    const shareUrl = getCleanBaseUrl();
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(shareUrl).then(() => {
@@ -2046,7 +2051,7 @@ function checkInAppBrowser() {
 const copyInAppBtn = document.getElementById('copy-inapp-url-btn');
 if (copyInAppBtn) {
     copyInAppBtn.addEventListener('click', () => {
-        const url = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
+        const url = getCleanBaseUrl();
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url).then(() => {
                 copyInAppBtn.innerHTML = '<span>✅</span><span>주소가 복사되었습니다! Safari에 붙여넣으세요</span>';
