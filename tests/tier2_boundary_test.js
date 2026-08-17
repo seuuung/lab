@@ -40,7 +40,7 @@ function runTier2Tests() {
     assertIncludes(indexViewport, 'viewport-fit=cover', 'Tier2-B1-01: index.html viewport에 viewport-fit=cover 포함');
     assertIncludes(indexViewport, 'width=device-width', 'Tier2-B1-02: index.html viewport에 width=device-width 포함');
 
-    // 2. 10개 하위 프로젝트 viewport-fit=cover 검증 (10 assertions)
+    // 2. 9개 하위 프로젝트 viewport-fit=cover 검증 (9 assertions)
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameHtml = readFile(path.join(dir, 'index.html'));
         const vp = extractMetaViewport(gameHtml) || '';
@@ -52,7 +52,7 @@ function runTier2Tests() {
     const hasIndexSafeArea = /safe-area-inset|env\(safe-area/i.test(indexHtml) || /pt-safe|pb-safe/i.test(indexHtml) || /p-4|pt-8|max\(/i.test(indexHtml);
     assert(hasIndexSafeArea, 'Tier2-B1-13: index.html에 Safe-Area 또는 상단 여백 보정 적용');
 
-    // 10개 게임 각각 Safe-Area or Floating 버튼 위치 보정
+    // 9개 게임 각각 Safe-Area or Floating 버튼 위치 보정
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameHtml = readFile(path.join(dir, 'index.html'));
         const hasSafeAreaInGame = /safe-area-inset/i.test(gameHtml) || 
@@ -137,11 +137,8 @@ function runTier2Tests() {
     const hasHackingResponsive = hackingHtml.includes('w-full') || hackingHtml.includes('overflow-') || hackingHtml.includes('break-all') || hackingHtml.includes('max-w-') || hackingCss.includes('width: 100%') || hackingCss.includes('overflow: hidden');
     assert(hasHackingResponsive, 'Tier2-B2-14: game/hacking 터미널 모바일 줄바꿈 및 오버플로우 방지');
 
-    // 12. toto 320px 호환성
-    const totoHtml = readFile('game/toto/index.html');
-    assert(totoHtml.includes('w-full') || totoHtml.includes('max-w-') || totoHtml.includes('grid-cols-1') || totoHtml.includes('flex-col'), 'Tier2-B2-15: game/toto 모바일 반응형 레이아웃 구성');
 
-    // 13. 10개 프로젝트 바디/래퍼 오버플로우 방지 전수 검증 (10 assertions)
+    // 13. 9개 프로젝트 바디/래퍼 오버플로우 방지 전수 검증 (9 assertions)
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         let content = readFile(path.join(dir, 'index.html'));
         const cssPath = path.join(dir, 'style.css');
@@ -162,7 +159,7 @@ function runTier2Tests() {
     const hasTabTouchTarget = /py-[2-4]|px-[3-6]|h-1[0-2]|min-h-\[44px\]|p-[2-4]/i.test(indexHtml);
     assert(hasTabTouchTarget, 'Tier2-B3-01: index.html 탭 버튼 패딩/높이 44px+ 터치 타겟 규격 충족');
 
-    // 2. 10개 하위 프로젝트 홈 버튼 44px+ 터치 타겟 검증 (10 assertions)
+    // 2. 9개 하위 프로젝트 홈 버튼 44px+ 터치 타겟 검증 (9 assertions)
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const html = readFile(path.join(dir, 'index.html'));
         const hasHomeBtnTouchTarget = /min-h-\[44px\]|min-w-\[44px\]|p-2\.5|p-3|py-2\.5|py-3|h-1[1-2]|w-1[1-2]|floating-home-btn|btn|px-4\s+py-2/i.test(html);
@@ -175,8 +172,6 @@ function runTier2Tests() {
     // 4. 3D 지뢰찾기 모드 버튼 (F7)
     assert(minesweeperHtml.includes('p-2') || minesweeperHtml.includes('py-2') || minesweeperHtml.includes('px-3') || minesweeperHtml.includes('button'), 'Tier2-B3-13: game/3D_ minesweeper 컨트롤 버튼 터치 타겟 확보');
 
-    // 5. 기상토토 베팅 버튼 (F7)
-    assert(totoHtml.includes('py-') || totoHtml.includes('p-') || totoHtml.includes('button') || totoHtml.includes('h-'), 'Tier2-B3-14: game/toto 베팅 버튼 터치 타겟 확보');
 
     // 6. 로봇 인증 인터랙션 버튼 (F7)
     assert(robotHtml.includes('py-') || robotHtml.includes('px-') || robotHtml.includes('btn') || robotHtml.includes('button'), 'Tier2-B3-15: game/robot 인증 버튼 터치 타겟 확보');

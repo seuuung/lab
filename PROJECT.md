@@ -4,7 +4,7 @@
 - **Tech Stack**: Pure Static Web (HTML5, Vanilla JavaScript ES6+, Tailwind CSS CDN, Canvas 2D API, Three.js WebGL)
 - **Directory Structure**:
   - `index.html` (메인 쇼케이스 포털)
-  - `game/` (10개 웹 게임 및 인터랙티브 프로젝트)
+  - `game/` (9개 웹 게임 및 인터랙티브 프로젝트)
     - `game/3D_ minesweeper/` (3D 지뢰찾기 - Three.js)
     - `game/Magnetic_Orbit/` (궤도 생존 - 2D Canvas)
     - `game/choi_circle/` (최원형 - Interactive Meme)
@@ -14,7 +14,6 @@
     - `game/shadow_puzzle/` (그림자 퍼즐 - Three.js)
     - `game/sign_up_for_hell/` (지옥의 회원가입 - 인터랙티브 폼)
     - `game/slime_jump/` (슬라임 점프 - 2D Canvas Slingshot)
-    - `game/toto/` (삼척 기상토토 - 베팅/사다리 시뮬레이터)
   - `.agents/` (오케스트레이터 및 하위 에이전트 메타데이터)
 
 ## Feature Inventory
@@ -22,7 +21,7 @@
 |---|---------|-------------|-----------|--------|
 | F1 | About Me 프로필 카드 | 아바타, 자기소개, GitHub(`https://github.com/seuuung`) 링크, 기술 스택 뱃지 | M1 | Survey / R1 |
 | F2 | 4단계 카테고리 탭 필터 | 전체, 모바일 앱, 웹 게임, 밈 & 실험실 동적 필터링 바닐라 JS | M1 | Survey / R1 |
-| F3 | 삼척 기상토토 쇼케이스 카드 | 누락된 `game/toto` 네온 글래스모피즘 쇼케이스 카드 추가 | M1 | Survey / R1 |
+| F3 | [삭제됨] 삼척 기상토토 쇼케이스 카드 | [삭제됨] game/toto 쇼케이스 카드 제거 완료 | M1 | Survey / R1 |
 | F4 | 모던 글래스모피즘 & UI 개선 | Backdrop-filter, 호버 글로우, 배지, 일관된 푸터 브랜딩 | M1 | Survey / R1 |
 | F5 | Viewport-Fit & Safe-Area | 전수 `viewport-fit=cover` 및 CSS `env(safe-area-inset-*)` 적용 | M2 | Survey / R2 |
 | F6 | 320px~480px 모바일 오버플로우 해소 | `choi_circle`, `maze_escape`, `sign_up_for_hell` 고정 픽셀 유동화 | M2 | Survey / R2 |
@@ -42,12 +41,12 @@
 | M1 | 포털 UI/UX 고도화 & 카테고리 필터링 | `index.html` About Me, 탭 필터링, `toto` 카드 추가, 글래스모피즘 디자인 | Survey 완료 | DONE |
 | M2 | 모바일 반응형 & Safe-Area & 터치 타겟 | Viewport-fit, `env(safe-area-inset-*)`, 320px 오버플로우 방지, 44px 타겟 | M1 | DONE |
 | M3 | 웹 게임 모바일 터치 & Canvas DPR/리사이즈 왜곡 수정 | 5개 Canvas/WebGL 게임 DPR, 리사이즈 왜곡 수정, 슬라임 점프 버그 수정 | M1 | DONE |
-| M4 | 표준 글로벌 내비게이션 & 버그 전수 수정 | 10개 하위 게임 좌상단 플로팅 홈 버튼 전수 적용 및 콘솔 런타임 에러 제거 | M2, M3 | DONE |
+| M4 | 표준 글로벌 내비게이션 & 버그 전수 수정 | 9개 하위 게임 좌상단 플로팅 홈 버튼 전수 적용 및 콘솔 런타임 에러 제거 | M2, M3 | DONE |
 | M5 | E2E 테스트 검증 & Adversarial Hardening & Audit | 전체 기능 및 모바일 반응형 검증, Reviewer/Challenger/Auditor 게이트 | M1, M2, M3, M4 | DONE |
 
 ## Interface Contracts
 ### Floating Home Navigation Contract
-- Target: All 10 subprojects (`game/*/index.html`)
+- Target: All 9 subprojects (`game/*/index.html`)
 - UI Element: Floating Glassmorphism Button at top-left (`position: fixed; top: max(16px, env(safe-area-inset-top, 16px)); left: max(16px, env(safe-area-inset-left, 16px)); z-index: 9999;`)
 - HTML Snippet:
   ```html
@@ -79,5 +78,4 @@
 - `game/shadow_puzzle/*`: Shadow Puzzle Three.js
 - `game/sign_up_for_hell/*`: Hell Signup Form Meme
 - `game/slime_jump/*`: Slime Jump 2D Canvas
-- `game/toto/*`: Weather Toto Simulator
 - `tests/`: E2E verification test suites and runners

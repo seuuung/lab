@@ -2,6 +2,15 @@
 <html lang="ko">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0XQB053HX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-T0XQB053HX');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>승민's 실험실 (Seungmin's Lab)</title>
@@ -496,32 +505,6 @@
                     </a>
                 </article>
 
-                <!-- 8. Web Game: Samcheok Weather Toto (NEW!) -->
-                <article class="project-item" data-category="game">
-                    <a href="game/toto/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-amber-500/30 hover:border-amber-400/60 block h-full"
-                       style="background: linear-gradient(145deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%);">
-                        <div class="thumb-container bg-gradient-to-br from-amber-950/70 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-amber-500/40 group-hover:border-amber-400/70 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-amber-500 via-red-500 to-rose-600 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.5)] relative flex flex-col items-center justify-center transform group-hover:scale-110 transition-transform duration-500">
-                                <span class="text-xl sm:text-3xl">⛈️</span>
-                                <span class="text-[8px] font-black text-amber-200 tracking-tighter uppercase font-mono">TOTO</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-amber-300 transition-colors">삼척 기상토토</h3>
-                                <span class="text-[10px] font-black px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded-md border border-amber-500/40 uppercase tracking-wider">Simulation</span>
-                                <span class="text-[9px] font-bold px-1.5 py-0.2 bg-red-500/20 text-red-400 rounded border border-red-500/30">HOT</span>
-                            </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                7월 17일 삼척 강수 확률과 기상 데이터를 예측하는 스릴 넘치는 기상 베팅 & 사다리 시뮬레이터!
-                            </p>
-                            <div class="flex items-center text-amber-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
-                                입장 및 배팅하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                            </div>
-                        </div>
-                    </a>
-                </article>
 
                 <!-- 9. Meme/Lab: Linux CTF -->
                 <article class="project-item" data-category="lab">
@@ -675,6 +658,41 @@
                 if (elLab) elLab.textContent = labCount;
             }
 
+            // Safe GA4 Event Tracker
+            function trackEvent(eventName, params = {}) {
+                if (typeof window.gtag === 'function') {
+                    try {
+                        window.gtag('event', eventName, params);
+                    } catch (e) {
+                        console.debug('GA4 tracking error:', e);
+                    }
+                }
+            }
+
+            // Track project card clicks
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const title = this.querySelector('h2')?.innerText?.trim() || 'Unknown Project';
+                    const category = this.closest('.project-item')?.getAttribute('data-category') || 'general';
+                    const link = this.getAttribute('href') || '';
+                    
+                    trackEvent('game_enter', {
+                        game_name: title,
+                        category: category,
+                        target_url: link
+                    });
+                });
+            });
+
+            // Track GitHub profile clicks
+            document.querySelectorAll('a[href*="github.com"]').forEach(link => {
+                link.addEventListener('click', function () {
+                    trackEvent('profile_click', {
+                        target: 'github'
+                    });
+                });
+            });
+
             // Filter function
             function filterProjects(category) {
                 let visibleCount = 0;
@@ -716,6 +734,10 @@
                     const category = this.getAttribute('data-filter');
                     filterProjects(category);
                     
+                    trackEvent('category_filter', {
+                        category: category
+                    });
+
                     // Update URL hash without jumping
                     if (history.replaceState) {
                         history.replaceState(null, null, '#' + category);

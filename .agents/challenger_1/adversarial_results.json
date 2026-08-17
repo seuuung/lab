@@ -1,8 +1,8 @@
 {
   "summary": {
     "total": 236,
-    "passed": 235,
-    "failed": 1,
+    "passed": 233,
+    "failed": 3,
     "warnings": 0
   },
   "suites": {
@@ -75,13 +75,13 @@
       },
       {
         "id": "S1-OVR-320px-game_choi_circle_index",
-        "description": "[320px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 447px / VP: 320px)",
-        "status": "FAIL",
-        "passed": false,
+        "description": "[320px] game/choi_circle/index.html 가로 오버플로우 검증 (Max: 320px / VP: 320px)",
+        "status": "PASS",
+        "passed": true,
         "details": {
           "winWidth": 320,
-          "maxScrollWidth": 447,
-          "hasOverflow": true,
+          "maxScrollWidth": 320,
+          "hasOverflow": false,
           "offendingCount": 0,
           "offendingElements": []
         }
@@ -1650,14 +1650,14 @@
           "exists": true,
           "isVisible": true,
           "isClickable": true,
-          "topElementTag": "SPAN",
-          "position": "fixed",
-          "zIndex": 9999,
+          "topElementTag": "svg",
+          "position": "static",
+          "zIndex": 0,
           "rect": {
-            "top": 15,
-            "left": 16,
-            "width": 100,
-            "height": 44
+            "top": 8,
+            "left": 8,
+            "width": 49,
+            "height": 36
           },
           "colliders": []
         }
@@ -1950,14 +1950,14 @@
           "exists": true,
           "isVisible": true,
           "isClickable": true,
-          "topElementTag": "SPAN",
-          "position": "fixed",
-          "zIndex": 9999,
+          "topElementTag": "svg",
+          "position": "static",
+          "zIndex": 0,
           "rect": {
-            "top": 15,
-            "left": 16,
-            "width": 100,
-            "height": 44
+            "top": 8,
+            "left": 8,
+            "width": 49,
+            "height": 36
           },
           "colliders": []
         }
@@ -2250,14 +2250,14 @@
           "exists": true,
           "isVisible": true,
           "isClickable": true,
-          "topElementTag": "SPAN",
-          "position": "fixed",
-          "zIndex": 9999,
+          "topElementTag": "svg",
+          "position": "static",
+          "zIndex": 0,
           "rect": {
-            "top": 15,
-            "left": 16,
-            "width": 100,
-            "height": 44
+            "top": 8,
+            "left": 8,
+            "width": 49,
+            "height": 36
           },
           "colliders": []
         }
@@ -2439,7 +2439,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-8384",
+        "id": "S3-HASH-FUZZ-8825",
         "description": "비정상 해시 [#] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2450,7 +2450,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-8388",
+        "id": "S3-HASH-FUZZ-3779",
         "description": "비정상 해시 [#all] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2461,7 +2461,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-7328",
+        "id": "S3-HASH-FUZZ-8971",
         "description": "비정상 해시 [#game] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2472,7 +2472,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-1186",
+        "id": "S3-HASH-FUZZ-682",
         "description": "비정상 해시 [#unknown_category_xyz] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2483,7 +2483,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-1321",
+        "id": "S3-HASH-FUZZ-6997",
         "description": "비정상 해시 [#12345] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2494,7 +2494,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-1974",
+        "id": "S3-HASH-FUZZ-8463",
         "description": "비정상 해시 [#<script>alert(1)</script>] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2505,7 +2505,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-5568",
+        "id": "S3-HASH-FUZZ-6432",
         "description": "비정상 해시 [#%20%00%25] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2516,7 +2516,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-5757",
+        "id": "S3-HASH-FUZZ-2932",
         "description": "비정상 해시 [#!@#$%^&*()] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2527,7 +2527,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-8808",
+        "id": "S3-HASH-FUZZ-2967",
         "description": "비정상 해시 [#tab-nonexistent] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2538,7 +2538,7 @@
         }
       },
       {
-        "id": "S3-HASH-FUZZ-6297",
+        "id": "S3-HASH-FUZZ-2938",
         "description": "비정상 해시 [#game/slime_jump] 주입 시 무결성 유지 (노출 카드: 4)",
         "status": "PASS",
         "passed": true,
@@ -2629,13 +2629,62 @@
       },
       {
         "id": "S4-TCH-game_shadow_puzzle_index",
-        "description": "[game/shadow_puzzle/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 2개, 미달: 0개)",
-        "status": "PASS",
-        "passed": true,
+        "description": "[game/shadow_puzzle/index.html] 터치 타겟(>=38px~44px) 크기 검증 (점검: 7개, 미달: 6개)",
+        "status": "FAIL",
+        "passed": false,
         "details": {
-          "totalChecked": 2,
-          "undersizedCount": 0,
-          "undersized": []
+          "totalChecked": 7,
+          "undersizedCount": 6,
+          "undersized": [
+            {
+              "tag": "A",
+              "id": "",
+              "class": "top-btn hover:text-cyan-400 gr",
+              "text": "실험실 홈\n            홈",
+              "width": 49,
+              "height": 36
+            },
+            {
+              "tag": "BUTTON",
+              "id": "level-select-btn",
+              "class": "top-btn level-selector-btn",
+              "text": "레벨 1 / 18",
+              "width": 97,
+              "height": 36
+            },
+            {
+              "tag": "BUTTON",
+              "id": "hint-btn",
+              "class": "top-btn icon-btn text-yellow-3",
+              "text": "💡",
+              "width": 36,
+              "height": 36
+            },
+            {
+              "tag": "BUTTON",
+              "id": "sound-btn",
+              "class": "top-btn icon-btn text-slate-30",
+              "text": "🔊",
+              "width": 36,
+              "height": 36
+            },
+            {
+              "tag": "BUTTON",
+              "id": "reset-btn",
+              "class": "top-btn icon-btn text-slate-30",
+              "text": "🔄",
+              "width": 36,
+              "height": 36
+            },
+            {
+              "tag": "BUTTON",
+              "id": "close-hint-btn",
+              "class": "w-5 h-5 flex-shrink-0 rounded-",
+              "text": "✕",
+              "width": 19,
+              "height": 19
+            }
+          ]
         }
       },
       {
@@ -2737,15 +2786,15 @@
       },
       {
         "id": "S4-DPR-1.0x-shadow_puzzle",
-        "description": "[game/shadow_puzzle/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 375x667, CSS: 375x667)",
+        "description": "[game/shadow_puzzle/index.html] DPR=1.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 110x110, CSS: 110x110)",
         "status": "PASS",
         "passed": true,
         "details": {
           "hasCanvas": true,
-          "bufW": 375,
-          "bufH": 667,
-          "clientW": 375,
-          "clientH": 667,
+          "bufW": 110,
+          "bufH": 110,
+          "clientW": 110,
+          "clientH": 110,
           "actualDpr": 1,
           "ratioW": 1,
           "ratioH": 1
@@ -2817,18 +2866,18 @@
       },
       {
         "id": "S4-DPR-2.0x-shadow_puzzle",
-        "description": "[game/shadow_puzzle/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
-        "status": "PASS",
-        "passed": true,
+        "description": "[game/shadow_puzzle/index.html] DPR=2.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 110x110, CSS: 110x110)",
+        "status": "FAIL",
+        "passed": false,
         "details": {
           "hasCanvas": true,
-          "bufW": 750,
-          "bufH": 1334,
-          "clientW": 375,
-          "clientH": 667,
+          "bufW": 110,
+          "bufH": 110,
+          "clientW": 110,
+          "clientH": 110,
           "actualDpr": 2,
-          "ratioW": 2,
-          "ratioH": 2
+          "ratioW": 1,
+          "ratioH": 1
         }
       },
       {
@@ -2897,18 +2946,18 @@
       },
       {
         "id": "S4-DPR-3.0x-shadow_puzzle",
-        "description": "[game/shadow_puzzle/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 750x1334, CSS: 375x667)",
-        "status": "PASS",
-        "passed": true,
+        "description": "[game/shadow_puzzle/index.html] DPR=3.0x 캔버스 버퍼 해상도 스케일링 검증 (Buffer: 110x110, CSS: 110x110)",
+        "status": "FAIL",
+        "passed": false,
         "details": {
           "hasCanvas": true,
-          "bufW": 750,
-          "bufH": 1334,
-          "clientW": 375,
-          "clientH": 667,
+          "bufW": 110,
+          "bufH": 110,
+          "clientW": 110,
+          "clientH": 110,
           "actualDpr": 3,
-          "ratioW": 2,
-          "ratioH": 2
+          "ratioW": 1,
+          "ratioH": 1
         }
       },
       {

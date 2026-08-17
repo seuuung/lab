@@ -103,30 +103,6 @@ try:
         print("index.html Tabs Diag:", json.dumps(tab_diag, indent=2, ensure_ascii=False))
         page.close()
         
-        # 3. Diagnose game/toto touch targets
-        print("\n=== DIAGNOSING game/toto Touch Targets ===")
-        page = browser.new_page(viewport={'width': 320, 'height': 568})
-        page.goto(f"{BASE_URL}/game/toto/index.html", wait_until="domcontentloaded")
-        page.wait_for_timeout(200)
-        
-        toto_diag = page.evaluate("""() => {
-            const clickables = Array.from(document.querySelectorAll('button, a, input, select'));
-            return clickables.map(el => {
-                const r = el.getBoundingClientRect();
-                const s = window.getComputedStyle(el);
-                return {
-                    tag: el.tagName,
-                    id: el.id,
-                    text: (el.textContent || '').trim().substring(0, 20),
-                    w: Math.round(r.width),
-                    h: Math.round(r.height),
-                    padding: s.padding,
-                    margin: s.margin
-                };
-            }).filter(i => i.w < 38 || i.h < 38);
-        }""")
-        print("game/toto undersized targets:", json.dumps(toto_diag, indent=2, ensure_ascii=False))
-        page.close()
         
         browser.close()
 finally:

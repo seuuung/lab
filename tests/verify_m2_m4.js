@@ -13,7 +13,6 @@ const games = [
     { dir: 'game/shadow_puzzle', html: 'index.html', css: 'style.css' },
     { dir: 'game/sign_up_for_hell', html: 'index.html', css: 'style.css' },
     { dir: 'game/slime_jump', html: 'index.html', css: 'style.css' },
-    { dir: 'game/toto', html: 'index.html', css: 'style.css' },
 ];
 
 let totalTests = 0;
@@ -33,7 +32,7 @@ function assert(condition, message) {
 
 console.log('=== [M2 & M4] 승민\'s 실험실 모바일 최적화 및 플로팅 홈 내비게이션 전수 검증 ===\n');
 
-// 1. 10개 프로젝트 전수 Viewport 및 플로팅 홈 버튼 검증
+// 1. 9개 프로젝트 전수 Viewport 및 플로팅 홈 버튼 검증
 console.log('1. Viewport & Floating Home Button Verification:');
 games.forEach(g => {
     const htmlPath = path.join(projectRoot, g.dir, g.html);

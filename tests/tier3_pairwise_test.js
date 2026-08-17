@@ -126,9 +126,9 @@ function runTier3Tests() {
 
 
     // ----------------------------------------------------
-    // Matrix 3: 10개 하위 게임 각각 진입 -> 복귀 내비게이션 결합 (10 assertions)
+    // Matrix 3: 9개 하위 게임 각각 진입 -> 복귀 내비게이션 결합 (9 assertions)
     // ----------------------------------------------------
-    console.log('[Tier 3] Matrix 3: 10개 하위 게임 진입 -> 홈 버튼 복귀 경로 결합...');
+    console.log('[Tier 3] Matrix 3: 9개 하위 게임 진입 -> 홈 버튼 복귀 경로 결합...');
 
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');

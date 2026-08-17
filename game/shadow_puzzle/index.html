@@ -2,15 +2,27 @@
 <html lang="ko">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0XQB053HX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-T0XQB053HX');
+    </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Shadow Puzzle (섀도우 퍼즐) - 승민's 실험실</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body class="bg-slate-950 select-none overflow-hidden touch-none font-['Outfit','Noto_Sans_KR',sans-serif]">
@@ -19,39 +31,113 @@
     <header class="top-nav-bar">
         <!-- Left: Home Button -->
         <a href="../../index.html" class="top-btn hover:text-cyan-400 group" aria-label="실험실 홈으로 이동">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:scale-110 transition-transform">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                class="group-hover:scale-110 transition-transform">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             <span class="hidden sm:inline">실험실 홈</span>
             <span class="sm:hidden">홈</span>
         </a>
 
-        <!-- Center: Level Selector -->
-        <button id="level-select-btn" class="top-btn level-selector-btn" aria-label="레벨 선택 목록 열기">
+        <!-- Center: Level Display Badge (단계 표시) -->
+        <div id="level-display-badge" class="top-btn level-display-badge cursor-default">
             <span id="level-badge" class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span id="level-text" class="text-white whitespace-nowrap">레벨 1 / 18</span>
-            <svg class="w-3 h-3 text-cyan-300 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-        </button>
+            <span id="level-text" class="text-white whitespace-nowrap">단계 1 / 13</span>
+        </div>
 
         <!-- Right: Tool Actions (Hint, Sound, Reset) -->
         <div class="flex items-center gap-1.5 sm:gap-2">
-            <!-- Hint Button -->
-            <button id="hint-btn" class="top-btn icon-btn text-yellow-300 hover:text-yellow-200 border-yellow-500/30 hover:border-yellow-400/60 shadow-lg" title="💡 힌트 보기 (목표 형상 실루엣)" aria-label="힌트 보기">
-                <span class="text-base sm:text-lg">💡</span>
+            <!-- Hint Button (아이콘 + 글씨) -->
+            <button id="hint-btn"
+                class="top-btn hint-btn text-yellow-300 hover:text-yellow-200 border-yellow-500/30 hover:border-yellow-400/60 shadow-lg"
+                title="💡 힌트 보기 (목표 형상 실루엣)" aria-label="힌트 보기">
+                <span class="text-sm sm:text-base">💡</span>
+                <span class="text-xs font-bold">힌트</span>
             </button>
 
             <!-- Sound Toggle Button -->
-            <button id="sound-btn" class="top-btn icon-btn text-slate-300 hover:text-white" title="효과음 켜기/끄기" aria-label="효과음 토글">
+            <button id="sound-btn" class="top-btn icon-btn text-slate-300 hover:text-white" title="효과음 켜기/끄기"
+                aria-label="효과음 토글">
                 <span id="sound-icon" class="text-sm sm:text-base">🔊</span>
             </button>
 
             <!-- Reset Angle Button -->
-            <button id="reset-btn" class="top-btn icon-btn text-slate-300 hover:text-white" title="각도 다시 섞기" aria-label="각도 리셋">
+            <button id="reset-btn" class="top-btn icon-btn text-slate-300 hover:text-white" title="각도 다시 섞기"
+                aria-label="각도 리셋">
                 <span class="text-sm sm:text-base">🔄</span>
             </button>
         </div>
     </header>
+
+    <!-- 🌟 시작 인트로 모달 (게임 설명 & 유형 검사 안내) -->
+    <div id="intro-modal"
+        class="fixed inset-0 modal-backdrop flex flex-col items-center justify-center z-40 pointer-events-auto p-3.5 sm:p-4 overflow-y-auto transition-all duration-300">
+        <div
+            class="glass-panel w-full max-w-lg rounded-3xl p-5 sm:p-7 text-center flex flex-col items-center gap-4 border border-cyan-500/40 shadow-[0_0_50px_rgba(6,182,212,0.25)] my-auto">
+
+            <!-- Category Badge -->
+            <div
+                class="flex items-center gap-2 text-xs font-bold px-3.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                <span>🧩</span>
+                <span>섀도우 퍼즐</span>
+            </div>
+
+            <!-- Title & Hook -->
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">
+                    🧠 3D 공간 지각력 유형 검사 (SPTI)
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-sm">
+                    3D 블록을 회전시켜 숨겨진 <strong class="text-yellow-300">13가지 그림자의 비밀</strong>을 완성하세요!
+                </p>
+            </div>
+
+
+
+            <!-- 3-Step Play Guide -->
+            <div class="w-full flex flex-col gap-2.5 pt-1">
+                <!-- Step 1 -->
+                <div class="intro-guide-card">
+                    <span class="text-xl sm:text-2xl flex-shrink-0">🔄</span>
+                    <div>
+                        <div class="text-xs font-bold text-white mb-0.5">1. 3D 블록 회전</div>
+                        <div class="text-[11px] text-slate-300 leading-tight">화면을 드래그하여 3D 블록을 원하는 각도로 자유롭게 회전시키세요.
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="intro-guide-card">
+                    <span class="text-xl sm:text-2xl flex-shrink-0">💡</span>
+                    <div>
+                        <div class="text-xs font-bold text-yellow-300 mb-0.5">2. 목표 형상 가이드 힌트</div>
+                        <div class="text-[11px] text-slate-300 leading-tight">어려울 땐 상단 💡 버튼을 눌러 목표 그림자 실루엣을 확인하세요.
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="intro-guide-card">
+                    <span class="text-xl sm:text-2xl flex-shrink-0">🏆</span>
+                    <div>
+                        <div class="text-xs font-bold text-emerald-400 mb-0.5">3. 결과 카드 획득</div>
+                        <div class="text-[11px] text-slate-300 leading-tight">13개 퍼즐을 모두 완주하면 나의 공간 지각력 분석 결과 카드가 발급됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-center pt-2">
+                <button id="start-game-btn"
+                    class="min-h-[46px] w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-extrabold text-sm py-3 px-6 rounded-full shadow-lg shadow-cyan-500/30 transform transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                    <span>🚀 게임 시작하기</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- 💡 콤팩트 목표 형상 힌트 프리뷰 카드 (줄바꿈 없이 한눈에 인식) -->
     <div id="hint-card-panel" class="hint-card-panel">
@@ -59,20 +145,26 @@
             <div class="flex items-center gap-1.5 text-xs font-bold whitespace-nowrap overflow-hidden">
                 <span class="text-yellow-400 text-sm">💡</span>
                 <span class="text-yellow-300/80">목표:</span>
-                <span id="hint-level-name" class="text-white font-extrabold truncate max-w-[130px] sm:max-w-[160px]">하트</span>
+                <span id="hint-level-name"
+                    class="text-white font-extrabold truncate max-w-[130px] sm:max-w-[160px]">하트</span>
             </div>
-            <button id="close-hint-btn" class="w-5 h-5 flex-shrink-0 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors" aria-label="힌트 닫기">✕</button>
+            <button id="close-hint-btn"
+                class="w-5 h-5 flex-shrink-0 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors"
+                aria-label="힌트 닫기">✕</button>
         </div>
         <canvas id="hint-preview-canvas" width="110" height="110"></canvas>
         <span class="text-[9.5px] text-slate-400 whitespace-nowrap">벽면 그림자를 위 형상으로 맞추세요</span>
     </div>
 
     <!-- Bottom HUD & Proximity Meter -->
-    <div class="fixed bottom-[max(1.2rem,env(safe-area-inset-bottom,1.2rem))] left-0 w-full flex flex-col items-center justify-end z-20 pointer-events-none gap-2.5 px-4">
-        
+    <div
+        class="fixed bottom-[max(1.2rem,env(safe-area-inset-bottom,1.2rem))] left-0 w-full flex flex-col items-center justify-end z-20 pointer-events-none gap-2.5 px-4">
+
         <!-- Live Proximity Gauge -->
-        <div id="proximity-container" class="pointer-events-auto flex flex-col items-center gap-1 transition-all duration-300 opacity-90">
-            <div class="flex items-center justify-between w-full max-w-[220px] px-1 text-[11px] font-semibold text-slate-400">
+        <div id="proximity-container"
+            class="pointer-events-auto flex flex-col items-center gap-1 transition-all duration-300 opacity-90">
+            <div
+                class="flex items-center justify-between w-full max-w-[220px] px-1 text-[11px] font-semibold text-slate-400">
                 <span class="flex items-center gap-1">
                     <span id="proximity-dot" class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
                     <span id="proximity-label">그림자 일치율</span>
@@ -85,65 +177,261 @@
         </div>
 
         <!-- Dynamic Instruction Banner -->
-        <div id="instruction-card" class="pointer-events-auto glass-panel px-5 py-2 sm:px-6 sm:py-2.5 rounded-full shadow-2xl transition-all duration-300 text-center max-w-md">
+        <div id="instruction-card"
+            class="pointer-events-auto glass-panel px-5 py-2 sm:px-6 sm:py-2.5 rounded-full shadow-2xl transition-all duration-300 text-center max-w-md">
             <p id="instruction" class="text-xs sm:text-sm font-medium text-slate-200">
                 3D 블록을 드래그하여 벽면의 그림자 형상을 맞춰보세요!
             </p>
         </div>
 
         <!-- Next Level Button -->
-        <div id="next-btn-container" class="h-0 overflow-hidden opacity-0 transition-all duration-500 ease-out flex justify-center pointer-events-auto">
-            <button id="next-btn" class="min-h-[46px] bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm py-2.5 px-7 rounded-full shadow-xl shadow-cyan-500/30 transform transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-                <span>다음 레벨로 이동</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+        <div id="next-btn-container"
+            class="h-0 overflow-hidden opacity-0 transition-all duration-500 ease-out flex justify-center pointer-events-auto">
+            <button id="next-btn"
+                class="min-h-[46px] bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-extrabold text-sm py-2.5 px-7 rounded-full shadow-xl shadow-cyan-500/30 transform transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                <span>다음 단계로 이동</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
             </button>
         </div>
     </div>
 
-    <!-- Level Select Modal -->
-    <div id="level-modal" class="fixed inset-0 modal-backdrop hidden flex-col items-center justify-center z-40 pointer-events-auto p-4 transition-all duration-300">
-        <div class="glass-panel w-full max-w-xl rounded-3xl p-5 sm:p-7 flex flex-col gap-4 scale-in border border-slate-700/60 shadow-2xl">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <span class="text-2xl">🧩</span>
-                    <h2 class="text-lg sm:text-xl font-bold text-white">레벨 선택 (총 18개 스테이지)</h2>
-                </div>
-                <button id="close-level-modal" class="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center font-bold text-base transition-colors" aria-label="닫기">
-                    ✕
-                </button>
-            </div>
-            <p class="text-slate-400 text-xs">플레이하고 싶은 스테이지를 선택하세요.</p>
-            
-            <div id="level-grid" class="grid grid-cols-3 sm:grid-cols-6 gap-2.5 max-h-[55vh] overflow-y-auto pr-1">
-                <!-- Level Cards dynamically injected -->
+
+
+    <!-- 🏆 SPTI 공간 지각 유형 검사 풀스크린 결과지 화면 -->
+    <div id="ending-modal"
+        class="fixed inset-0 modal-backdrop hidden flex-col items-center justify-start z-40 pointer-events-auto p-3.5 sm:p-6 overflow-y-auto transition-all duration-300">
+        <div
+            class="glass-panel w-full max-w-xl rounded-3xl p-5 sm:p-8 text-center flex flex-col items-center gap-5 scale-in border border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.25)] my-auto max-h-[92vh] overflow-y-auto">
+
+            <!-- 1. Header Category Badge -->
+            <div
+                class="flex items-center gap-2 text-xs font-bold px-4 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                <span>🧠</span>
+                <span>SPTI • 나의 공간 지각력 유형 진단서</span>
             </div>
 
-            <div class="flex justify-between items-center pt-2 border-t border-slate-800 text-xs text-slate-400">
-                <span>클리어 진행도: <strong id="cleared-count" class="text-emerald-400">0 / 18</strong></span>
-                <button id="reset-progress-btn" class="text-slate-500 hover:text-rose-400 underline transition-colors">진행도 초기화</button>
+            <!-- 2. Main Character Section Card -->
+            <div
+                class="result-section-card flex flex-col items-center text-center gap-2.5 bg-gradient-to-b from-slate-900/90 to-slate-900/60 border-cyan-500/30">
+                <div id="final-type-icon"
+                    class="w-20 h-20 rounded-full bg-slate-800/90 border-2 border-cyan-400 flex items-center justify-center text-4xl shadow-lg shadow-cyan-500/20">
+                    🐬
+                </div>
+                <div>
+                    <h2 id="final-type-title" class="text-2xl sm:text-3xl font-black text-cyan-300 tracking-tight">자유로운
+                        돌고래형</h2>
+                    <div id="final-type-eng"
+                        class="text-xs font-semibold text-slate-400 font-mono tracking-wider mt-0.5">PLAYFUL DOLPHIN
+                    </div>
+                </div>
+                <p id="final-type-desc" class="text-xs sm:text-sm text-slate-200 font-medium px-2 py-1 leading-relaxed">
+                    "즐거운 감각과 리듬감으로 3차원 공간을 유영하는 감각파"
+                </p>
+            </div>
+
+            <!-- 3. 4-Dimension Stats Bar Section -->
+            <div class="result-section-card flex flex-col gap-3">
+                <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                    <span>📊</span>
+                    <span>4대 공간 지각 능력치 분석</span>
+                </h3>
+                <div class="flex flex-col gap-2.5">
+                    <!-- Speed -->
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">⚡ 순발력 (Speed)</span>
+                            <span id="stat-speed-val" class="font-mono text-yellow-400 font-bold">90점</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div id="stat-speed-bar" class="stat-bar-fill bg-yellow-400" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                    <!-- Spatial -->
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">🧭 공간 지각력 (Spatial)</span>
+                            <span id="stat-spatial-val" class="font-mono text-cyan-400 font-bold">93점</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div id="stat-spatial-bar" class="stat-bar-fill bg-cyan-400" style="width: 93%;"></div>
+                        </div>
+                    </div>
+                    <!-- Precision -->
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">🎯 조작 정밀도 (Precision)</span>
+                            <span id="stat-precision-val" class="font-mono text-emerald-400 font-bold">84점</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div id="stat-precision-bar" class="stat-bar-fill bg-emerald-400" style="width: 84%;"></div>
+                        </div>
+                    </div>
+                    <!-- Focus -->
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300">🧠 몰입 집중도 (Focus)</span>
+                            <span id="stat-focus-val" class="font-mono text-purple-400 font-bold">88점</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div id="stat-focus-bar" class="stat-bar-fill bg-purple-400" style="width: 88%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Traits & Behaviors Section -->
+            <div class="result-section-card flex flex-col gap-2.5">
+                <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                    <span>💡</span>
+                    <span>유형 핵심 특징</span>
+                </h3>
+                <ul id="final-traits-list"
+                    class="flex flex-col gap-2 text-xs text-slate-300 list-disc list-inside leading-relaxed text-left">
+                    <!-- Dynamic Injected Traits -->
+                </ul>
+            </div>
+
+            <!-- 5. Match Chemistry (환상의 짝꿍 / 환장의 짝꿍) -->
+            <div class="result-section-card grid grid-cols-2 gap-3 text-center">
+                <div class="bg-slate-900/60 rounded-xl p-2.5 border border-emerald-500/20">
+                    <span class="text-[11px] text-slate-400 font-semibold block mb-1">🤝 환상의 짝꿍</span>
+                    <strong id="final-match-good" class="text-xs sm:text-sm font-bold text-emerald-400">🦊 임기응변
+                        여우형</strong>
+                </div>
+                <div class="bg-slate-900/60 rounded-xl p-2.5 border border-rose-500/20">
+                    <span class="text-[11px] text-slate-400 font-semibold block mb-1">💔 환장의 짝꿍</span>
+                    <strong id="final-match-bad" class="text-xs sm:text-sm font-bold text-rose-400">🦅 날카로운 매형</strong>
+                </div>
+            </div>
+
+            <!-- 6. 13 Course Record Bar -->
+            <div class="result-section-card flex justify-around items-center text-center bg-slate-900/60 py-3">
+                <div>
+                    <span class="text-[11px] text-slate-400 block">13코스 완주 시간</span>
+                    <strong id="final-time-text" class="text-sm sm:text-base font-mono text-cyan-300 font-bold">04분
+                        53초</strong>
+                </div>
+                <div class="h-8 w-px bg-slate-800"></div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block">총 블록 조작 횟수</span>
+                    <strong id="final-rot-text"
+                        class="text-sm sm:text-base font-mono text-emerald-400 font-bold">88회</strong>
+                </div>
+            </div>
+
+
+            <!-- 9. 다른 유형 살펴보기 -->
+            <div class="w-full">
+                <button id="explore-types-btn"
+                    class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-slate-800/50 hover:bg-slate-800/80 border border-slate-700/60 transition-colors text-left group">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">🔍</span>
+                        <span class="text-xs font-bold text-slate-200">다른 유형도 살펴보기</span>
+                        <span class="text-[10px] text-slate-400">(8가지 유형 전체)</span>
+                    </div>
+                    <svg id="explore-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" class="text-slate-400 transition-transform duration-300">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+
+                <!-- 유형 카드 그리드 (기본 숨김) -->
+                <div id="explore-types-grid" class="hidden mt-2.5 grid grid-cols-2 gap-2">
+                    <!-- JS로 동적 주입 -->
+                </div>
+            </div>
+
+            <!-- 8. Bottom Navigation -->
+            <div class="flex flex-row gap-3 w-full justify-center pt-2 border-t border-slate-800">
+                <button id="restart-btn" class="min-h-[42px] top-btn px-6 rounded-full font-bold text-xs sm:text-sm">
+                    🔄 다시하기
+                </button>
+                <a href="../../index.html"
+                    class="min-h-[42px] top-btn px-6 rounded-full text-slate-300 hover:text-white text-xs sm:text-sm">
+                    실험실로 복귀
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- All Clear Ending Modal -->
-    <div id="ending-modal" class="fixed inset-0 modal-backdrop hidden flex-col items-center justify-center z-40 pointer-events-auto p-4 transition-all duration-300">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-8 text-center flex flex-col items-center gap-5 scale-in border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.25)]">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-500 flex items-center justify-center text-4xl shadow-lg shadow-amber-500/40 animate-bounce">
-                🏆
-            </div>
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">모든 레벨 마스터!</h1>
-                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                    당신의 뛰어난 공간 지각 능력으로<br>18개의 모든 그림자 비밀을 완벽하게 풀어냈습니다!
-                </p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3 w-full justify-center pt-2">
-                <button id="restart-btn" class="min-h-[44px] flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-cyan-500/30 transform transition-transform hover:scale-105 active:scale-95">
-                    처음부터 다시 하기
+    <!-- 결과 화면 플로팅 공유 바 (ending-modal 활성화 시에만 표시) -->
+    <div id="result-float-bar" class="hidden fixed bottom-0 left-0 right-0 z-45 pointer-events-auto"
+        style="padding-bottom:max(12px,env(safe-area-inset-bottom,12px));">
+        <!-- 배경 블러 레이어 -->
+        <div class="absolute inset-0"
+            style="background:linear-gradient(to top,rgba(9,13,22,0.97) 60%,transparent);backdrop-filter:blur(2px);">
+        </div>
+        <!-- 콘텐츠 -->
+        <div class="relative flex flex-col gap-2 px-4 pt-3">
+            <!-- 이름 입력 -->
+            <input id="player-name-input" type="text" maxlength="20" placeholder="이름 입력 시 카드에 반영돼요 ✨"
+                class="w-full bg-slate-800/80 border border-slate-600/50 rounded-full px-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/70 transition-colors"
+                style="min-height:36px" />
+            <!-- 버튼 2개 나란히 -->
+            <div class="flex gap-2">
+                <button id="download-card-btn" class="share-btn share-btn-download flex-1"
+                    style="padding:10px 12px;font-size:12px">
+                    <span>💾</span>
+                    <span>이미지 저장</span>
                 </button>
-                <a href="../../index.html" class="min-h-[44px] flex-1 top-btn py-3 px-6 rounded-full text-slate-300 hover:text-white font-semibold flex items-center justify-center">
-                    실험실로 복귀
-                </a>
+                <button id="copy-story-btn" class="share-btn share-btn-insta flex-1"
+                    style="padding:10px 12px;font-size:12px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
+                    <span>링크 복사</span>
+                </button>
+            </div>
+            <!-- 상태 메시지 -->
+            <p id="share-status-msg"
+                class="text-[10px] text-center text-emerald-400 font-semibold h-3.5 transition-opacity"></p>
+        </div>
+    </div>
+
+    <!-- 유형 상세 팝업 오버레이 -->
+    <div id="type-detail-overlay" class="fixed inset-0 z-50 hidden flex items-end justify-center p-4 sm:items-center"
+        style="background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
+        <div class="w-full max-w-sm bg-slate-900 border border-slate-700/80 rounded-3xl p-5 flex flex-col gap-4 shadow-2xl"
+            style="animation:slideUp .28s cubic-bezier(0.16,1,0.3,1)">
+            <!-- 팝업 헤더 -->
+            <div class="flex items-center justify-between">
+                <span id="detail-badge" class="text-[10px] font-bold px-3 py-1 rounded-full border">TYPE</span>
+                <button id="close-type-detail"
+                    class="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors">✕</button>
+            </div>
+            <!-- 아이콘 + 이름 -->
+            <div class="flex flex-col items-center text-center gap-2">
+                <div id="detail-icon" class="w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2"
+                    style="background:rgba(30,41,59,0.9)">🐬</div>
+                <div>
+                    <div id="detail-name" class="text-xl font-black tracking-tight">자유로운 돌고래형</div>
+                    <div id="detail-eng" class="text-[10px] font-mono text-slate-400 mt-0.5 tracking-wider">PLAYFUL
+                        DOLPHIN</div>
+                </div>
+                <p id="detail-summary" class="text-xs text-slate-300 leading-relaxed px-1"></p>
+            </div>
+            <!-- 핵심 특징 -->
+            <div id="detail-stats" class="flex flex-col gap-2.5 text-[11px]"></div>
+            <!-- 궁합 (클릭 시 해당 유형으로 이동) -->
+            <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="bg-slate-800/60 rounded-xl p-2 border border-emerald-500/20 hover:border-emerald-400/50 hover:bg-slate-800 transition-colors cursor-pointer"
+                    style="-webkit-tap-highlight-color:transparent">
+                    <div class="text-[10px] text-slate-400 mb-1">🤝 환상의 짝꿍</div>
+                    <div id="detail-good" class="text-[11px] font-bold text-emerald-400 leading-tight"></div>
+                    <div class="text-[9px] text-slate-500 mt-1">눌러서 보기 →</div>
+                </div>
+                <div class="bg-slate-800/60 rounded-xl p-2 border border-rose-500/20 hover:border-rose-400/50 hover:bg-slate-800 transition-colors cursor-pointer"
+                    style="-webkit-tap-highlight-color:transparent">
+                    <div class="text-[10px] text-slate-400 mb-1">💔 환장의 짝꿍</div>
+                    <div id="detail-bad" class="text-[11px] font-bold text-rose-400 leading-tight"></div>
+                    <div class="text-[9px] text-slate-500 mt-1">눌러서 보기 →</div>
+                </div>
             </div>
         </div>
     </div>

@@ -143,8 +143,7 @@ const SUBPROJECT_DIRS = [
     'game/robot',
     'game/shadow_puzzle',
     'game/sign_up_for_hell',
-    'game/slime_jump',
-    'game/toto'
+    'game/slime_jump'
 ];
 
 module.exports = {

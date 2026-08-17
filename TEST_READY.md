@@ -10,11 +10,11 @@ Node.js 내장 표준 라이브러리(`fs`, `path`, `vm`, `assert`)만을 기반
 
 | Tier | 테스트 파일 | 주요 검증 영역 | 목표 Assertion | 작성된 Assertion |
 |:---|:---|:---|:---:|:---:|
-| **Tier 1** | `tests/tier1_feature_test.js` | About Me 프로필, 4단계 탭 필터, 삼척 기상토토 쇼케이스, 12개 카드 전수 존재성, 10개 하위 게임 홈 버튼 및 링크 무결성 | 70+ | **92** |
-| **Tier 2** | `tests/tier2_boundary_test.js` | 뷰포트 메타태그(`viewport-fit=cover`), Safe-Area CSS, 320px 모바일 오버플로우 방지, 44px+ 터치 타겟, Canvas/WebGL 2x DPR 및 리사이즈 | 70+ | **90** |
-| **Tier 3** | `tests/tier3_pairwise_test.js` | 탭 필터(4종) × 카테고리 필터링 매트릭스, 뷰포트(320/768/1440) × DPR(1/2/3) 매트릭스, 게임 진입/복귀 양방향 내비게이션 결합 | 20+ | **31** |
-| **Tier 4** | `tests/tier4_realworld_test.js` | 포털 진입 -> 탭 탐색 -> 10개 게임 각각 플레이 및 캔버스 초기화 -> 홈 복귀 E2E 사용자 여정 시뮬레이션, 404 및 런타임 에러 0건 검증 | 10+ | **24** |
-| **합계** | **통합 테스트 러너** | `node tests/run_all_tests.js` | **170+** | **237** |
+| **Tier 1** | `tests/tier1_feature_test.js` | About Me 프로필, 4단계 탭 필터, 11개 카드 전수 존재성, 9개 하위 게임 홈 버튼 및 링크 무결성 | 70+ | **78** |
+| **Tier 2** | `tests/tier2_boundary_test.js` | 뷰포트 메타태그(`viewport-fit=cover`), Safe-Area CSS, 320px 모바일 오버플로우 방지, 44px+ 터치 타겟, Canvas/WebGL 2x DPR 및 리사이즈 | 70+ | **84** |
+| **Tier 3** | `tests/tier3_pairwise_test.js` | 탭 필터(4종) × 카테고리 필터링 매트릭스, 뷰포트(320/768/1440) × DPR(1/2/3) 매트릭스, 게임 진입/복귀 양방향 내비게이션 결합 | 20+ | **30** |
+| **Tier 4** | `tests/tier4_realworld_test.js` | 포털 진입 -> 탭 탐색 -> 9개 게임 각각 플레이 및 캔버스 초기화 -> 홈 복귀 E2E 사용자 여정 시뮬레이션, 404 및 런타임 에러 0건 검증 | 10+ | **22** |
+| **합계** | **통합 테스트 러너** | `node tests/run_all_tests.js` | **170+** | **214** |
 
 ---
 
@@ -39,12 +39,12 @@ node tests/tier4_realworld_test.js
 
 - **F1 (About Me 프로필)**: `index.html` 내 GitHub 링크(`https://github.com/seuuung`), 아바타, 직함, 스택 뱃지, 글래스모피즘 검증
 - **F2 (4단계 탭 필터)**: `all`, `app`, `game`, `lab` 탭 버튼, `data-category` 속성 바인딩, 동적 필터링 바닐라 JS 로직 검증
-- **F3 (삼척 기상토토)**: `game/toto` 카드 존재성, 썸네일, 제목/설명, `lab` 카테고리 매핑, 대상 파일 무결성 검증
-- **F4 (12개 쇼케이스 카드 & UI)**: 12개 프로젝트 카드 전수 존재, `glass-card`, `thumb-container`, 푸터 브랜딩(`© 2026`) 검증
+- **F3 ([삭제됨] 삼척 기상토토)**: 삼척 기상토토 (`game/toto`) 카드 및 하위 프로젝트 폴더 삭제 완료 검증
+- **F4 (11개 쇼케이스 카드 & UI)**: 11개 프로젝트 카드 전수 존재, `glass-card`, `thumb-container`, 푸터 브랜딩(`© 2026`) 검증
 - **F5 & F6 (Safe-Area & 320px 오버플로우 방지)**: `viewport-fit=cover`, `env(safe-area-inset-*)`, 500px 고정폭 제거 및 유동 반응형 검증
 - **F7 (44px+ 터치 타겟)**: 탭 버튼, 홈 버튼, 게임별 주요 인터랙션 버튼(START, 캡차 등) 터치 가능 영역 확보 검증
 - **F8 ~ F12 (Canvas DPR & 모바일 제어)**: 5개 캔버스/WebGL 게임 DPR 스케일링, 리사이즈 왜곡 보정, 터치 제스처/가상 조이스틱 검증
-- **F13 (플로팅 홈 버튼)**: 10개 하위 게임 좌상단 플로팅 Safe-Area 홈 버튼(`../../index.html`) 전수 적용 검증
+- **F13 (플로팅 홈 버튼)**: 9개 하위 게임 좌상단 플로팅 Safe-Area 홈 버튼(`../../index.html`) 전수 적용 검증
 - **F14 (런타임 무결성)**: 전체 파일 시스템 경로 매핑, 구문 오류(Syntax Error) 0건, 깨진 링크 0건 검증
 
 ---

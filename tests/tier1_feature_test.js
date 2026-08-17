@@ -126,43 +126,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F3: 삼척 기상토토 쇼케이스 카드 검증 (10 assertions)
+    // F4: 11개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘 (19 assertions)
     // ----------------------------------------------------
-    console.log('[Tier 1] F3: 삼척 기상토토 쇼케이스 카드 검증...');
-    const hasTotoHref = indexHtml.includes('game/toto') || indexHtml.includes('game/toto/index.html');
-    assert(hasTotoHref, 'Tier1-F3-01: index.html에 game/toto 링크 포함');
-
-    const totoAnchor = allAnchorTags.find(a => (a.attributes.href || '').includes('game/toto'));
-    assert(!!totoAnchor, 'Tier1-F3-02: 기상토토 카드 <a> 태그 존재');
-
-    const hasTotoTitle = /기상토토|삼척\s*기상토토|Weather\s*Toto/i.test(indexHtml);
-    assert(hasTotoTitle, 'Tier1-F3-03: 기상토토 카드 제목 텍스트("기상토토" 또는 "삼척 기상토토") 포함');
-
-    const hasTotoDesc = /날씨|기상|베팅|시뮬레이|사다리/i.test(indexHtml);
-    assert(hasTotoDesc, 'Tier1-F3-04: 기상토토 카드 설명 텍스트 포함');
-
-    const hasTotoThumb = indexHtml.includes('thumb-container') && hasTotoHref;
-    assert(hasTotoThumb, 'Tier1-F3-05: 기상토토 카드 썸네일 컨테이너 존재');
-
-    const totoCardRaw = totoAnchor ? totoAnchor.fullTag : '';
-    const hasTotoGlassCard = /glass-card/i.test(totoCardRaw) || /glass-card/i.test(indexHtml);
-    assert(hasTotoGlassCard, 'Tier1-F3-06: 기상토토 카드에 glass-card 클래스 적용');
-
-    const hasTotoCategoryLab = /data-category=["'](lab|game)["']/i.test(totoCardRaw) || indexHtml.includes('data-category="lab"');
-    assert(hasTotoCategoryLab, 'Tier1-F3-07: 기상토토 카드의 data-category가 lab 또는 game으로 지정됨');
-
-    assertFileExists('game/toto/index.html', 'Tier1-F3-08: 기상토토 대상 파일 game/toto/index.html 실제 존재');
-    const totoHtml = readFile('game/toto/index.html');
-    assertGreaterOrEqual(totoHtml.length, 200, 'Tier1-F3-09: game/toto/index.html 파일 내용 무결성');
-
-    const hasTotoInteractiveElements = totoHtml.includes('canvas') || totoHtml.includes('button') || totoHtml.includes('script');
-    assert(hasTotoInteractiveElements, 'Tier1-F3-10: game/toto/index.html에 인터랙티브 요소(버튼/스크립트 등) 포함');
-
-
-    // ----------------------------------------------------
-    // F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘 (20 assertions)
-    // ----------------------------------------------------
-    console.log('[Tier 1] F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
+    console.log('[Tier 1] F4: 11개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
     const REQUIRED_PROJECTS = [
         { id: 'onsic', name: '온식 (OnSic)', check: (h) => h.includes('com.onsic.app') || h.includes('온식') },
         { id: 'spatial_mine', name: 'Spatial Mine', check: (h) => h.includes('spatialmine.app') || h.includes('Spatial Mine') },
@@ -174,8 +140,7 @@ function runTier1Tests() {
         { id: 'minesweeper', name: '3D 지뢰찾기', check: (h) => h.includes('game/3D_ minesweeper') || h.includes('3D%20minesweeper') || h.includes('3D_minesweeper') },
         { id: 'sign_up_hell', name: '지옥의 회원가입', check: (h) => h.includes('game/sign_up_for_hell') },
         { id: 'choi_circle', name: '최원형', check: (h) => h.includes('game/choi_circle') },
-        { id: 'robot', name: '로봇 인증', check: (h) => h.includes('game/robot') },
-        { id: 'toto', name: '삼척 기상토토', check: (h) => h.includes('game/toto') }
+        { id: 'robot', name: '로봇 인증', check: (h) => h.includes('game/robot') }
     ];
 
     REQUIRED_PROJECTS.forEach((proj, idx) => {
@@ -184,10 +149,10 @@ function runTier1Tests() {
     });
 
     const glassCards = indexHtml.match(/class=["'][^"']*glass-card[^"']*["']/g) || [];
-    assertGreaterOrEqual(glassCards.length, 12, 'Tier1-F4-13: 12개 이상의 쇼케이스 카드에 glass-card 적용');
+    assertGreaterOrEqual(glassCards.length, 11, 'Tier1-F4-13: 11개 이상의 쇼케이스 카드에 glass-card 적용');
 
     const thumbContainers = indexHtml.match(/class=["'][^"']*thumb-container[^"']*["']/g) || [];
-    assertGreaterOrEqual(thumbContainers.length, 12, 'Tier1-F4-14: 12개 이상의 쇼케이스 카드에 표준 thumb-container 적용');
+    assertGreaterOrEqual(thumbContainers.length, 11, 'Tier1-F4-14: 11개 이상의 쇼케이스 카드에 표준 thumb-container 적용');
 
     const hasPlayButtons = indexHtml.includes('플레이하기') || indexHtml.includes('확인') || indexHtml.includes('Play');
     assert(hasPlayButtons, 'Tier1-F4-15: 쇼케이스 카드에 인터랙션 CTA 텍스트(플레이하기 등) 존재');
@@ -209,9 +174,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F13: 10개 하위 게임 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용 (20 assertions)
+    // F13: 9개 하위 게임 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용 (18 assertions)
     // ----------------------------------------------------
-    console.log('[Tier 1] F13: 10개 하위 게임 프로젝트 표준 홈 내비게이션 검증...');
+    console.log('[Tier 1] F13: 9개 하위 게임 프로젝트 표준 홈 내비게이션 검증...');
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');
         assertFileExists(gameIndexPath, `Tier1-F13-${String(idx * 2 + 1).padStart(2, '0')}: [${dir}] index.html 존재`);
@@ -231,9 +196,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성 (15 assertions)
+    // F14: 9개 하위 프로젝트 파일 무결성 및 링크 정합성 (14 assertions)
     // ----------------------------------------------------
-    console.log('[Tier 1] F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성 검증...');
+    console.log('[Tier 1] F14: 9개 하위 프로젝트 파일 무결성 및 링크 정합성 검증...');
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');
         const content = readFile(gameIndexPath);
@@ -245,7 +210,7 @@ function runTier1Tests() {
     const hasBrokenHref = robotHtml.includes('href="undefined"') || robotHtml.includes('src="undefined"') || robotHtml.includes('href="#"');
     assert(!hasBrokenHref, 'Tier1-F14-11: game/robot/index.html 내 undefined 또는 빈 앵커 깨진 링크 부재');
 
-    // 상대 경로 정합성 검증 (index.html 내 10개 게임 경로가 실제 로컬에 존재하는지)
+    // 상대 경로 정합성 검증 (index.html 내 9개 게임 경로가 실제 로컬에 존재하는지)
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const fullPath = path.join(PROJECT_ROOT, dir, 'index.html');
         const exists = fs.existsSync(fullPath);

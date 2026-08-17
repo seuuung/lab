@@ -48,8 +48,7 @@ const SUBPROJECTS = [
     'game/robot',
     'game/shadow_puzzle',
     'game/sign_up_for_hell',
-    'game/slime_jump',
-    'game/toto'
+    'game/slime_jump'
 ];
 
 // ----------------------------------------------------------------------
@@ -64,8 +63,7 @@ const jsFiles = [
     'game/robot/script.js',
     'game/shadow_puzzle/script.js',
     'game/sign_up_for_hell/script.js',
-    'game/slime_jump/game.js',
-    'game/toto/app.js'
+    'game/slime_jump/game.js'
 ];
 
 jsFiles.forEach(file => {
