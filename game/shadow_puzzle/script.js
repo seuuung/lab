@@ -287,7 +287,7 @@ const animalTypes = [
             '복잡한 형상일수록 핵심 랜드마크 도트를 빠르게 식별합니다.',
             '목표가 확실해지면 단번에 정확한 방향으로 스냅을 이끌어냅니다.'
         ],
-        goodMatch: '🦁 당당한 사자형',
+        goodMatch: '🐺 냉철한 늑대형',
         badMatch: '🐬 자유로운 돌고래형'
     },
     {
@@ -303,7 +303,7 @@ const animalTypes = [
             '예상치 못한 방향에서 정답 그림자를 찾아내는 창의성이 돋보입니다.',
             '어려운 단계를 만나도 당황하지 않고 요령 있게 해결합니다.'
         ],
-        goodMatch: '🐺 냉철한 늑대형',
+        goodMatch: '🐬 자유로운 돌고래형',
         badMatch: '🦉 지혜로운 올빼미형'
     },
     {
@@ -351,8 +351,8 @@ const animalTypes = [
             '정확한 쿼터니언 각도를 본능적으로 파악해 오차 없이 스냅시킵니다.',
             '군더더기 없는 깔끔한 조작으로 안정적인 고득점을 달성합니다.'
         ],
-        goodMatch: '🐆 번개 치타형',
-        badMatch: '🐬 자유로운 돌고래형'
+        goodMatch: '🦅 날카로운 매형',
+        badMatch: '🦁 당당한 사자형'
     },
     {
         id: 'lion',
@@ -825,23 +825,23 @@ function adjustLayoutForScreen() {
     const isMobile = width < 768 || aspect < 1.0;
 
     if (aspect < 1.0) {
-        // 모바일 세로 화면: 완벽한 정답 실루엣 형상 + 깊은 3D 입체 공간감 밸런스
-        const baseFov = 46;
-        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 56);
-        camera.position.set(12, 10, 27);
-        basePuzzlePos = { x: -2.0, y: 0, z: 0 };
-        camera.lookAt(0, 0, -4);
+        // 모바일 세로 화면: 줌 아웃 + 중앙 안전 여백 확보 (큐브 잘림 완전 방지)
+        const baseFov = 48;
+        camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 54);
+        camera.position.set(8.5, 7.0, 34);
+        basePuzzlePos = { x: 0.8, y: -0.6, z: 0 };
+        camera.lookAt(0, 0, -3);
     } else if (isMobile) {
         // 모바일 가로 화면
-        camera.fov = 44;
-        camera.position.set(15, 11, 25);
-        basePuzzlePos = { x: -2.5, y: 0, z: 0 };
+        camera.fov = 42;
+        camera.position.set(12, 8.5, 29);
+        basePuzzlePos = { x: -0.5, y: -0.6, z: 0 };
         camera.lookAt(0, 0, -3);
     } else {
-        // 데스크톱: 웅장한 3D 원근 쿼터뷰
-        camera.fov = 44;
-        camera.position.set(15, 11, 24);
-        basePuzzlePos = { x: -2.0, y: 0, z: 0 };
+        // 데스크톱: 쾌적한 3D 뷰
+        camera.fov = 42;
+        camera.position.set(12, 8.5, 28);
+        basePuzzlePos = { x: -0.5, y: -0.6, z: 0 };
         camera.lookAt(0, 0, -3);
     }
 
@@ -929,7 +929,7 @@ function loadLevel(index) {
     const grid = levelData.grid;
     const rows = grid.length;
     const cols = grid[0].length;
-    const blockSize = 1.0;
+    const blockSize = 0.78;
 
     const blockMaterial = new THREE.MeshStandardMaterial({
         color: levelData.color,
@@ -947,7 +947,7 @@ function loadLevel(index) {
 
                 const posX = (x - cols / 2 + 0.5) * blockSize;
                 const posY = -(y - rows / 2 + 0.5) * blockSize;
-                const posZ = (Math.random() - 0.5) * 8.5;
+                const posZ = (Math.random() - 0.5) * 6.0;
 
                 mesh.position.set(posX, posY, posZ);
                 puzzleGroup.add(mesh);
@@ -1245,11 +1245,27 @@ function renderResultScreen() {
         });
     }
 
-    // 4. 유형 궁합 주입
+    // 4. 유형 궁합 주입 및 클릭 연결
     const goodEl = document.getElementById('final-match-good');
     const badEl = document.getElementById('final-match-bad');
-    if (goodEl) goodEl.innerText = myType.goodMatch;
-    if (badEl) badEl.innerText = myType.badMatch;
+    if (goodEl) {
+        goodEl.innerText = myType.goodMatch;
+        const goodBox = goodEl.parentElement;
+        goodBox.style.cursor = 'pointer';
+        goodBox.onclick = () => {
+            const target = animalTypes.find(a => myType.goodMatch.includes(a.emoji));
+            if (target) openTypeDetail(target);
+        };
+    }
+    if (badEl) {
+        badEl.innerText = myType.badMatch;
+        const badBox = badEl.parentElement;
+        badBox.style.cursor = 'pointer';
+        badBox.onclick = () => {
+            const target = animalTypes.find(a => myType.badMatch.includes(a.emoji));
+            if (target) openTypeDetail(target);
+        };
+    }
 
     // 5. 완주 기록 주입
     const timeEl = document.getElementById('final-time-text');
@@ -1630,14 +1646,14 @@ async function copyShareCardToClipboard() {
     }
 }
 
-function downloadShareCard() {
+async function downloadShareCard() {
     trackEvent('viral_share', { action_type: 'download_card' });
 
     // 이름 입력 필드에서 이름 읽기
     const nameInput = document.getElementById('player-name-input');
     const playerName = nameInput ? nameInput.value.trim() : '';
 
-    // 이름이 있으면 캔버스 재렌더링 (이름 삽입)
+    // 이름이 반영된 캔버스 재렌더링
     const totalSec = progress.stats.totalTime || 0;
     const totalRot = progress.stats.totalRotations || 0;
     const totalMin = Math.floor(totalSec / 60);
@@ -1647,12 +1663,81 @@ function downloadShareCard() {
 
     generateBackgroundMasterCanvas(myType, timeFormatted, totalRot, playerName);
 
-    const link = document.createElement('a');
     const namePart = playerName ? `_${playerName}` : '';
-    link.download = `shadow_puzzle_spti${namePart}_${Date.now()}.png`;
-    link.href = cachedMasterCanvas.toDataURL('image/png');
-    link.click();
-    showShareStatus('💾 결과 카드 이미지가 다운로드되었습니다.');
+    const fileName = `shadow_puzzle_spti${namePart}_${Date.now()}.png`;
+
+    if (!cachedMasterCanvas) {
+        showShareStatus('⚠️ 카드 생성에 실패했습니다. 다시 시도해주세요.', true);
+        return;
+    }
+
+    // 캔버스를 Blob으로 변환
+    cachedMasterCanvas.toBlob(async (blob) => {
+        if (!blob) {
+            // 폴백: DataURL 방식
+            openImageSaveModal(cachedMasterCanvas.toDataURL('image/png'));
+            return;
+        }
+
+        const file = new File([blob], fileName, { type: 'image/png' });
+
+        // 1. 모바일 Web Share API (사진 앱에 저장 / 인스타그램 / 카카오톡 전송)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: 'SPTI 나의 공간 지각력 유형 진단서',
+                    text: `🧩 나의 3D 공간 지각 유형: ${myType.name}!`
+                });
+                showShareStatus('✨ 이미지가 공유/저장되었습니다.');
+                return;
+            } catch (shareErr) {
+                if (shareErr.name === 'AbortError') {
+                    // 사용자가 공유창을 닫은 경우
+                    return;
+                }
+                console.warn('Web Share failed, falling back to download/modal:', shareErr);
+            }
+        }
+
+        // 2. 일반 브라우저 Blob URL 다운로드 시도
+        try {
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = blobUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 15000);
+            showShareStatus('💾 결과 카드 이미지가 다운로드되었습니다.');
+        } catch (downloadErr) {
+            console.warn('Direct download failed:', downloadErr);
+        }
+
+        // 3. 인앱 브라우저(인스타그램/카톡) 등 모바일 다운로드 차단 환경 대비: 이미지 팝업 모달 제공
+        const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobileDevice) {
+            openImageSaveModal(cachedMasterCanvas.toDataURL('image/png'));
+        }
+    }, 'image/png');
+}
+
+function openImageSaveModal(imgDataUrl) {
+    const modal = document.getElementById('image-save-modal');
+    const img = document.getElementById('save-preview-img');
+    if (!modal || !img) return;
+    img.src = imgDataUrl;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeImageSaveModal() {
+    const modal = document.getElementById('image-save-modal');
+    if (modal) {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }
 }
 
 function copyChallengeLink() {
@@ -1908,6 +1993,12 @@ document.getElementById('explore-types-btn').addEventListener('click', () => {
 document.getElementById('close-type-detail').addEventListener('click', closeTypeDetail);
 document.getElementById('type-detail-overlay').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) closeTypeDetail();
+});
+
+// 모바일 이미지 저장 모달 닫기
+document.getElementById('close-image-modal').addEventListener('click', closeImageSaveModal);
+document.getElementById('image-save-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeImageSaveModal();
 });
 
 document.getElementById('sound-icon').innerText = sound.enabled ? '🔊' : '🔇';

@@ -436,6 +436,29 @@
         </div>
     </div>
 
+    <!-- 📱 모바일 이미지 저장 프리뷰 팝업 모달 -->
+    <div id="image-save-modal" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-4" style="background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);">
+        <div class="relative max-w-sm w-full flex flex-col items-center gap-3 scale-in">
+            <!-- 상단 안내 바 -->
+            <div class="flex items-center justify-between w-full px-2">
+                <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
+                    <span>📸</span>
+                    <span>이미지를 1초간 길게 눌러 [사진에 저장]하세요</span>
+                </div>
+                <button id="close-image-modal" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center font-bold text-sm transition-colors" aria-label="닫기">
+                    ✕
+                </button>
+            </div>
+            <!-- 생성된 이미지 (길게 눌러 저장 가능) -->
+            <div class="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl max-h-[75vh]">
+                <img id="save-preview-img" src="" alt="SPTI 공간 지각력 진단서" class="w-full h-auto object-contain max-h-[75vh] select-auto" style="-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;" />
+            </div>
+            <p class="text-[11px] text-slate-400 text-center">
+                ※ 인앱 브라우저(인스타그램, 카카오톡 등)에서는 이미지를 길게 누르면 바로 갤러리에 저장할 수 있습니다.
+            </p>
+        </div>
+    </div>
+
     <!-- 3D WebGL Canvas -->
     <canvas id="game-canvas"></canvas>
 
