@@ -1770,20 +1770,16 @@ function closeImageSaveModal() {
 function copyChallengeLink() {
     trackEvent('viral_share', { action_type: 'copy_challenge' });
     const totalSec = progress.stats.totalTime || 135;
-    const totalRot = progress.stats.totalRotations || 88;
-    const typeTitle = document.getElementById('final-type-title').innerText || '번개 치타형';
 
-    const baseUrl = window.location.href.split('#')[0];
-    const challengeUrl = `${baseUrl}#challenge?time=${totalSec}&rot=${totalRot}&type=${encodeURIComponent(typeTitle)}`;
-
-    const text = `🔥 [섀도우 퍼즐 13코스 유형 검사 도전장]\n나의 유형: ${typeTitle}\n내 완주 기록(${document.getElementById('final-time-text').innerText})을 깰 수 있나요? 지금 도전하기 👉 ${challengeUrl}`;
+    const baseUrl = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
+    const challengeUrl = `${baseUrl}#c=${totalSec}`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-            showShareStatus('⚔️ 도전장 링크와 메시지가 복사되었습니다!');
+        navigator.clipboard.writeText(challengeUrl).then(() => {
+            showShareStatus('🔗 도전장 주소가 복사되었습니다!');
         });
     } else {
-        prompt('도전장 링크를 복사하세요:', challengeUrl);
+        prompt('도전장 주소를 복사하세요:', challengeUrl);
     }
 }
 
@@ -1797,29 +1793,34 @@ function showShareStatus(msg, isError = false) {
     }, 4000);
 }
 
-// 챌린지 URL 파라미터 처리
+// 챌린지 URL 파라미터 처리 (#c=135 또는 #challenge?time=135 호환)
 function checkChallengeParams() {
     const hash = window.location.hash;
-    if (hash && hash.includes('challenge')) {
+    if (!hash) return;
+
+    let targetTime = null;
+    if (hash.startsWith('#c=')) {
+        targetTime = parseInt(hash.replace('#c=', ''), 10);
+    } else if (hash.includes('challenge')) {
         const params = new URLSearchParams(hash.replace('#challenge?', ''));
-        const targetTime = params.get('time');
+        targetTime = parseInt(params.get('time'), 10);
+    }
 
-        if (targetTime) {
-            const min = Math.floor(targetTime / 60);
-            const sec = Math.floor(targetTime % 60);
-            const banner = document.getElementById('challenge-banner');
-            const bannerText = document.getElementById('challenge-banner-text');
-            if (banner && bannerText) {
-                bannerText.innerText = `⚔️ 라이벌 도전장: 친구의 완주 기록(${min}분 ${sec}초)에 도전 중!`;
-                banner.classList.remove('hidden');
-            }
+    if (targetTime && !isNaN(targetTime)) {
+        const min = Math.floor(targetTime / 60);
+        const sec = Math.floor(targetTime % 60);
+        const banner = document.getElementById('challenge-banner');
+        const bannerText = document.getElementById('challenge-banner-text');
+        if (banner && bannerText) {
+            bannerText.innerText = `⚔️ 라이벌 도전장: 친구의 완주 기록(${min}분 ${sec}초)에 도전 중!`;
+            banner.classList.remove('hidden');
+        }
 
-            const introChallengeCard = document.getElementById('intro-challenge-card');
-            const introChallengeText = document.getElementById('intro-challenge-text');
-            if (introChallengeCard && introChallengeText) {
-                introChallengeText.innerText = `친구의 13코스 완주 기록(${min}분 ${sec}초)을 돌파해 보세요!`;
-                introChallengeCard.classList.remove('hidden');
-            }
+        const introChallengeCard = document.getElementById('intro-challenge-card');
+        const introChallengeText = document.getElementById('intro-challenge-text');
+        if (introChallengeCard && introChallengeText) {
+            introChallengeText.innerText = `친구의 13코스 완주 기록(${min}분 ${sec}초)을 돌파해 보세요!`;
+            introChallengeCard.classList.remove('hidden');
         }
     }
 }
@@ -1983,22 +1984,21 @@ document.getElementById('sound-btn').addEventListener('click', () => {
 
 
 
-// 테스트 공유 버튼 — 현재 페이지 링크를 클립보드에 복사
+// 테스트 공유 버튼 — 현재 페이지 링크를 클립보드에 복사 (오직 순수 주소만 복사)
 document.getElementById('copy-story-btn').addEventListener('click', () => {
     sound.init();
     trackEvent('viral_share', { action_type: 'copy_link' });
 
-    const shareUrl = window.location.href.split('#')[0]; // 깔끔한 base URL
-    const shareText = `🧩 3D 공간 지각력 유형 테스트 — 나는 어떤 유형일까?\n${shareUrl}`;
+    const shareUrl = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareText).then(() => {
-            showShareStatus('🔗 테스트 링크가 복사되었습니다! 친구에게 공유해보세요.');
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            showShareStatus('🔗 테스트 주소가 복사되었습니다!');
         }).catch(() => {
-            prompt('아래 링크를 복사하세요:', shareUrl);
+            prompt('아래 주소를 복사하세요:', shareUrl);
         });
     } else {
-        prompt('아래 링크를 복사하세요:', shareUrl);
+        prompt('아래 주소를 복사하세요:', shareUrl);
     }
 });
 
@@ -2046,7 +2046,7 @@ function checkInAppBrowser() {
 const copyInAppBtn = document.getElementById('copy-inapp-url-btn');
 if (copyInAppBtn) {
     copyInAppBtn.addEventListener('click', () => {
-        const url = window.location.href.split('#')[0];
+        const url = window.location.href.split('#')[0].replace(/\/index\.html$/i, '');
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(url).then(() => {
                 copyInAppBtn.innerHTML = '<span>✅</span><span>주소가 복사되었습니다! Safari에 붙여넣으세요</span>';

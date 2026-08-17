@@ -26,7 +26,7 @@
                 location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
             } else if (isAndroid && isOtherInApp) {
                 const cleanUrl = location.href.replace(/https?:\/\//i, '');
-                location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+                location.href = 'intent://' + cleanUrl + '#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end';
             }
         })();
     </script>
