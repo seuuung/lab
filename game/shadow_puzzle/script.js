@@ -825,23 +825,23 @@ function adjustLayoutForScreen() {
     const isMobile = width < 768 || aspect < 1.0;
 
     if (aspect < 1.0) {
-        // 모바일 세로 화면: 완만한 3D 입체각 (벽면 그림자 무왜곡 + 3D 블록 공간감 공존)
-        const baseFov = 48;
+        // 모바일 세로 화면: 완벽한 정답 실루엣 형상 + 깊은 3D 입체 공간감 밸런스
+        const baseFov = 46;
         camera.fov = THREE.MathUtils.clamp(baseFov / Math.sqrt(aspect), 46, 56);
-        camera.position.set(4, 3.5, 26);
-        basePuzzlePos = { x: -0.8, y: -1.2, z: 0 };
-        camera.lookAt(0, 0, -3);
+        camera.position.set(12, 10, 27);
+        basePuzzlePos = { x: -2.0, y: 0, z: 0 };
+        camera.lookAt(0, 0, -4);
     } else if (isMobile) {
         // 모바일 가로 화면
         camera.fov = 44;
-        camera.position.set(6, 4.5, 25);
-        basePuzzlePos = { x: -1.5, y: -1.0, z: 0 };
+        camera.position.set(15, 11, 25);
+        basePuzzlePos = { x: -2.5, y: 0, z: 0 };
         camera.lookAt(0, 0, -3);
     } else {
-        // 데스크톱: 세련된 3D 쿼터뷰 공간감
+        // 데스크톱: 웅장한 3D 원근 쿼터뷰
         camera.fov = 44;
-        camera.position.set(6, 4.5, 24);
-        basePuzzlePos = { x: -1.2, y: -1.0, z: 0 };
+        camera.position.set(15, 11, 24);
+        basePuzzlePos = { x: -2.0, y: 0, z: 0 };
         camera.lookAt(0, 0, -3);
     }
 
