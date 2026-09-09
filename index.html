@@ -5,18 +5,20 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0XQB053HX"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-T0XQB053HX');
+        gtag('config', 'G-T0XQB053HX');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>승민's 실험실 (Seungmin's Lab)</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js (r128) for Fullscreen Interactive Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        (function() {
+        (function () {
             const ua = navigator.userAgent || navigator.vendor || window.opera || '';
             const isAndroid = /android/i.test(ua);
             const isKakao = /KAKAOTALK/i.test(ua);
@@ -31,96 +33,112 @@
         })();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
 
         :root {
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-top: env(safe-area-inset-top, 16px);
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
             --safe-left: env(safe-area-inset-left, 0px);
             --safe-right: env(safe-area-inset-right, 0px);
+            --spotlight-color: rgba(56, 189, 248, 0.12);
         }
 
         body {
             font-family: 'Outfit', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0b0f19;
+            background: #05070c;
             color: #f8fafc;
             overflow-x: hidden;
             word-break: keep-all;
-            padding-top: var(--safe-top);
-            padding-bottom: var(--safe-bottom);
+            padding-top: max(16px, env(safe-area-inset-top, 16px));
+            padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
             padding-left: var(--safe-left);
             padding-right: var(--safe-right);
+            min-height: 100vh;
+            min-height: 100dvh;
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #0b0f19;
+            background: #05070c;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #1e293b;
-            border-radius: 10px;
+            border-radius: 9999px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #334155;
         }
 
-        /* Glassmorphism panel */
+        /* Fullscreen Canvas */
+        #bg-webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Spotlight Glassmorphism Card */
         .glass-card {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(11, 16, 28, 0.68);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.25s cubic-bezier(0.2, 0, 0.1, 1);
+            will-change: transform;
         }
 
         .glass-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.04),
-                transparent
-            );
-            transition: 0.6s ease;
+            top: var(--mouse-y, -200px);
+            left: var(--mouse-x, -200px);
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle closest-side, var(--spotlight-color), transparent);
+            transform: translate(-50%, -50%);
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
         }
 
         .glass-card:hover::before {
-            left: 100%;
+            opacity: 1;
         }
 
         .glass-card:hover {
-            transform: translateY(-6px);
-            background: rgba(30, 41, 59, 0.75);
             border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.12);
         }
 
         /* About Me Glass Card */
         .about-glass-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(10, 15, 29, 0.8) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        /* Filter Tab Styles */
+        /* Interactive Filter Tab Styles */
         .tab-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             user-select: none;
+            min-height: 44px;
         }
 
         .tab-btn.active {
@@ -128,7 +146,7 @@
             color: #ffffff;
             font-weight: 700;
             border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 4px 15px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
         }
 
         .tab-btn:not(.active) {
@@ -140,13 +158,13 @@
         .tab-btn:not(.active):hover {
             background: rgba(30, 41, 59, 0.8);
             color: #f1f5f9;
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-1px);
         }
 
-        /* Item Grid Animation */
+        /* Project Item Animation */
         .project-item {
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 1;
             transform: scale(1);
         }
@@ -154,22 +172,29 @@
         .project-item.hidden-item {
             display: none !important;
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
         .neon-text {
-            text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
-        }
-
-        .neon-glow-purple {
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+            text-shadow: 0 0 24px rgba(6, 182, 212, 0.5);
         }
 
         @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0, 0) scale(1); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(20px, -30px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-15px, 15px) scale(0.95);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
         }
 
         .animate-float {
@@ -177,142 +202,154 @@
         }
 
         .animate-float-delayed {
-            animation: float 25s infinite alternate-reverse ease-in-out;
+            animation: float 26s infinite alternate-reverse ease-in-out;
         }
 
         /* Standardized Thumbnail */
         .thumb-container {
-            width: 4.5rem; /* 72px */
+            width: 4.5rem;
             height: 4.5rem;
             flex-shrink: 0;
         }
 
         @media (min-width: 640px) {
             .thumb-container {
-                width: 5.5rem; /* 88px */
-                height: 5.5rem;
+                width: 5.25rem;
+                height: 5.25rem;
             }
         }
 
         /* Tech Badge */
         .tech-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(8px);
             transition: all 0.2s ease;
         }
 
         .tech-badge:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(56, 189, 248, 0.4);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-between p-4 sm:p-8 relative selection:bg-cyan-500/30">
+<body
+    class="min-h-screen flex flex-col items-center justify-between p-3 sm:p-6 md:p-8 relative selection:bg-cyan-500/30">
 
-    <!-- Ambient lights -->
-    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-40 pointer-events-none animate-float z-0"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-700/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 pointer-events-none animate-float-delayed z-0"></div>
-    <div class="fixed top-[30%] right-[10%] w-[35%] h-[35%] bg-blue-600/5 rounded-full mix-blend-screen filter blur-[100px] opacity-25 pointer-events-none animate-float z-0"></div>
+    <!-- Fullscreen 3D Interactive WebGL Canvas -->
+    <canvas id="bg-webgl-canvas"></canvas>
+
+    <!-- Ambient background glows -->
+    <div
+        class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] opacity-40 pointer-events-none animate-float z-0">
+    </div>
+    <div
+        class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-700/10 rounded-full mix-blend-screen filter blur-[120px] opacity-30 pointer-events-none animate-float-delayed z-0">
+    </div>
 
     <!-- Main Container -->
-    <div class="w-full max-w-7xl z-10 flex flex-col items-center">
+    <main class="w-full max-w-7xl z-10 flex flex-col items-center">
 
-        <!-- Header -->
-        <header class="mb-8 sm:mb-12 text-center w-full pt-4 sm:pt-8">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs text-cyan-400 font-medium mb-4 backdrop-blur-md">
+        <!-- Top Navigation Bar & Interactive Sound Toggle -->
+        <header class="w-full flex items-center justify-between py-3 mb-6 sm:mb-8 border-b border-slate-800/50">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/70 border border-slate-700/50 text-xs text-cyan-400 font-medium backdrop-blur-md">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Interactive Showcase Portal 2026
+                <span>실험실 온라인</span>
             </div>
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-3">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 neon-text">승민's</span>
-                <span class="text-white"> 실험실</span>
-            </h1>
-            <p class="text-slate-400 text-base sm:text-xl font-light tracking-wide max-w-2xl mx-auto">
-                웹 기술의 한계를 시험하는 인터랙티브 실험작과 모바일 프로덕트를 경험하세요.
-            </p>
+
+            <!-- Audio SFX Toggle Button -->
+            <button id="sfx-toggle-btn" type="button" aria-label="사운드 효과 토글"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/70 hover:bg-slate-800 border border-slate-700/50 text-xs text-slate-300 font-medium transition-all active:scale-95 cursor-pointer">
+                <span id="sfx-icon">🔇</span>
+                <span id="sfx-label" class="hidden sm:inline text-[11px] text-slate-400">Audio Muted</span>
+            </button>
         </header>
 
-        <!-- About Me Profile Card -->
-        <section class="w-full mb-10 sm:mb-14">
-            <div class="about-glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-700/60">
-                <!-- Inner Decorative Glow -->
-                <div class="absolute -right-20 -top-20 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-20 -bottom-20 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- Hero Section (Minimal & High-End) -->
+        <section class="w-full text-center mb-8 sm:mb-12 pt-2 sm:pt-4">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-2 sm:mb-3">
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 neon-text">승민's</span>
+                <span class="text-white"> 실험실</span>
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm md:text-base font-light tracking-wide max-w-lg mx-auto">
+                크리에이티브 코딩 실험실.
+            </p>
+        </section>
 
-                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8 relative z-10">
-                    <!-- Avatar / Visual Symbol -->
+        <!-- About Me Profile Card -->
+        <section class="w-full mb-8 sm:mb-12" aria-label="About Me 프로필">
+            <div class="about-glass-card rounded-3xl p-5 sm:p-7 relative overflow-hidden border border-slate-700/50">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-5 sm:gap-7 relative z-10">
+                    <!-- Profile Avatar -->
                     <div class="relative flex-shrink-0 group">
-                        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 to-purple-600 p-0.5 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] transition-all duration-500">
-                            <div class="w-full h-full bg-slate-900/90 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm relative overflow-hidden">
-                                <span class="text-4xl sm:text-5xl transform group-hover:scale-110 transition-transform duration-300">🚀</span>
-                                <div class="absolute bottom-1 px-1.5 py-0.5 bg-cyan-500/20 border border-cyan-400/30 rounded text-[9px] font-bold text-cyan-300">
-                                    DEV LAB
-                                </div>
+                        <div
+                            class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 to-purple-600 p-0.5 shadow-[0_0_25px_rgba(6,182,212,0.25)]">
+                            <div
+                                class="w-full h-full bg-slate-900/90 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                <span class="text-2xl sm:text-3xl">🚀</span>
                             </div>
                         </div>
-                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-[10px] text-white shadow-lg" title="온라인">
+                        <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-[9px] text-white shadow-md"
+                            title="온라인">
                             ⚡
                         </div>
                     </div>
 
-                    <!-- Profile Description & Info -->
+                    <!-- Profile Info -->
                     <div class="flex flex-col flex-grow text-center md:text-left">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
                             <div>
-                                <div class="flex items-center justify-center md:justify-start gap-2.5">
-                                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">승민 (Seungmin)</h2>
-                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-300">
-                                        Creator
+                                <div class="flex items-center justify-center md:justify-start gap-2">
+                                    <h2 class="text-lg sm:text-2xl font-extrabold text-white tracking-tight">승민
+                                        (Seungmin)</h2>
+                                    <span
+                                        class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/15 border border-cyan-500/25 text-cyan-300">
+                                        About Me
                                     </span>
                                 </div>
-                                <p class="text-cyan-400 font-medium text-sm sm:text-base mt-0.5">
-                                    창의적인 인터랙티브 웹과 모바일 앱을 만듭니다
+                                <p class="text-slate-300 text-xs sm:text-sm mt-1 font-light">
+                                    승민의 프로젝트 아카이브.
                                 </p>
                             </div>
 
                             <!-- GitHub Profile Link -->
                             <a href="https://github.com/seuuung" target="_blank" rel="noopener noreferrer"
-                               class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/90 border border-slate-600/50 hover:border-cyan-400 text-white text-xs sm:text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95 group/btn">
-                                <svg class="w-4 h-4 fill-current text-slate-300 group-hover/btn:text-cyan-400 transition-colors" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-slate-800/70 hover:bg-slate-700/80 border border-slate-600/40 hover:border-cyan-400/60 text-white text-xs sm:text-sm font-semibold transition-all active:scale-95 group/btn min-h-[44px]">
+                                <svg class="w-4 h-4 fill-current text-slate-300 group-hover/btn:text-cyan-400 transition-colors"
+                                    viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
                                 </svg>
                                 <span>GitHub 프로필</span>
-                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-0.5 transition-transform"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                 </svg>
                             </a>
                         </div>
 
-                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4 font-light">
-                            WebGL 3D 렌더링, 2D 물리 엔진 시뮬레이션, 참신한 밈 인터랙션부터 실용적인 모바일 앱까지 폭넓은 영역을 탐구하고 구현합니다.
-                        </p>
-
                         <!-- Tech Stack Badges -->
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2">
-                            <span class="text-xs text-slate-400 font-semibold mr-1 flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>Tech Stack:
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-cyan-300 border-cyan-500/20">
-                                JavaScript (ES6+)
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-orange-300 border-orange-500/20">
-                                HTML5 / CSS3
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-sky-300 border-sky-500/20">
-                                Tailwind CSS
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-indigo-300 border-indigo-500/20">
-                                Three.js (WebGL)
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-emerald-300 border-emerald-500/20">
-                                Canvas 2D API
-                            </span>
-                            <span class="tech-badge px-2.5 py-1 rounded-lg text-xs font-medium text-purple-300 border-purple-500/20">
-                                Android Apps
-                            </span>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 mt-2">
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-cyan-300">JavaScript</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-orange-300">HTML5</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-sky-300">CSS3</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-blue-300">Tailwind</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-indigo-300">Three.js</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-purple-300">WebGL</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-emerald-300">Canvas</span>
+                            <span
+                                class="tech-badge px-2 py-0.5 rounded-md text-[11px] font-medium text-rose-300">Android</span>
                         </div>
                     </div>
                 </div>
@@ -320,53 +357,73 @@
         </section>
 
         <!-- 4-Stage Category Filter Tabs -->
-        <section class="w-full mb-8 z-10" aria-label="프로젝트 카테고리 필터">
-            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-slate-900/80 backdrop-blur-xl border border-slate-800 shadow-xl max-w-full">
-                <button type="button" data-filter="all" class="tab-btn active px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
+        <section class="w-full mb-6 sm:mb-8 z-10" aria-label="프로젝트 카테고리 필터">
+            <div
+                class="tab-container flex flex-wrap items-center justify-center sm:justify-start gap-2 p-1.5 rounded-2xl bg-slate-900/70 backdrop-blur-xl border border-slate-800/60 shadow-lg max-w-full">
+                <button type="button" data-filter="all"
+                    class="tab-btn active px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
                     <span>✨ 전체</span>
-                    <span class="tab-count bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="count-all">11</span>
+                    <span class="tab-count bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                        id="count-all">11</span>
                 </button>
-                <button type="button" data-filter="app" class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
+                <button type="button" data-filter="app"
+                    class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
                     <span>📱 모바일 앱</span>
-                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="count-app">2</span>
+                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                        id="count-app">2</span>
                 </button>
-                <button type="button" data-filter="game" class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
+                <button type="button" data-filter="game"
+                    class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
                     <span>🎮 웹 게임</span>
-                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="count-game">6</span>
+                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                        id="count-game">6</span>
                 </button>
-                <button type="button" data-filter="lab" class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
+                <button type="button" data-filter="lab"
+                    class="tab-btn px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 border cursor-pointer">
                     <span>🧪 밈 & 실험실</span>
-                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full" id="count-lab">3</span>
+                    <span class="tab-count bg-slate-800 text-slate-300 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                        id="count-lab">3</span>
                 </button>
             </div>
         </section>
 
         <!-- Showcase Main Project Cards Grid -->
-        <main class="w-full flex flex-col gap-6" id="projects-container">
+        <div class="w-full flex flex-col gap-6" id="projects-container">
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="projects-grid">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5" id="projects-grid">
 
                 <!-- 1. Mobile App: OnSic -->
                 <article class="project-item" data-category="app">
-                    <a href="https://play.google.com/store/apps/details?id=com.onsic.app&pcampaignid=web_share" target="_blank" rel="noopener noreferrer"
-                        class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-rose-500/20 hover:border-rose-400/50 block h-full"
-                        style="text-decoration: none; background: linear-gradient(145deg, rgba(244, 63, 94, 0.06) 0%, rgba(15, 23, 42, 0.6) 100%);">
-                        
-                        <div class="thumb-container bg-slate-800 rounded-xl sm:rounded-2xl p-0.5 shadow-[0_0_20px_rgba(244,63,94,0.15)] relative overflow-hidden flex items-center justify-center border border-slate-700/50 group-hover:shadow-[0_0_30px_rgba(244,63,94,0.3)] transition-all duration-500">
-                            <img src="https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=w512-h512-rw" alt="온식 (OnSic) 아이콘" class="w-full h-full object-cover rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform duration-500">
+                    <a href="https://play.google.com/store/apps/details?id=com.onsic.app&pcampaignid=web_share"
+                        target="_blank" rel="noopener noreferrer"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-rose-500/20 hover:border-rose-400/40 block h-full min-h-[44px]"
+                        style="text-decoration: none;">
+
+                        <div
+                            class="thumb-container bg-slate-800/80 rounded-xl sm:rounded-2xl p-0.5 shadow-md relative overflow-hidden flex items-center justify-center border border-slate-700/50 group-hover:scale-105 transition-transform duration-300">
+                            <img src="https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=w512-h512-rw"
+                                alt="온식 (OnSic) 아이콘" class="w-full h-full object-cover rounded-lg sm:rounded-xl">
                         </div>
 
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-rose-300 transition-colors">온식 (OnSic)</h3>
-                                <span class="bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Android App</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-rose-300 transition-colors">
+                                    온식 (OnSic)</h3>
+                                <span
+                                    class="bg-rose-500/15 text-rose-300 border border-rose-500/30 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Android
+                                    App</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                갤러리에 쌓여만 가는 음식 사진들을 관리하는 식단 아카이빙 솔루션입니다. 정갈한 식단 캘린더와 데이터 리포트로 재탄생시키세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                식단 사진 갤러리 관리 및 데이터 리포팅 솔루션.
                             </p>
-                            <div class="flex items-center text-rose-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-rose-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 Google Play에서 확인
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -374,25 +431,36 @@
 
                 <!-- 2. Mobile App: Spatial Mine -->
                 <article class="project-item" data-category="app">
-                    <a href="https://play.google.com/store/apps/details?id=spatialmine.app&pcampaignid=web_share" target="_blank" rel="noopener noreferrer"
-                        class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-emerald-500/20 hover:border-emerald-400/50 block h-full"
-                        style="text-decoration: none; background: linear-gradient(145deg, rgba(16, 185, 129, 0.06) 0%, rgba(15, 23, 42, 0.6) 100%);">
-                        
-                        <div class="thumb-container bg-slate-800 rounded-xl sm:rounded-2xl p-0.5 shadow-[0_0_20px_rgba(16,185,129,0.15)] relative overflow-hidden flex items-center justify-center border border-slate-700/50 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-500">
-                            <img src="https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA" alt="Spatial Mine 아이콘" class="w-full h-full object-cover rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform duration-500">
+                    <a href="https://play.google.com/store/apps/details?id=spatialmine.app&pcampaignid=web_share"
+                        target="_blank" rel="noopener noreferrer"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-emerald-500/20 hover:border-emerald-400/40 block h-full min-h-[44px]"
+                        style="text-decoration: none;">
+
+                        <div
+                            class="thumb-container bg-slate-800/80 rounded-xl sm:rounded-2xl p-0.5 shadow-md relative overflow-hidden flex items-center justify-center border border-slate-700/50 group-hover:scale-105 transition-transform duration-300">
+                            <img src="https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA"
+                                alt="Spatial Mine 아이콘" class="w-full h-full object-cover rounded-lg sm:rounded-xl">
                         </div>
 
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">Spatial Mine</h3>
-                                <span class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Android App</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                                    Spatial Mine</h3>
+                                <span
+                                    class="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">Android
+                                    App</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                클래식 지뢰찾기가 3D로 돌아왔습니다. 큐브 속에 숨겨진 지뢰를 공간 지각 능력을 활용해 찾아내세요!
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                3차원 입체 큐브 공간에서 즐기는 지뢰찾기.
                             </p>
-                            <div class="flex items-center text-emerald-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-emerald-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 Google Play에서 확인
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -400,24 +468,35 @@
 
                 <!-- 3. Web Game: Slime Jump -->
                 <article class="project-item" data-category="game">
-                    <a href="game/slime_jump/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-cyan-500/20 hover:border-cyan-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-cyan-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-tr from-cyan-400 to-blue-500 rounded-t-full rounded-b-lg shadow-[0_0_20px_rgba(6,182,212,0.5)] relative">
+                    <a href="game/slime_jump/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-cyan-500/20 hover:border-cyan-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-cyan-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-cyan-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <div
+                                class="w-9 h-9 sm:w-12 sm:h-12 bg-gradient-to-tr from-cyan-400 to-blue-500 rounded-t-full rounded-b-lg relative">
                                 <div class="absolute top-2 left-2 w-1.5 h-1.5 bg-white rounded-full"></div>
                                 <div class="absolute top-2 right-2 w-1.5 h-1.5 bg-white rounded-full"></div>
                             </div>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">슬라임 점프</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-cyan-500/15 text-cyan-300 rounded-md border border-cyan-500/30 uppercase tracking-wider">Canvas 2D</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
+                                    슬라임 점프</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-cyan-500/15 text-cyan-300 rounded-md border border-cyan-500/30 uppercase tracking-wider">Canvas
+                                    2D</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                벽을 튕기며 끝없이 위로! 부스트 구슬을 모아 광활한 우주까지 도달해보세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                벽면 반동과 원터치 가속을 이용한 수직 점프 액션.
                             </p>
-                            <div class="flex items-center text-cyan-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-cyan-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -425,23 +504,34 @@
 
                 <!-- 4. Web Game: Magnetic Orbit -->
                 <article class="project-item" data-category="game">
-                    <a href="game/Magnetic_Orbit/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-indigo-500/20 hover:border-indigo-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-indigo-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-indigo-500/30 group-hover:border-indigo-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-indigo-400 to-purple-600 shadow-[0_0_20px_rgba(99,102,241,0.5)] relative flex items-center justify-center">
-                                <div class="w-5 h-5 sm:w-7 sm:h-7 bg-slate-900 rounded-full"></div>
+                    <a href="game/Magnetic_Orbit/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-indigo-500/20 hover:border-indigo-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-indigo-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-indigo-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <div
+                                class="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-600 relative flex items-center justify-center">
+                                <div class="w-4 h-4 sm:w-6 sm:h-6 bg-slate-900 rounded-full"></div>
                             </div>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">궤도 생존</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-indigo-500/15 text-indigo-300 rounded-md border border-indigo-500/30 uppercase tracking-wider">Physics 2D</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">
+                                    궤도 생존</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-indigo-500/15 text-indigo-300 rounded-md border border-indigo-500/30 uppercase tracking-wider">Physics
+                                    2D</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                중력과 원심력을 제어하여 다가오는 우주 파편들 사이에서 살아남으세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                중력장과 궤도 역학 기반의 2D 물리 회피 게임.
                             </p>
-                            <div class="flex items-center text-indigo-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-indigo-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -449,48 +539,73 @@
 
                 <!-- 5. Web Game: Maze Escape -->
                 <article class="project-item" data-category="game">
-                    <a href="game/maze_escape/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-emerald-500/20 hover:border-emerald-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-emerald-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-emerald-500/30 group-hover:border-emerald-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-slate-800 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] relative flex items-center justify-center overflow-hidden border border-emerald-500/40">
-                                <div class="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.15)_1px,transparent_1px)] bg-[size:4px_4px]"></div>
-                                <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399] z-10 animate-bounce"></div>
+                    <a href="game/maze_escape/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-amber-500/20 hover:border-amber-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-amber-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-amber-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <div class="w-9 h-9 sm:w-12 sm:h-12 grid grid-cols-3 gap-0.5 p-1 bg-slate-950 rounded-lg">
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-slate-800 rounded-sm"></div>
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-slate-800 rounded-sm"></div>
+                                <div class="bg-slate-800 rounded-sm"></div>
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-emerald-400 rounded-sm animate-pulse"></div>
                             </div>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">미로 탈출</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-emerald-500/15 text-emerald-300 rounded-md border border-emerald-500/30 uppercase tracking-wider">Three.js 3D</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
+                                    미로 탈출</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-amber-500/15 text-amber-300 rounded-md border border-amber-500/30 uppercase tracking-wider">Procedural
+                                    Maze</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                랜덤하게 생성되는 3D 미로! 1인칭 시점으로 출구를 향한 긴박한 여정을 떠나세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                절차적 생성 알고리즘으로 매번 새로워지는 미로 탐색.
                             </p>
-                            <div class="flex items-center text-emerald-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-amber-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
                 </article>
 
-                <!-- 6. Web Game: 3D Minesweeper -->
+                <!-- 6. Web Game: Hacker CTF -->
                 <article class="project-item" data-category="game">
-                    <a href="game/3D_ minesweeper/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-red-500/20 hover:border-red-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-red-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-red-500/30 group-hover:border-red-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-red-500 to-orange-600 rounded-lg shadow-[0_0_20px_rgba(239,68,68,0.4)] relative flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 text-xl sm:text-3xl">
-                                💣
-                            </div>
+                    <a href="game/hacking/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-emerald-500/20 hover:border-emerald-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-emerald-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-emerald-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md font-mono font-bold text-emerald-400 text-sm sm:text-base">
+                            &gt;_CTF
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-red-300 transition-colors">3D 지뢰찾기</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-red-500/15 text-red-300 rounded-md border border-red-500/30 uppercase tracking-wider">WebGL 3D</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">
+                                    해커 CTF</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-emerald-500/15 text-emerald-300 rounded-md border border-emerald-500/30 uppercase tracking-wider">Cyber
+                                    Sandbox</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                3차원 공간에서 펼쳐지는 입체 지뢰찾기! 숨겨진 지뢰를 피해 안전 구역을 찾으세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                가상 터미널 환경의 보안 취약점 공략 샌드박스.
                             </p>
-                            <div class="flex items-center text-red-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-emerald-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -498,121 +613,173 @@
 
                 <!-- 7. Web Game: Shadow Puzzle -->
                 <article class="project-item" data-category="game">
-                    <a href="game/shadow_puzzle/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-yellow-500/20 hover:border-yellow-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-yellow-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-yellow-500/30 group-hover:border-yellow-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg shadow-[0_0_20px_rgba(234,179,8,0.4)] relative flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-500">
-                                <div class="w-4 h-4 sm:w-6 sm:h-6 bg-black/40 rounded-sm"></div>
+                    <a href="game/shadow_puzzle/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-violet-500/20 hover:border-violet-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-violet-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-violet-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <div
+                                class="w-8 h-8 sm:w-11 sm:h-11 bg-slate-950 border border-violet-400 rounded-lg flex items-center justify-center text-xs sm:text-sm font-bold text-violet-300">
+                                3D
                             </div>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-yellow-300 transition-colors">그림자 퍼즐</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-yellow-500/15 text-yellow-300 rounded-md border border-yellow-500/30 uppercase tracking-wider">Three.js 3D</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-violet-300 transition-colors">
+                                    그림자 퍼즐</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-violet-500/15 text-violet-300 rounded-md border border-violet-500/30 uppercase tracking-wider">3D
+                                    Light & Shadow</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                3D 블록을 돌려가며 숨겨진 그림자를 찾아내는 공간 지각 퍼즐 게임!
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                3D 블록을 회전시켜 정답 실루엣을 완성하는 공간 지각 퍼즐.
                             </p>
-                            <div class="flex items-center text-yellow-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-violet-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
                 </article>
 
-
-                <!-- 9. Meme/Lab: Linux CTF -->
-                <article class="project-item" data-category="lab">
-                    <a href="game/hacking/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-purple-500/20 hover:border-purple-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-purple-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-purple-500/30 group-hover:border-purple-400/60 shadow-lg">
-                            <div class="w-10 h-8 sm:w-14 sm:h-11 bg-black rounded border border-purple-500/40 p-1 flex flex-col shadow-[0_0_15px_rgba(168,85,247,0.3)]">
-                                <div class="flex gap-0.5 mb-0.5"><div class="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-red-500"></div><div class="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-green-500"></div></div>
-                                <div class="font-mono text-purple-400 text-[6px] sm:text-[9px] leading-none">&gt;_ ctf</div>
+                <!-- 8. Web Game: 3D Minesweeper -->
+                <article class="project-item" data-category="game">
+                    <a href="game/3D_minesweeper/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-sky-500/20 hover:border-sky-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-sky-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-sky-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <div class="w-8 h-8 sm:w-11 sm:h-11 grid grid-cols-2 gap-1 p-1 bg-slate-950 rounded-lg">
+                                <div
+                                    class="bg-sky-500 rounded flex items-center justify-center text-[9px] font-bold text-white">
+                                    1</div>
+                                <div
+                                    class="bg-slate-800 rounded flex items-center justify-center text-[9px] text-rose-400">
+                                    🚩</div>
+                                <div class="bg-slate-800 rounded"></div>
+                                <div
+                                    class="bg-sky-600 rounded flex items-center justify-center text-[9px] font-bold text-white">
+                                    2</div>
                             </div>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-purple-300 transition-colors">해커 CTF</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-purple-500/15 text-purple-300 rounded-md border border-purple-500/30 uppercase tracking-wider">Terminal Sim</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-sky-300 transition-colors">
+                                    3D 지뢰찾기</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-sky-500/15 text-sky-300 rounded-md border border-sky-500/30 uppercase tracking-wider">Three.js
+                                    WebGL</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                리눅스 터미널 환경에서 숨겨진 단서를 찾고 시스템을 복구하는 해킹 시뮬레이션!
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                WebGL 기반으로 구현된 3차원 입체 지뢰찾기 웹 버전.
                             </p>
-                            <div class="flex items-center text-purple-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-sky-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
                 </article>
 
-                <!-- 10. Meme/Lab: Sign up for Hell -->
+                <!-- 9. Meme/Lab: Sign Up For Hell -->
                 <article class="project-item" data-category="lab">
-                    <a href="game/sign_up_for_hell/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-pink-500/20 hover:border-pink-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-pink-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-pink-500/30 group-hover:border-pink-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg shadow-[0_0_20px_rgba(236,72,153,0.5)] relative flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 text-2xl sm:text-4xl">
-                                📝
-                            </div>
+                    <a href="game/sign_up_for_hell/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-red-500/20 hover:border-red-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-red-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-red-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md text-xl sm:text-2xl">
+                            😈
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-pink-300 transition-colors">지옥의 회원가입</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-pink-500/15 text-pink-300 rounded-md border border-pink-500/30 uppercase tracking-wider">Meme Form</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-red-300 transition-colors">
+                                    지옥의 회원가입</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-red-500/15 text-red-300 rounded-md border border-red-500/30 uppercase tracking-wider">UI
+                                    Hell Meme</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                우주에서 가장 빠르고 편리한(?) 회원가입 페이지! 당신의 인내심을 테스트해보세요.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                극단적 다크 패턴 인터페이스를 풍자한 인터랙티브 밈.
                             </p>
-                            <div class="flex items-center text-pink-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-red-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
                 </article>
 
-                <!-- 11. Meme/Lab: Choi Circle -->
+                <!-- 10. Meme/Lab: Choi Circle -->
                 <article class="project-item" data-category="lab">
-                    <a href="game/choi_circle/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-red-500/20 hover:border-red-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-red-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-red-500/30 group-hover:border-red-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-tr from-red-500 to-orange-400 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.7)] relative flex items-center justify-center animate-pulse">
-                                <div class="text-white font-mono text-[7px] sm:text-[10px] opacity-80 italic font-bold">πr²</div>
-                            </div>
+                    <a href="game/choi_circle/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-yellow-500/20 hover:border-yellow-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-yellow-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-yellow-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md">
+                            <span class="text-lg sm:text-2xl">⭕</span>
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-red-300 transition-colors">최원형</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-red-500/15 text-red-300 rounded-md border border-red-500/30 uppercase tracking-wider">Interactive Meme</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-yellow-300 transition-colors">
+                                    최원형</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-yellow-500/15 text-yellow-300 rounded-md border border-yellow-500/30 uppercase tracking-wider">Circle
+                                    Drawing</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                완벽한 동그라미의 진실을 파헤쳐보세요. 원형탈모 빔 주의!
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                마우스와 터치로 완벽한 원형 그리기에 도전하는 정밀도 테스트.
                             </p>
-                            <div class="flex items-center text-red-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-yellow-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
                 </article>
 
-                <!-- 12. Meme/Lab: Robot Captcha Game -->
+                <!-- 11. Meme/Lab: Robot Captcha -->
                 <article class="project-item" data-category="lab">
-                    <a href="game/robot/index.html" class="glass-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-6 group cursor-pointer active:scale-[0.98] border border-blue-500/20 hover:border-blue-400/50 block h-full">
-                        <div class="thumb-container bg-gradient-to-br from-blue-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-blue-500/30 group-hover:border-blue-400/60 shadow-lg">
-                            <div class="w-10 h-10 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-[0_0_20px_rgba(59,130,246,0.4)] relative flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 text-xl sm:text-3xl">
-                                🤖
-                            </div>
+                    <a href="game/robot/index.html"
+                        class="glass-card project-card rounded-2xl p-4 sm:p-5 flex flex-row items-center gap-4 sm:gap-5 group cursor-pointer active:scale-[0.99] border border-blue-500/20 hover:border-blue-400/40 block h-full min-h-[44px]">
+                        <div
+                            class="thumb-container bg-gradient-to-br from-blue-950/60 to-slate-900 rounded-xl sm:rounded-2xl relative overflow-hidden flex items-center justify-center border border-blue-500/30 group-hover:scale-105 transition-transform duration-300 shadow-md text-xl sm:text-2xl">
+                            🤖
                         </div>
                         <div class="flex flex-col flex-grow text-left">
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h3 class="text-lg sm:text-xl font-bold text-white group-hover:text-blue-300 transition-colors">로봇 인증</h3>
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-500/15 text-blue-300 rounded-md border border-blue-500/30 uppercase tracking-wider">Captcha Meme</span>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <h3
+                                    class="text-base sm:text-lg font-bold text-white group-hover:text-blue-300 transition-colors">
+                                    로봇 인증</h3>
+                                <span
+                                    class="text-[10px] font-bold px-2 py-0.5 bg-blue-500/15 text-blue-300 rounded-md border border-blue-500/30 uppercase tracking-wider">Captcha
+                                    Meme</span>
                             </div>
-                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-3 line-clamp-2 font-light">
-                                당신은 정말 인간입니까? 10단계의 인증 절차를 통해 증명하십시오.
+                            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-2.5 line-clamp-1 font-light">
+                                10단계의 기상천외한 캡차 챌린지를 돌파하는 인증 밈.
                             </p>
-                            <div class="flex items-center text-blue-400 text-xs font-bold gap-1.5 group-hover:translate-x-1 transition-transform">
+                            <div
+                                class="flex items-center text-blue-400 text-xs font-semibold gap-1 group-hover:translate-x-1 transition-transform">
                                 플레이하기
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
                             </div>
                         </div>
                     </a>
@@ -620,35 +787,488 @@
 
             </div>
 
-            <!-- Empty State Display (if filter has no items) -->
+            <!-- Empty State Display -->
             <div id="empty-state" class="hidden text-center py-16 px-4 glass-card rounded-2xl">
-                <span class="text-4xl mb-3 block">🔍</span>
-                <h3 class="text-lg font-bold text-white mb-1">해당 카테고리에 프로젝트가 없습니다</h3>
-                <p class="text-slate-400 text-sm">다른 탭을 선택해주세요.</p>
+                <span class="text-3xl mb-2 block">🔍</span>
+                <p class="text-slate-400 text-sm">해당 카테고리에 프로젝트가 없습니다.</p>
             </div>
 
-        </main>
+        </div>
 
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="mt-16 sm:mt-24 z-10 text-center w-full py-6 border-t border-slate-800/80">
-        <p class="text-slate-400 text-xs sm:text-sm font-medium">
+    <footer class="mt-16 sm:mt-24 z-10 text-center w-full py-6 border-t border-slate-800/60">
+        <p class="text-slate-500 text-xs font-medium">
             © 2026 승민's 실험실 (Seungmin's Lab). All rights reserved.
-        </p>
-        <p class="text-slate-600 text-[11px] mt-1 font-light">
-            Designed with Pure Static Architecture & Glassmorphism UI
         </p>
     </footer>
 
-    <!-- Vanilla JavaScript Filter Logic -->
+    <!-- Three.js Fullscreen Interactive Background Script -->
     <script>
+        (function initFullscreen3D() {
+            const canvas = document.getElementById('bg-webgl-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const scene = new THREE.Scene();
+
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+            camera.position.z = 18;
+
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true,
+                powerPreference: 'high-performance'
+            });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // --- 뷰포트 기반 파티클 수 ---
+            const isMobile = width < 768;
+            const particleCount = isMobile ? 260 : 650;
+
+            // --- 파티클 지오메트리 (위치 + 원본위치 + 색상 + 원본색상 + 변위) ---
+            const particleGeo = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const originalPositions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const originalColors = new Float32Array(particleCount * 3);
+            const displacements = new Float32Array(particleCount * 3);
+
+            const colorPalette = [
+                new THREE.Color(0x38bdf8),
+                new THREE.Color(0x818cf8),
+                new THREE.Color(0xc084fc),
+                new THREE.Color(0x22d3ee)
+            ];
+            const glowColor = new THREE.Color(0xffffff);
+
+            for (let i = 0; i < particleCount; i++) {
+                const x = (Math.random() - 0.5) * 45;
+                const y = (Math.random() - 0.5) * 45;
+                const z = (Math.random() - 0.5) * 30;
+
+                positions[i * 3] = x;
+                positions[i * 3 + 1] = y;
+                positions[i * 3 + 2] = z;
+                originalPositions[i * 3] = x;
+                originalPositions[i * 3 + 1] = y;
+                originalPositions[i * 3 + 2] = z;
+                displacements[i * 3] = 0;
+                displacements[i * 3 + 1] = 0;
+                displacements[i * 3 + 2] = 0;
+
+                const c = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                colors[i * 3] = c.r;
+                colors[i * 3 + 1] = c.g;
+                colors[i * 3 + 2] = c.b;
+                originalColors[i * 3] = c.r;
+                originalColors[i * 3 + 1] = c.g;
+                originalColors[i * 3 + 2] = c.b;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const baseParticleSize = isMobile ? 0.09 : 0.11;
+            const particleMat = new THREE.PointsMaterial({
+                size: baseParticleSize,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.65,
+                sizeAttenuation: true
+            });
+            const particleSystem = new THREE.Points(particleGeo, particleMat);
+            scene.add(particleSystem);
+
+            // --- Constellation 연결선 (데스크톱 전용) ---
+            const MAX_CONNECTIONS = isMobile ? 0 : 60;
+            let lineGeo = null;
+            let lineMesh = null;
+            if (!isMobile) {
+                const linePositions = new Float32Array(MAX_CONNECTIONS * 6);
+                const lineColors = new Float32Array(MAX_CONNECTIONS * 6);
+                lineGeo = new THREE.BufferGeometry();
+                lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+                lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+                lineGeo.setDrawRange(0, 0);
+                const lineMat = new THREE.LineBasicMaterial({
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.25,
+                    linewidth: 1
+                });
+                lineMesh = new THREE.LineSegments(lineGeo, lineMat);
+                scene.add(lineMesh);
+            }
+
+            // --- 3D 와이어프레임 오브젝트 (5개) ---
+            const polyGroup = new THREE.Group();
+            scene.add(polyGroup);
+
+            function makePolyMat(color) {
+                return new THREE.MeshBasicMaterial({
+                    color: color, wireframe: true, transparent: true, opacity: 0.12
+                });
+            }
+
+            const polyObjs = [];
+            const pMat1 = makePolyMat(0x38bdf8);
+            const p1 = new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 0), pMat1);
+            p1.position.set(-10, 4, -5);
+            polyGroup.add(p1);
+            polyObjs.push({ mesh: p1, mat: pMat1, baseOp: 0.12, rx: 0.2, ry: 0.25, orbitR: 0, orbitSpeed: 0, orbitAxis: 'y', orbitCenter: null });
+
+            const pMat2 = makePolyMat(0x818cf8);
+            const p2 = new THREE.Mesh(new THREE.OctahedronGeometry(1.8, 0), pMat2);
+            p2.position.set(11, -6, -8);
+            polyGroup.add(p2);
+            polyObjs.push({ mesh: p2, mat: pMat2, baseOp: 0.12, rx: -0.18, ry: 0.22, orbitR: 0, orbitSpeed: 0, orbitAxis: 'y', orbitCenter: null });
+
+            const pMat3 = makePolyMat(0xc084fc);
+            const p3 = new THREE.Mesh(new THREE.TorusKnotGeometry(1.2, 0.35, 48, 8, 2, 3), pMat3);
+            p3.position.set(8, 8, -12);
+            polyGroup.add(p3);
+            polyObjs.push({ mesh: p3, mat: pMat3, baseOp: 0.10, rx: 0.12, ry: -0.15, orbitR: 6, orbitSpeed: 0.08, orbitAxis: 'y', orbitCenter: new THREE.Vector3(8, 8, -12) });
+
+            const pMat4 = makePolyMat(0x22d3ee);
+            const p4 = new THREE.Mesh(new THREE.DodecahedronGeometry(1.5, 0), pMat4);
+            p4.position.set(-12, -8, -10);
+            polyGroup.add(p4);
+            polyObjs.push({ mesh: p4, mat: pMat4, baseOp: 0.10, rx: 0.14, ry: 0.19, orbitR: 5, orbitSpeed: -0.06, orbitAxis: 'x', orbitCenter: new THREE.Vector3(-12, -8, -10) });
+
+            const pMat5 = makePolyMat(0x60a5fa);
+            const p5 = new THREE.Mesh(new THREE.TetrahedronGeometry(1.6, 0), pMat5);
+            p5.position.set(0, 12, -7);
+            polyGroup.add(p5);
+            polyObjs.push({ mesh: p5, mat: pMat5, baseOp: 0.08, rx: -0.1, ry: 0.13, orbitR: 4, orbitSpeed: 0.05, orbitAxis: 'z', orbitCenter: new THREE.Vector3(0, 12, -7) });
+
+            // --- 인터랙션 좌표 ---
+            let mouseX = 0, mouseY = 0;
+            let targetCameraX = 0, targetCameraY = 0;
+            let scrollYProgress = 0;
+            let cursor3D = new THREE.Vector3(0, 0, 0);
+            let cursorActive = false;
+
+            function updatePointerPos(clientX, clientY) {
+                mouseX = (clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(clientY / window.innerHeight) * 2 + 1;
+                targetCameraX = mouseX * 2.5;
+                targetCameraY = mouseY * 2.0;
+                cursorActive = true;
+                // NDC → 3D 월드 좌표 투영 (z=0 평면)
+                const vec = new THREE.Vector3(mouseX, mouseY, 0.5);
+                vec.unproject(camera);
+                const dir = vec.sub(camera.position).normalize();
+                const dist = -camera.position.z / dir.z;
+                cursor3D = camera.position.clone().add(dir.multiplyScalar(dist));
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                updatePointerPos(e.clientX, e.clientY);
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches && e.touches[0]) updatePointerPos(e.touches[0].clientX, e.touches[0].clientY);
+            }, { passive: true });
+            window.addEventListener('touchend', () => { cursorActive = false; }, { passive: true });
+            window.addEventListener('mouseleave', () => { cursorActive = false; }, { passive: true });
+
+            window.addEventListener('scroll', () => {
+                const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+                scrollYProgress = window.scrollY / maxScroll;
+            }, { passive: true });
+
+            function onResize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+            window.addEventListener('resize', onResize);
+
+            // --- 스프링 물리 카메라 ---
+            let camVelX = 0, camVelY = 0;
+            const springK = 0.04, springD = 0.82;
+
+            // --- 스크롤 배경 그라데이션 ---
+            const bgC = [{ r: 5, g: 7, b: 12 }, { r: 8, g: 12, b: 24 }, { r: 10, g: 15, b: 26 }];
+            function updateBgColor(prog) {
+                const t = Math.min(1, Math.max(0, prog));
+                let from, to, lt;
+                if (t < 0.5) { from = bgC[0]; to = bgC[1]; lt = t * 2; }
+                else { from = bgC[1]; to = bgC[2]; lt = (t - 0.5) * 2; }
+                const r = Math.round(from.r + (to.r - from.r) * lt);
+                const g = Math.round(from.g + (to.g - from.g) * lt);
+                const b = Math.round(from.b + (to.b - from.b) * lt);
+                document.body.style.backgroundColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+            }
+
+            // --- 반발 물리 상수 ---
+            const REP_R = isMobile ? 3 : 4.5;
+            const REP_F = isMobile ? 0.5 : 0.8;
+            const SP_RET = 0.06, SP_D = 0.88;
+            const CON_DIST = 3.5, CON_CUR_R = 8;
+
+            // --- 애니메이션 루프 ---
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+
+                // [6] 스프링 물리 카메라
+                const tX = targetCameraX;
+                const tY = targetCameraY - (scrollYProgress * 8);
+                camVelX = (camVelX + (tX - camera.position.x) * springK) * springD;
+                camVelY = (camVelY + (tY - camera.position.y) * springK) * springD;
+                camera.position.x += camVelX;
+                camera.position.y += camVelY;
+                camera.position.z = 18 - (scrollYProgress * 6);
+
+                // [7] 배경 그라데이션
+                updateBgColor(scrollYProgress);
+
+                // [5] 3D 오브젝트: 자전 + 공전 + 커서 반응
+                for (let p = 0; p < polyObjs.length; p++) {
+                    const o = polyObjs[p];
+                    o.mesh.rotation.x = time * o.rx;
+                    o.mesh.rotation.y = time * o.ry;
+                    if (o.orbitR > 0 && o.orbitCenter) {
+                        const a = time * o.orbitSpeed;
+                        if (o.orbitAxis === 'y') {
+                            o.mesh.position.x = o.orbitCenter.x + Math.cos(a) * o.orbitR;
+                            o.mesh.position.z = o.orbitCenter.z + Math.sin(a) * o.orbitR;
+                        } else if (o.orbitAxis === 'x') {
+                            o.mesh.position.y = o.orbitCenter.y + Math.cos(a) * o.orbitR;
+                            o.mesh.position.z = o.orbitCenter.z + Math.sin(a) * o.orbitR;
+                        } else {
+                            o.mesh.position.x = o.orbitCenter.x + Math.cos(a) * o.orbitR;
+                            o.mesh.position.y = o.orbitCenter.y + Math.sin(a) * o.orbitR;
+                        }
+                    }
+                    if (cursorActive) {
+                        const dx = o.mesh.position.x - cursor3D.x;
+                        const dy = o.mesh.position.y - cursor3D.y;
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        o.mat.opacity = o.baseOp + Math.max(0, 1 - d / 15) * 0.18;
+                    } else {
+                        o.mat.opacity += (o.baseOp - o.mat.opacity) * 0.05;
+                    }
+                }
+
+                // --- 파티클: 웨이브 + 반발 + 네온 글로우 ---
+                const pos = particleGeo.attributes.position.array;
+                const col = particleGeo.attributes.color.array;
+                const nearIdx = [];
+
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    const ox = originalPositions[idx];
+                    const oy = originalPositions[idx + 1];
+                    const oz = originalPositions[idx + 2];
+
+                    const bx = ox + Math.sin(time * 0.4 + oy * 0.2) * 0.6;
+                    const by = oy + Math.cos(time * 0.35 + ox * 0.2) * 0.6;
+                    const bz = oz + Math.sin(time * 0.3 + i) * 0.4;
+
+                    // [1] 반발 물리
+                    if (cursorActive) {
+                        const dx = bx + displacements[idx] - cursor3D.x;
+                        const dy = by + displacements[idx + 1] - cursor3D.y;
+                        const dSq = dx * dx + dy * dy;
+                        const rSq = REP_R * REP_R;
+                        if (dSq < rSq && dSq > 0.01) {
+                            const d = Math.sqrt(dSq);
+                            const f = (1 - d / REP_R) * REP_F;
+                            displacements[idx] += (dx / d) * f;
+                            displacements[idx + 1] += (dy / d) * f;
+                        }
+                    }
+                    displacements[idx] = displacements[idx] * SP_D + (0 - displacements[idx]) * SP_RET;
+                    displacements[idx + 1] = displacements[idx + 1] * SP_D + (0 - displacements[idx + 1]) * SP_RET;
+                    displacements[idx + 2] = displacements[idx + 2] * SP_D + (0 - displacements[idx + 2]) * SP_RET;
+
+                    pos[idx] = bx + displacements[idx];
+                    pos[idx + 1] = by + displacements[idx + 1];
+                    pos[idx + 2] = bz + displacements[idx + 2];
+
+                    // [2] 네온 글로우 색상
+                    if (cursorActive) {
+                        const cdx = pos[idx] - cursor3D.x;
+                        const cdy = pos[idx + 1] - cursor3D.y;
+                        const cd = Math.sqrt(cdx * cdx + cdy * cdy);
+                        const gr = REP_R * 1.5;
+                        if (cd < gr) {
+                            const t2 = 1 - cd / gr;
+                            const boost = t2 * t2;
+                            col[idx] = originalColors[idx] + (1.0 - originalColors[idx]) * boost;
+                            col[idx + 1] = originalColors[idx + 1] + (1.0 - originalColors[idx + 1]) * boost;
+                            col[idx + 2] = originalColors[idx + 2] + (1.0 - originalColors[idx + 2]) * boost;
+                            if (!isMobile && cd < CON_CUR_R) nearIdx.push(i);
+                        } else {
+                            col[idx] += (originalColors[idx] - col[idx]) * 0.08;
+                            col[idx + 1] += (originalColors[idx + 1] - col[idx + 1]) * 0.08;
+                            col[idx + 2] += (originalColors[idx + 2] - col[idx + 2]) * 0.08;
+                        }
+                    } else {
+                        col[idx] += (originalColors[idx] - col[idx]) * 0.05;
+                        col[idx + 1] += (originalColors[idx + 1] - col[idx + 1]) * 0.05;
+                        col[idx + 2] += (originalColors[idx + 2] - col[idx + 2]) * 0.05;
+                    }
+                }
+                particleGeo.attributes.position.needsUpdate = true;
+                particleGeo.attributes.color.needsUpdate = true;
+
+                // [4] 파티클 크기 동적 변화
+                if (cursorActive) {
+                    particleMat.size += (baseParticleSize * 1.4 - particleMat.size) * 0.08;
+                } else {
+                    particleMat.size += (baseParticleSize - particleMat.size) * 0.05;
+                }
+
+                // [3] Constellation 연결선 (데스크톱 전용)
+                if (!isMobile && lineGeo && nearIdx.length > 1) {
+                    const lPos = lineGeo.attributes.position.array;
+                    const lCol = lineGeo.attributes.color.array;
+                    let lc = 0;
+                    const mx = Math.min(nearIdx.length, 30);
+                    for (let a = 0; a < mx && lc < MAX_CONNECTIONS; a++) {
+                        for (let b = a + 1; b < mx && lc < MAX_CONNECTIONS; b++) {
+                            const ia = nearIdx[a] * 3, ib = nearIdx[b] * 3;
+                            const dx = pos[ia] - pos[ib], dy = pos[ia + 1] - pos[ib + 1], dz = pos[ia + 2] - pos[ib + 2];
+                            const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                            if (d < CON_DIST) {
+                                const li = lc * 6;
+                                lPos[li] = pos[ia]; lPos[li + 1] = pos[ia + 1]; lPos[li + 2] = pos[ia + 2];
+                                lPos[li + 3] = pos[ib]; lPos[li + 4] = pos[ib + 1]; lPos[li + 5] = pos[ib + 2];
+                                const br = (1 - d / CON_DIST) * 0.7;
+                                lCol[li] = 0.22 + br; lCol[li + 1] = 0.83 + br * 0.15; lCol[li + 2] = 0.97;
+                                lCol[li + 3] = 0.22 + br; lCol[li + 4] = 0.83 + br * 0.15; lCol[li + 5] = 0.97;
+                                lc++;
+                            }
+                        }
+                    }
+                    lineGeo.setDrawRange(0, lc * 2);
+                    lineGeo.attributes.position.needsUpdate = true;
+                    lineGeo.attributes.color.needsUpdate = true;
+                } else if (!isMobile && lineGeo) {
+                    lineGeo.setDrawRange(0, 0);
+                }
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        })();
+
+        // ----------------------------------------------------
+        // Audio SFX Module
+        // ----------------------------------------------------
+        const audioModule = (function () {
+            let audioCtx = null;
+            let isMuted = true;
+
+            function getAudioContext() {
+                if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                return audioCtx;
+            }
+
+            function playPulse(freq = 440, type = 'sine', duration = 0.08) {
+                if (isMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    if (!ctx) return;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + duration);
+
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start();
+                    osc.stop(ctx.currentTime + duration);
+                } catch (e) { }
+            }
+
+            return {
+                toggle: function () {
+                    isMuted = !isMuted;
+                    if (!isMuted) {
+                        getAudioContext();
+                        playPulse(650, 'sine', 0.1);
+                    }
+                    return !isMuted;
+                },
+                playTap: function () {
+                    playPulse(520, 'sine', 0.05);
+                },
+                playHover: function () {
+                    playPulse(880, 'triangle', 0.03);
+                }
+            };
+        })();
+
+        // ----------------------------------------------------
+        // UI Interactions & Spotlight Card Logic
+        // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', function () {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const projectItems = document.querySelectorAll('.project-item');
             const emptyState = document.getElementById('empty-state');
+            const sfxBtn = document.getElementById('sfx-toggle-btn');
+            const sfxIcon = document.getElementById('sfx-icon');
+            const sfxLabel = document.getElementById('sfx-label');
 
-            // Update tab badge counts dynamically
+            if (sfxBtn) {
+                sfxBtn.addEventListener('click', function () {
+                    const enabled = audioModule.toggle();
+                    if (sfxIcon) sfxIcon.textContent = enabled ? '🔊' : '🔇';
+                    if (sfxLabel) sfxLabel.textContent = enabled ? 'Audio Active' : 'Audio Muted';
+                });
+            }
+
+            // Spotlight Tracking and Subtle 3D Tilt
+            document.querySelectorAll('.glass-card').forEach(card => {
+                card.addEventListener('mousemove', function (e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    this.style.setProperty('--mouse-x', `${x}px`);
+                    this.style.setProperty('--mouse-y', `${y}px`);
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotX = ((y - centerY) / centerY) * -3;
+                    const rotY = ((x - centerX) / centerX) * 3;
+                    this.style.transform = `perspective(800px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-2px)`;
+                });
+
+                card.addEventListener('mouseenter', function () {
+                    audioModule.playHover();
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = '';
+                });
+
+                card.addEventListener('touchstart', function () {
+                    audioModule.playTap();
+                }, { passive: true });
+            });
+
             function updateCounts() {
                 const totalCount = projectItems.length;
                 let appCount = 0;
@@ -673,24 +1293,21 @@
                 if (elLab) elLab.textContent = labCount;
             }
 
-            // Safe GA4 Event Tracker
             function trackEvent(eventName, params = {}) {
                 if (typeof window.gtag === 'function') {
                     try {
                         window.gtag('event', eventName, params);
-                    } catch (e) {
-                        console.debug('GA4 tracking error:', e);
-                    }
+                    } catch (e) { }
                 }
             }
 
-            // Track project card clicks
             document.querySelectorAll('.project-card').forEach(card => {
                 card.addEventListener('click', function () {
-                    const title = this.querySelector('h2')?.innerText?.trim() || 'Unknown Project';
+                    audioModule.playTap();
+                    const title = this.querySelector('h3')?.innerText?.trim() || 'Unknown';
                     const category = this.closest('.project-item')?.getAttribute('data-category') || 'general';
                     const link = this.getAttribute('href') || '';
-                    
+
                     trackEvent('game_enter', {
                         game_name: title,
                         category: category,
@@ -699,16 +1316,15 @@
                 });
             });
 
-            // Track GitHub profile clicks
             document.querySelectorAll('a[href*="github.com"]').forEach(link => {
                 link.addEventListener('click', function () {
+                    audioModule.playTap();
                     trackEvent('profile_click', {
                         target: 'github'
                     });
                 });
             });
 
-            // Filter function
             function filterProjects(category) {
                 let visibleCount = 0;
 
@@ -730,7 +1346,6 @@
                     }
                 }
 
-                // Update active button state
                 tabButtons.forEach(btn => {
                     const btnFilter = btn.getAttribute('data-filter');
                     if (btnFilter === category) {
@@ -743,27 +1358,24 @@
                 });
             }
 
-            // Attach click listeners to tabs
             tabButtons.forEach(btn => {
                 btn.addEventListener('click', function () {
+                    audioModule.playTap();
                     const category = this.getAttribute('data-filter');
                     filterProjects(category);
-                    
+
                     trackEvent('category_filter', {
                         category: category
                     });
 
-                    // Update URL hash without jumping
                     if (history.replaceState) {
                         history.replaceState(null, null, '#' + category);
                     }
                 });
             });
 
-            // Initialize counts
             updateCounts();
 
-            // Check URL hash on page load (e.g., #game, #app, #lab)
             const initialHash = window.location.hash.replace('#', '');
             if (['all', 'app', 'game', 'lab'].includes(initialHash)) {
                 filterProjects(initialHash);
