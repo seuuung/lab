@@ -29,6 +29,7 @@ function runTier2Tests() {
     console.log('========================================\n');
 
     const indexHtml = readFile('index.html');
+    const homeCss = readFile('home.css');
 
     // ----------------------------------------------------
     // Boundary 1: Viewport-Fit & Safe-Area Inset 검증 (25 assertions)
@@ -49,7 +50,7 @@ function runTier2Tests() {
 
     // 3. Safe-Area Inset CSS 적용 검증 (11 assertions)
     // index.html
-    const hasIndexSafeArea = /safe-area-inset|env\(safe-area/i.test(indexHtml) || /pt-safe|pb-safe/i.test(indexHtml) || /p-4|pt-8|max\(/i.test(indexHtml);
+    const hasIndexSafeArea = /safe-area-inset|env\(safe-area/i.test(homeCss) || /pt-safe|pb-safe/i.test(indexHtml) || /p-4|pt-8|max\(/i.test(indexHtml);
     assert(hasIndexSafeArea, 'Tier2-B1-13: index.html에 Safe-Area 또는 상단 여백 보정 적용');
 
     // 9개 게임 각각 Safe-Area or Floating 버튼 위치 보정
@@ -71,7 +72,7 @@ function runTier2Tests() {
     assert(hasSafeAreaFallback, 'Tier2-B1-24: Safe-Area CSS에 fallback 기본 픽셀(16px 등) 지정 확인');
 
     // 5. 하단 Safe-Area 대응 검증
-    const hasBottomSafeArea = /safe-area-inset-bottom/i.test(indexHtml) || /mb-|pb-|min-h-screen/i.test(indexHtml);
+    const hasBottomSafeArea = /safe-area-inset-bottom/i.test(homeCss) || /mb-|pb-|min-h-screen/i.test(indexHtml);
     assert(hasBottomSafeArea, 'Tier2-B1-25: 하단 Safe-Area 및 뷰포트 여백(min-h-screen 등) 확보');
 
 
@@ -81,7 +82,7 @@ function runTier2Tests() {
     console.log('[Tier 2] Boundary 2: 320px 모바일 뷰포트 오버플로우 방지 검증...');
 
     // 1. index.html body overflow-x: hidden
-    assertIncludes(indexHtml, 'overflow-x: hidden', 'Tier2-B2-01: index.html body에 overflow-x: hidden 적용으로 가로 스크롤 방지');
+    assert(/overflow-x:\s*(clip|hidden)/.test(homeCss), 'Tier2-B2-01: 메인 화면 가로 넘침 제어');
 
     // 2. index.html 내 320px 초과 고정폭 부재 검증
     const hasHardcoded500pxIndex = /w-\[5[0-9]{2}px\]|width:\s*5[0-9]{2}px|min-width:\s*5[0-9]{2}px/i.test(indexHtml);
@@ -156,7 +157,7 @@ function runTier2Tests() {
     console.log('[Tier 2] Boundary 3: 44px+ 터치 타겟 규격 검증...');
 
     // 1. 포털 탭 버튼 터치 타겟 검증 (F7)
-    const hasTabTouchTarget = /py-[2-4]|px-[3-6]|h-1[0-2]|min-h-\[44px\]|p-[2-4]/i.test(indexHtml);
+    const hasTabTouchTarget = /\.tab-btn\s*\{[^}]*min-height:\s*44px/.test(homeCss);
     assert(hasTabTouchTarget, 'Tier2-B3-01: index.html 탭 버튼 패딩/높이 44px+ 터치 타겟 규격 충족');
 
     // 2. 9개 하위 프로젝트 홈 버튼 44px+ 터치 타겟 검증 (9 assertions)

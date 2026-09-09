@@ -37,10 +37,10 @@ htmlFiles.forEach(f => {
 
 // 2. 메인 포털 유입 및 클릭 이벤트 검증
 console.log('\n[2] Checking Main Portal Event Tracking...');
-const portalContent = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
-assert(portalContent.includes("trackEvent('game_enter'"), 'Includes game_enter event tracking');
-assert(portalContent.includes("trackEvent('category_filter'"), 'Includes category_filter event tracking');
-assert(portalContent.includes("trackEvent('profile_click'"), 'Includes profile_click event tracking');
+const portalContent = fs.readFileSync(path.join(rootDir, 'home.js'), 'utf8');
+assert(portalContent.includes("track('game_enter'"), 'Includes game_enter event tracking');
+assert(portalContent.includes("track('category_filter'"), 'Includes category_filter event tracking');
+assert(portalContent.includes("track('profile_click'"), 'Includes profile_click event tracking');
 console.log('  ✔ Verified Main Portal Acquisition & Exploration Events');
 
 // 3. 섀도우 퍼즐 핵심 퍼널 이벤트 검증
