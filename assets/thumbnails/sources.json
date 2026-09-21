@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Shadow Puzzle",
+    "page": "game/shadow_puzzle/index.html",
+    "image": "assets/thumbnails/shadow-puzzle-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "Neon Slime Jump",
+    "page": "game/slime_jump/index.html",
+    "image": "assets/thumbnails/slime-jump-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "Magnetic Orbit",
+    "page": "game/Magnetic_Orbit/index.html",
+    "image": "assets/thumbnails/magnetic-orbit-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "Maze Runner",
+    "page": "game/maze_escape/index.html",
+    "image": "assets/thumbnails/maze-runner-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "3D 지뢰찾기",
+    "page": "game/3D_%20minesweeper/index.html",
+    "image": "assets/thumbnails/minesweeper-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "온식",
+    "page": "https://play.google.com/store/apps/details?id=com.onsic.app&pcampaignid=web_share",
+    "image": "https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=s0-br30",
+    "fallback": "assets/thumbnails/onsic.png",
+    "source": "Google Play og:image"
+  },
+  {
+    "name": "Spatial Mine",
+    "page": "https://play.google.com/store/apps/details?id=spatialmine.app&pcampaignid=web_share",
+    "image": "https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA=s0-br30",
+    "fallback": "assets/thumbnails/spatial-mine.png",
+    "source": "Google Play og:image"
+  },
+  {
+    "name": "SelPick",
+    "page": "https://play.google.com/store/apps/details?id=com.selpick.app&pcampaignid=web_share",
+    "image": "https://play-lh.googleusercontent.com/n1ihtZCBRJ1quEqMq8yJCUMM3rWBCrhnuTm1J7XdvGOokU5p8fb9DMlSisj2sJxyw2hVg0QG2ijtLkJVdxkN=s0-br30",
+    "fallback": "assets/thumbnails/selpick.png",
+    "source": "Google Play og:image"
+  },
+  {
+    "name": "Linux Hacker CTF",
+    "page": "game/hacking/index.html",
+    "image": "assets/thumbnails/hacker-ctf-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "지옥의 회원가입",
+    "page": "game/sign_up_for_hell/index.html",
+    "image": "assets/thumbnails/sign-up-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "최원형",
+    "page": "game/choi_circle/index.html",
+    "image": "assets/thumbnails/choi-circle-art.png",
+    "source": "Generated thematic game artwork"
+  },
+  {
+    "name": "로봇 인증",
+    "page": "game/robot/index.html",
+    "image": "assets/thumbnails/robot-art.png",
+    "source": "Generated thematic game artwork"
+  }
+]

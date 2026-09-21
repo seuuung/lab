@@ -11,7 +11,7 @@
     result.all++;
     result[item.dataset.category]++;
     return result;
-  }, { all: 0, game: 0, app: 0, lab: 0 });
+  }, { all: 0, game: 0, app: 0 });
   let motionPaused = reduced.matches;
   let soundEnabled = false;
   let audioContext;
@@ -91,7 +91,7 @@
       button.classList.toggle('active', active);
       button.setAttribute('aria-pressed', String(active));
     });
-    document.getElementById('result-count').textContent = `총 ${visible}개의 실험`;
+    document.getElementById('result-count').textContent = `총 ${visible}개`;
     document.getElementById('empty-state').hidden = visible !== 0;
   }
 
@@ -106,7 +106,9 @@
     history.replaceState(null, '', `#${category}`);
   }));
   function readHash() {
-    const category = location.hash.slice(1);
+    // Preserve saved links to the former experiment category.
+    const hash = location.hash.slice(1);
+    const category = hash === 'lab' ? 'game' : hash;
     if (!category) filterProjects('all');
     else if (Object.hasOwn(counts, category)) filterProjects(category);
   }
@@ -125,8 +127,21 @@
     items.forEach(item => observer.observe(item));
   }
 
+  // Use the same official image locally if Google's image CDN is unavailable.
+  document.querySelectorAll('.project-thumbnail').forEach(image => {
+    image.addEventListener('error', () => {
+      if (image.dataset.fallback) {
+        const fallback = image.dataset.fallback;
+        delete image.dataset.fallback;
+        image.src = fallback;
+      } else {
+        image.closest('.project-art').classList.add('thumbnail-failed');
+      }
+    });
+    if (image.complete && image.naturalWidth === 0) image.dispatchEvent(new Event('error'));
+  });
+
   document.querySelectorAll('.project-card').forEach(card => {
-    const scene = card.querySelector('.art-scene');
     card.addEventListener('click', () => {
       pulse();
       track('game_enter', {
@@ -136,22 +151,10 @@
       });
     });
     card.addEventListener('pointerenter', () => pulse(800));
-    card.addEventListener('pointermove', event => {
-      if (motionPaused || reduced.matches || event.pointerType !== 'mouse') return;
-      const rect = card.getBoundingClientRect();
-      scene.style.setProperty('--card-x', `${((event.clientX - rect.left) / rect.width - .5) * 9}px`);
-      scene.style.setProperty('--card-y', `${((event.clientY - rect.top) / rect.height - .5) * 9}px`);
-    });
-    card.addEventListener('pointerleave', () => {
-      scene.style.removeProperty('--card-x');
-      scene.style.removeProperty('--card-y');
-    });
+
   });
   document.querySelectorAll('a[href*="github.com"]').forEach(link => {
     link.addEventListener('click', () => track('profile_click', { target: 'github' }));
-  });
-  document.querySelector('.hero-bottom a').addEventListener('click', () => {
-    track('game_enter', { game_name: '그림자 퍼즐', category: 'game', target_url: 'game/shadow_puzzle/index.html' });
   });
 
   let scrollFrame = 0;

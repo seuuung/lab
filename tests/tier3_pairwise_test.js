@@ -33,20 +33,8 @@ function runTier3Tests() {
     console.log('[Tier 3] Matrix 1: 탭 필터 × 카테고리 필터링 조합...');
 
     // 12개 카드 정의
-    const sampleCards = [
-        { name: '온식', category: 'app' },
-        { name: 'Spatial Mine', category: 'app' },
-        { name: '슬라임 점프', category: 'game' },
-        { name: '궤도 생존', category: 'game' },
-        { name: '미로 탈출', category: 'game' },
-        { name: '해커 CTF', category: 'game' },
-        { name: '그림자 퍼즐', category: 'game' },
-        { name: '3D 지뢰찾기', category: 'game' },
-        { name: '지옥의 회원가입', category: 'lab' },
-        { name: '최원형', category: 'lab' },
-        { name: '로봇 인증', category: 'lab' },
-        { name: '삼척 기상토토', category: 'lab' }
-    ];
+    const sampleCards = [...indexHtml.matchAll(/<article class="project-item" data-category="([^"]+)"[\s\S]*?<h3>([^<]+)<\/h3>/g)]
+        .map(match => ({ category: match[1], name: match[2] }));
 
     // 필터링 시뮬레이션 함수
     function simulateFilter(tab) {
@@ -61,29 +49,28 @@ function runTier3Tests() {
     assertEqual(allResults.length, 12, 'Tier3-M1-01: "all" 탭 활성화 시 12개 전체 카드 노출');
     assert(allResults.some(c => c.category === 'app'), 'Tier3-M1-02: "all" 탭에 app 카테고리 포함');
     assert(allResults.some(c => c.category === 'game'), 'Tier3-M1-03: "all" 탭에 game 카테고리 포함');
-    assert(allResults.some(c => c.category === 'lab'), 'Tier3-M1-04: "all" 탭에 lab 카테고리 포함');
+    assert(allResults.some(c => c.name === 'SelPick'), 'Tier3-M1-04: 전체 목록에 SelPick 포함');
 
-    // 1-2. 'app' 탭: 2개 모바일 앱 카드만 표시
+    // 1-2. 'app' 탭: 3개 앱 카드만 표시
     const appResults = simulateFilter('app');
-    assertEqual(appResults.length, 2, 'Tier3-M1-05: "app" 탭 활성화 시 2개 모바일 앱 카드만 노출');
+    assertEqual(appResults.length, 3, 'Tier3-M1-05: "app" 탭 활성화 시 3개 앱 카드만 노출');
     assert(appResults.every(c => c.category === 'app'), 'Tier3-M1-06: "app" 탭 결과의 모든 카드가 app 카테고리');
 
-    // 1-3. 'game' 탭: 6개 웹 게임 카드만 표시
+    // 1-3. 'game' 탭: 9개 게임 카드만 표시
     const gameResults = simulateFilter('game');
-    assertEqual(gameResults.length, 6, 'Tier3-M1-07: "game" 탭 활성화 시 6개 웹 게임 카드만 노출');
+    assertEqual(gameResults.length, 9, 'Tier3-M1-07: "game" 탭 활성화 시 9개 게임 카드만 노출');
     assert(gameResults.every(c => c.category === 'game'), 'Tier3-M1-08: "game" 탭 결과의 모든 카드가 game 카테고리');
 
     // 1-4. 'lab' 탭: 4개 밈&실험실 카드만 표시
-    const labResults = simulateFilter('lab');
-    assertEqual(labResults.length, 4, 'Tier3-M1-09: "lab" 탭 활성화 시 4개 밈&실험실 카드만 노출');
-    assert(labResults.every(c => c.category === 'lab'), 'Tier3-M1-10: "lab" 탭 결과의 모든 카드가 lab 카테고리');
+    assert(!sampleCards.some(c => c.category === 'lab'), 'Tier3-M1-09: 독립 실험 분류 제거');
+    assert(['지옥의 회원가입', '최원형', '로봇 인증'].every(name => gameResults.some(c => c.name === name)), 'Tier3-M1-10: 기존 실험 3개가 게임 목록에 유지');
 
     // 1-5. 탭 연속 전이 시나리오 (all -> app -> game -> lab -> all)
     let currentCards = simulateFilter('all');
     currentCards = simulateFilter('app');
-    assertEqual(currentCards.length, 2, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
+    assertEqual(currentCards.length, 3, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
     currentCards = simulateFilter('all');
-    assertEqual(currentCards.length, 12, 'Tier3-M1-12: 탭 전이 lab -> all 복귀 결과 일치');
+    assertEqual(currentCards.length, 12, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
 
 
     // ----------------------------------------------------

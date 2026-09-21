@@ -45,18 +45,18 @@ function makeHome({ hash = '', reduced = false } = {}) {
     return card;
   });
   const buttons = [...html.matchAll(/class="tab-btn[^"]*" data-filter="([^"]+)"/g)].map(m => new Element({ filter: m[1] }));
-  const grid = new Element(), featured = new Element(), github = new Element();
+  const grid = new Element(), github = new Element();
   document.querySelectorAll = selector => ({ '.tab-btn': buttons, '.project-item': items, '.project-card': cards, 'a[href*="github.com"]': [github] }[selector] || []);
-  document.querySelector = selector => ({ '.project-grid': grid, '.hero-bottom a': featured }[selector]);
+  document.querySelector = selector => ({ '.project-grid': grid }[selector]);
   document.getElementById = id => ids[id];
   const context = { document, window, matchMedia: () => media, location: { hash }, history: { replaceState(a, b, value) { context.location.hash = value; } }, Event: class { constructor(type) { this.type = type; } }, innerHeight: 800, scrollY: 300, requestAnimationFrame: () => 1, Date };
   vm.runInNewContext(code, context);
-  return { context, items, cards, buttons, ids, grid, root, window, document, media, events, github, featured };
+  return { context, items, cards, buttons, ids, grid, root, window, document, media, events, github };
 }
 
-test('11 projects remain available without JavaScript, with valid destinations and safe external links', () => {
+test('12 projects remain available without JavaScript, with valid destinations and safe external links', () => {
   const articles = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/g)];
-  assert.equal(articles.length, 11);
+  assert.equal(articles.length, 12);
   for (const [, attributes, content] of articles) {
     assert.doesNotMatch(attributes, /\bhidden\b/);
     const link = content.match(/<a\b([^>]+)>/)[1];
@@ -66,41 +66,64 @@ test('11 projects remain available without JavaScript, with valid destinations a
   }
 });
 
-test('all visible interface copy is Korean', () => {
-  const visible = html.split('<body>')[1].replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ');
-  assert.doesNotMatch(visible, /[A-Za-z]{3,}/);
+test('game cards use generated artwork while app cards keep store artwork with local fallbacks', () => {
+  const gameImages = [...html.matchAll(/<article class="project-item" data-category="game"[\s\S]*?<img class="project-thumbnail game-thumbnail" src="([^"]+)"/g)].map(match => match[1]);
+  const appImages = [...html.matchAll(/<article class="project-item" data-category="app"[\s\S]*?<img class="project-thumbnail app-thumbnail" src="([^"]+)" data-fallback="([^"]+)"/g)];
+  assert.equal(gameImages.length, 9);
+  assert.ok(gameImages.every(src => /-art\.png$/.test(src)));
+  assert.equal(appImages.length, 3);
+  assert.ok(appImages.every(([, src, fallback]) => src.startsWith('https://play-lh.googleusercontent.com/') && /^assets\/thumbnails\/.+\.(png|jpg)$/.test(fallback)));
+});
+
+test('project names retain their source language instead of forced Korean translations', () => {
+  const names = Object.fromEntries([...html.matchAll(/<a class="project-card"[^>]*href="([^"]+)"[\s\S]*?<h3>([^<]+)<\/h3>/g)].map(m => [m[1], m[2]]));
+  assert.equal(names['game/Magnetic_Orbit/index.html'], 'Magnetic Orbit');
+  assert.equal(names['game/hacking/index.html'], 'Linux Hacker CTF');
+  assert.equal(names['game/shadow_puzzle/index.html'], 'Shadow Puzzle');
+  assert.equal(names['game/slime_jump/index.html'], 'Neon Slime Jump');
+  assert.equal(names['game/maze_escape/index.html'], 'Maze Runner');
+  assert.equal(names['game/3D_%20minesweeper/index.html'], '3D 지뢰찾기');
+  assert.equal(names['game/choi_circle/index.html'], '최원형');
+  assert.ok(Object.values(names).includes('Spatial Mine'));
+});
+
+test('decorative slogans and redundant project instructions are removed', () => {
+  assert.doesNotMatch(html, /호기심을 가지고 놀다|호기심의 결과물|손끝으로 시작되는 세계|브라우저에서 바로 플레이|정해진 답 없이|계속 만드는 중/);
+  assert.doesNotMatch(html, /class="(?:hero-bottom|collection-end|sculpture-index|art-topline)"/);
+  assert.match(html, /id="projects-title">프로젝트<\/h2>/);
 });
 
 test('category filters show exactly the right projects and accessible pressed state', () => {
   const env = makeHome();
+  assert.deepEqual(env.buttons.map(button => button.dataset.filter), ['all', 'game', 'app']);
   for (const button of env.buttons) {
     button.fire('click');
     const category = button.dataset.filter;
     const visible = env.items.filter(item => !item.hidden);
-    assert.equal(visible.length, { all: 11, game: 6, app: 2, lab: 3 }[category]);
+    assert.equal(visible.length, { all: 12, game: 9, app: 3 }[category]);
     assert.ok(visible.every(item => category === 'all' || item.dataset.category === category));
     assert.equal(env.buttons.filter(b => b.attrs['aria-pressed'] === 'true').length, 1);
     assert.equal(button.attrs['aria-pressed'], 'true');
     assert.equal(env.context.location.hash, '#' + category);
-    assert.equal(env.ids['result-count'].textContent, `총 ${visible.length}개의 실험`);
+    assert.equal(env.ids['result-count'].textContent, `총 ${visible.length}개`);
   }
 });
 
 test('deep links and hash navigation restore filters; section anchors do not clear selection', () => {
   const env = makeHome({ hash: '#app' });
-  assert.equal(env.items.filter(item => !item.hidden).length, 2);
+  assert.equal(env.items.filter(item => !item.hidden).length, 3);
   env.context.location.hash = '#lab'; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 3);
+  assert.equal(env.items.filter(item => !item.hidden).length, 9);
   env.context.location.hash = '#about'; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 3);
+  assert.equal(env.items.filter(item => !item.hidden).length, 9);
   env.context.location.hash = ''; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 11);
+  assert.equal(env.items.filter(item => !item.hidden).length, 12);
 });
 
 test('unknown or inherited category hashes leave the full list usable', () => {
   for (const hash of ['#not-a-category', '#constructor', '#__proto__']) {
     const env = makeHome({ hash });
-    assert.equal(env.items.filter(item => !item.hidden).length, 11);
+    assert.equal(env.items.filter(item => !item.hidden).length, 12);
   }
 });
 
@@ -123,11 +146,11 @@ test('motion starts paused for reduced-motion users and updates with preference 
   assert.equal(env.root.dataset.motion, 'paused');
 });
 
-test('analytics retains original project identities and destinations after Korean renaming', () => {
+test('analytics retains established project identities and destinations independently of display names', () => {
   const env = makeHome();
   env.cards.forEach(card => card.fire('click'));
   const clicks = env.events.filter(event => event[1] === 'game_enter');
-  assert.equal(clicks.length, 11);
+  assert.equal(clicks.length, 12);
   clicks.forEach((event, index) => {
     assert.equal(event[2].game_name, env.cards[index].dataset.name);
     assert.equal(event[2].target_url, env.cards[index].attrs.href);
@@ -199,4 +222,19 @@ test('hidden pages and WebGL context loss stop animation', () => {
   env.canvas.fire('webglcontextlost', { preventDefault() {} });
   assert.equal(env.frames.size, 0);
   assert.equal(env.stage.classList.contains('sculpture-ready'), false);
+});
+
+
+test('SelPick appears only in all and app filters, with the supplied Play Store destination', () => {
+  const env = makeHome();
+  const index = env.cards.findIndex(card => card.dataset.name === 'SelPick');
+  assert.ok(index >= 0);
+  const card = env.cards[index];
+  assert.equal(card.attrs.href, 'https://play.google.com/store/apps/details?id=com.selpick.app&pcampaignid=web_share');
+  for (const category of ['app', 'game', 'all']) {
+    env.buttons.find(button => button.dataset.filter === category).fire('click');
+    assert.equal(env.items[index].hidden, category === 'game');
+  }
+  card.fire('click');
+  assert.equal(env.events.at(-1)[2].category, 'app');
 });

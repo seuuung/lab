@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#f1f0ea">
-  <title>승민의 실험실 — 호기심을 가지고 놀다</title>
-  <meta name="description" content="작은 호기심에서 시작된 11개의 실험. 승민이 만든 웹 게임, 모바일 앱, 엉뚱한 인터랙티브 실험을 직접 플레이해 보세요.">
+  <title>승민의 실험실</title>
+  <meta name="description" content="승민이 만든 게임과 앱.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="home.css">
@@ -37,183 +37,187 @@
     </script>
 </head>
 <body>
-  <a class="skip-link" href="#projects">실험 목록 바로가기</a>
+  <a class="skip-link" href="#projects">프로젝트 바로가기</a>
   <div class="reading-progress" aria-hidden="true"></div>
   <header class="site-header">
     <a class="brand" href="./" aria-label="승민의 실험실 홈"><span class="brand-symbol"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg></span>승민의 실험실<span class="brand-period">.</span></a>
-    <nav aria-label="메인 메뉴"><a href="#projects">실험 모음 <sup>11</sup></a><a href="#about">만든 사람</a></nav>
+    <nav aria-label="메인 메뉴"><a href="#projects">프로젝트</a><a href="#about">만든 사람</a></nav>
     <div class="header-tools"><button id="sfx-toggle-btn" class="sound-toggle" type="button" aria-label="소리 켜기" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="sfx-label">소리 끔</span></button></div>
   </header>
   <main>
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-topline"><span><i class="status-dot"></i>작은 생각이 자라는 곳</span><span>승민의 개인 작업 아카이브</span></div>
       <div class="hero-content">
-        <div class="hero-copy"><h1 id="hero-title"><span>호기심을</span><span>가지고 <em>놀다.</em><i class="title-star" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg></i></span></h1>
-          <div class="hero-description"><span class="short-line" aria-hidden="true"></span><p>만들고, 부수고, 다시 만들고.<br>작은 상상이 손끝의 경험이 되는 실험실.</p></div>
-          <a class="hero-cta" href="#projects"><span>실험 둘러보기</span><span class="cta-circle" aria-hidden="true">↘</span></a>
-        </div>
+        <div class="hero-copy"><h1 id="hero-title">승민의 실험실</h1></div>
         <div class="sculpture-stage">
           <div class="sculpture-halo" aria-hidden="true"></div>
           <div class="sculpture-fallback" aria-hidden="true"><i></i><i></i><i></i></div>
           <canvas id="sculpture" tabindex="0" role="img" aria-label="회전하는 금속 매듭. 드래그하거나 방향키로 회전할 수 있습니다."></canvas>
           <div class="sculpture-shadow" aria-hidden="true"></div>
           <span class="sculpture-note"><i aria-hidden="true">↔</i> 드래그해서 돌려보세요</span>
-          <div class="sculpture-index" aria-hidden="true"><span>형태 연구 — 001</span><span>끝없이 이어지는 호기심</span></div>
           <button id="motion-toggle" class="motion-toggle" type="button" aria-label="모션 멈추기" aria-pressed="false">모션 멈추기 <span aria-hidden="true">Ⅱ</span></button>
         </div>
       </div>
-      <div class="hero-bottom"><span><i class="tiny-cross" aria-hidden="true">＋</i> 정해진 답 없이, 재미있는 방향으로.</span><a href="game/shadow_puzzle/index.html">먼저 해볼까요? <b>그림자 퍼즐</b> <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></a><span class="hero-page">01 — 11</span></div>
     </section>
     <section id="projects" class="projects" aria-labelledby="projects-title">
-      <div class="section-heading"><div><p class="eyebrow"><span class="label-mark"></span>호기심의 결과물</p><h2 id="projects-title">고르는 순간,<br><span>실험은 시작됩니다.</span></h2></div><p class="section-description">조금 진지한 앱부터 꽤 엉뚱한 게임까지.<br>마음이 가는 실험을 하나 열어보세요.</p></div>
+      <div class="section-heading"><h2 id="projects-title">프로젝트</h2></div>
       <div class="filter-bar"><div class="filters" aria-label="프로젝트 카테고리">
-        <button type="button" class="tab-btn active" data-filter="all" aria-pressed="true">전체 <span id="count-all">11</span></button>
-        <button type="button" class="tab-btn" data-filter="game" aria-pressed="false">웹 게임 <span id="count-game">06</span></button>
-        <button type="button" class="tab-btn" data-filter="app" aria-pressed="false">모바일 앱 <span id="count-app">02</span></button>
-        <button type="button" class="tab-btn" data-filter="lab" aria-pressed="false">엉뚱한 실험 <span id="count-lab">03</span></button>
-      </div><span id="result-count" role="status" aria-live="polite">총 11개의 실험</span></div>
+        <button type="button" class="tab-btn active" data-filter="all" aria-pressed="true">전체 <span id="count-all">12</span></button>
+        <button type="button" class="tab-btn" data-filter="game" aria-pressed="false">게임 <span id="count-game">09</span></button>
+        <button type="button" class="tab-btn" data-filter="app" aria-pressed="false">앱 <span id="count-app">03</span></button>
+      </div><span id="result-count" role="status" aria-live="polite">총 12개</span></div>
       <div class="project-grid">
         <article class="project-item" data-category="game" data-number="07">
           <a class="project-card" data-name="그림자 퍼즐" href="game/shadow_puzzle/index.html">
             <div class="project-art art-shadow" aria-hidden="true">
-              <div class="art-topline"><span>실험 07</span><span>손끝으로 시작되는 세계</span></div>
-              <div class="art-scene"><div class="light-beam"></div><div class="shadow-floor"></div><div class="block-sculpture"><i class="block block-1"><b></b><em></em></i><i class="block block-2"><b></b><em></em></i><i class="block block-3"><b></b><em></em></i><i class="block block-4"><b></b><em></em></i><i class="block block-5"><b></b><em></em></i></div><div class="art-caption">빛을 따라<br>발견하는 또 다른 모양.</div></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/shadow-puzzle-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>그림자 퍼즐</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>흩어진 조각을 돌려, 숨어 있던 그림자를 발견하세요.</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>Shadow Puzzle</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="03">
           <a class="project-card" data-name="슬라임 점프" href="game/slime_jump/index.html">
             <div class="project-art art-slime" aria-hidden="true">
-              <div class="art-topline"><span>실험 03</span><span>손끝으로 시작되는 세계</span></div>
-              <div class="art-scene"><div class="slime-sun"></div><div class="jump-track"><i></i><i></i><i></i></div><div class="slime-character"><div class="slime-highlight"></div><i class="eye eye-left"></i><i class="eye eye-right"></i><b class="mouth"></b><span class="cheek cheek-left"></span><span class="cheek cheek-right"></span></div><div class="slime-shadow"></div><span class="jump-caption">조금 더, 높이.</span></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/slime-jump-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>슬라임 점프</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>한 번의 터치로, 한 칸 더 높이. 어디까지 올라갈까요?</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>Neon Slime Jump</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="04">
           <a class="project-card" data-name="궤도 생존" href="game/Magnetic_Orbit/index.html">
             <div class="project-art art-orbit" aria-hidden="true">
-              <div class="art-topline"><span>실험 04</span><span>웹 게임</span></div>
-              <div class="art-scene"><div class="orbit-system"><i class="orbit-path"></i><i class="orbit-path orbit-path-two"></i><i class="planet"></i><i class="moon"></i><i class="orbit-point"></i></div><span class="orbit-label">인력과 관성 사이</span></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/magnetic-orbit-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>궤도 생존</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>당기는 힘과 벗어나는 힘 사이, 나만의 궤도를 찾아서.</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>Magnetic Orbit</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="05">
           <a class="project-card" data-name="미로 탈출" href="game/maze_escape/index.html">
             <div class="project-art art-maze" aria-hidden="true">
-              <div class="art-topline"><span>실험 05</span><span>웹 게임</span></div>
-              <div class="art-scene"><div class="maze-board"><i class="cell cell-0"></i><i class="cell cell-1"></i><i class="cell cell-2"></i><i class="cell cell-3"></i><i class="cell cell-4"></i><i class="cell cell-5"></i><i class="cell cell-6"></i><i class="cell cell-7"></i><i class="cell cell-8"></i><i class="cell cell-9"></i><i class="cell cell-10"></i><i class="cell cell-11"></i><i class="cell cell-12"></i><i class="cell cell-13"></i><i class="cell cell-14"></i><i class="cell cell-15"></i><i class="cell cell-16"></i><i class="cell cell-17"></i><i class="cell cell-18"></i><i class="cell cell-19"></i><i class="cell cell-20"></i><i class="cell cell-21"></i><i class="cell cell-22"></i><i class="cell cell-23"></i><i class="cell cell-24"></i><i class="cell cell-25"></i><i class="cell cell-26"></i><i class="cell cell-27"></i><i class="cell cell-28"></i><i class="cell cell-29"></i><i class="cell cell-30"></i><i class="cell cell-31"></i><i class="cell cell-32"></i><i class="cell cell-33"></i><i class="cell cell-34"></i><i class="cell cell-35"></i><i class="cell cell-36"></i><i class="cell cell-37"></i><i class="cell cell-38"></i><i class="cell cell-39"></i><i class="cell cell-40"></i><i class="cell cell-41"></i><i class="cell cell-42"></i><i class="cell cell-43"></i><i class="cell cell-44"></i><i class="cell cell-45"></i><i class="cell cell-46"></i><i class="cell cell-47"></i><i class="cell cell-48"></i><b class="maze-ball"></b></div></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/maze-runner-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>미로 탈출</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>길을 잃어도 괜찮아요. 다음 미로는 또 다르니까.</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>Maze Runner</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="08">
           <a class="project-card" data-name="3D 지뢰찾기" href="game/3D_%20minesweeper/index.html">
             <div class="project-art art-mine" aria-hidden="true">
-              <div class="art-topline"><span>실험 08</span><span>웹 게임</span></div>
-              <div class="art-scene"><div class="mine-cube"><div class="mine-face"><i></i><i>1</i><i></i><i>2</i><i></i><i></i><i></i><i>3</i><i></i></div></div><span class="mine-label">시선을 한 번 더 돌려보세요.</span></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/minesweeper-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>입체 지뢰찾기</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>한 면 너머까지 생각해야 하는, 한 차원 다른 지뢰찾기.</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>3D 지뢰찾기</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="app" data-number="01">
           <a class="project-card" data-name="온식 (OnSic)" href="https://play.google.com/store/apps/details?id=com.onsic.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
-            <div class="project-art art-food" aria-hidden="true">
-              <div class="art-topline"><span>실험 01</span><span>모바일 앱</span></div>
-              <div class="art-scene"><div class="phone"><div class="phone-camera"></div><div class="phone-heading">오늘의 온식 <span>＋</span></div><div class="plate"><i></i><b></b><em></em></div><div class="phone-details">잘 먹은 하루<span>나를 위한 작은 기록</span></div></div><div class="app-word">온식<span>당신의 하루를 담다.</span></div></div>
+            <div class="project-art art-food app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=s0-br30" data-fallback="assets/thumbnails/onsic.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
               <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
             <div class="project-info"><div class="project-title"><h3>온식</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>하루의 식단을 사진으로 모으고, 나만의 기록으로.</p><span class="project-type">모바일 앱<span> · </span>안드로이드</span>
+              <span class="project-type">Android</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="app" data-number="02">
           <a class="project-card" data-name="Spatial Mine" href="https://play.google.com/store/apps/details?id=spatialmine.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
-            <div class="project-art art-spatial" aria-hidden="true">
-              <div class="art-topline"><span>실험 02</span><span>모바일 앱</span></div>
-              <div class="art-scene"><div class="spatial-shape"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="spatial-label">작은 공간, 깊은 생각.</span></div>
+            <div class="project-art art-spatial app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA=s0-br30" data-fallback="assets/thumbnails/spatial-mine.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
               <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>스페이셜 마인</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>손안의 작은 입체 공간, 숨겨진 지뢰를 찾아보세요.</p><span class="project-type">모바일 앱<span> · </span>안드로이드</span>
+            <div class="project-info"><div class="project-title"><h3>Spatial Mine</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">Android</span>
+            </div>
+          </a>
+        </article>
+        <article class="project-item" data-category="app" data-number="12">
+          <a class="project-card" data-name="SelPick" href="https://play.google.com/store/apps/details?id=com.selpick.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <div class="project-art art-selpick app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/n1ihtZCBRJ1quEqMq8yJCUMM3rWBCrhnuTm1J7XdvGOokU5p8fb9DMlSisj2sJxyw2hVg0QG2ijtLkJVdxkN=s0-br30" data-fallback="assets/thumbnails/selpick.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
+              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </div>
+            <div class="project-info"><div class="project-title"><h3>SelPick</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">Android</span>
             </div>
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="06">
           <a class="project-card" data-name="해커 CTF" href="game/hacking/index.html">
             <div class="project-art art-terminal" aria-hidden="true">
-              <div class="art-topline"><span>실험 06</span><span>웹 게임</span></div>
-              <div class="art-scene"><div class="terminal-window"><div class="window-dots"><i></i><i></i><i></i><span>가상 터미널</span></div><p><span>실험실에 접속 중...</span><br>보안 퍼즐을 시작합니다.<br><b>접근이 허용되었습니다.</b><br>〉<i class="terminal-caret"></i></p></div></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/hacker-ctf-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>해커 시뮬레이터</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>가상 터미널 속 단서를 좇아 보안 퍼즐을 풀어보세요.</p><span class="project-type">웹 게임<span> · </span>브라우저에서 바로 플레이</span>
+            <div class="project-info"><div class="project-title"><h3>Linux Hacker CTF</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
-        <article class="project-item" data-category="lab" data-number="09">
+        <article class="project-item" data-category="game" data-number="09">
           <a class="project-card" data-name="지옥의 회원가입" href="game/sign_up_for_hell/index.html">
             <div class="project-art art-hell" aria-hidden="true">
-              <div class="art-topline"><span>실험 09</span><span>엉뚱한 실험</span></div>
-              <div class="art-scene"><div class="signup-window"><div>환영하지 않습니다. <span>×</span></div><p>비밀번호를 입력하세요.</p><div class="fake-password">••••••••••</div><span class="error-copy">조금 더 불가능한 비밀번호가 필요합니다.</span><b>가입하기 ↗</b></div></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/sign-up-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
             <div class="project-info"><div class="project-title"><h3>지옥의 회원가입</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>가입 버튼 하나 누르기가 이렇게 어려울 일이야?</p><span class="project-type">엉뚱한 실험<span> · </span>브라우저에서 바로 플레이</span>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
-        <article class="project-item" data-category="lab" data-number="10">
+        <article class="project-item" data-category="game" data-number="10">
           <a class="project-card" data-name="최원형" href="game/choi_circle/index.html">
             <div class="project-art art-circle" aria-hidden="true">
-              <div class="art-topline"><span>실험 10</span><span>엉뚱한 실험</span></div>
-              <div class="art-scene"><svg class="drawn-circle" viewBox="0 0 260 260"><circle cx="130" cy="130" r="83" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 6" opacity=".25"/><path d="M132 46C189 41 226 83 217 140S177 218 123 213 41 174 44 119 76 44 132 46" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span class="circle-score">거의 완벽한, 당신의 원.</span></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/choi-circle-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
             <div class="project-info"><div class="project-title"><h3>최원형</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>삐뚤어도 한 번 더. 손끝으로 완벽한 원에 도전하세요.</p><span class="project-type">엉뚱한 실험<span> · </span>브라우저에서 바로 플레이</span>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
-        <article class="project-item" data-category="lab" data-number="11">
+        <article class="project-item" data-category="game" data-number="11">
           <a class="project-card" data-name="로봇 인증" href="game/robot/index.html">
             <div class="project-art art-robot" aria-hidden="true">
-              <div class="art-topline"><span>실험 11</span><span>엉뚱한 실험</span></div>
-              <div class="art-scene"><div class="robot-window"><div class="robot-check">✓</div><span>로봇이 아닙니다.<small>확실한가요?</small></span><div class="robot-symbol"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg></div></div><div class="robot-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/robot-art.png" width="1586" height="992" alt="" loading="lazy" decoding="async"></div>
+
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
             <div class="project-info"><div class="project-title"><h3>로봇 인증</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <p>열 번의 기상천외한 질문. 당신은 정말 사람이 맞나요?</p><span class="project-type">엉뚱한 실험<span> · </span>브라우저에서 바로 플레이</span>
+              <span class="project-type">게임</span>
             </div>
           </a>
         </article>
       </div>
-      <p id="empty-state" hidden>아직 등록된 실험이 없습니다.</p>
-      <div class="collection-end"><span>여기까지, 지금의 호기심.</span><span>다음 실험도 이곳에 쌓입니다. <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg></span></div>
+      <p id="empty-state" hidden>등록된 프로젝트가 없습니다.</p>
     </section>
     <section id="about" class="about" aria-labelledby="about-title">
-      <div class="about-top"><p class="eyebrow"><span class="label-mark"></span>실험실을 만든 사람</p><span class="about-index">계속 만드는 중</span></div>
-      <div class="about-content"><div class="about-emblem" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg><span>만들고<br>또 만들고.</span></div><div class="about-copy"><h2 id="about-title">안녕하세요, 승민입니다.<br><span>재미있는 쪽으로 만듭니다.</span></h2><p>‘이런 것도 되려나?’ 하는 생각을 그냥 지나치지 못합니다.<br>직접 만들고 만져보며 알게 된 것들을 이곳에 모으고 있어요.</p><a class="about-link" href="https://github.com/seuuung" target="_blank" rel="noopener noreferrer">깃허브에서 더 보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></a></div></div>
+      <h2 id="about-title">승민</h2>
+      <a class="about-link" href="https://github.com/seuuung" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </section>
   </main>
-  <footer class="site-footer"><div class="footer-top"><a class="brand" href="./"><span class="brand-symbol"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M20 0v40M0 20h40M6 6l28 28M6 34L34 6" stroke="currentColor" stroke-width="8"/></svg></span>승민의 실험실.</a><a class="back-top" href="#">맨 위로 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="footer-bottom"><span>© <span id="year">2026</span> 승민. 호기심으로 만들었습니다.</span><span>작은 실험은 계속됩니다.</span></div></footer>
+  <footer class="site-footer"><span>© <span id="year">2026</span> 승민</span><a class="back-top" href="#">맨 위로 ↑</a></footer>
 </body>
 </html>

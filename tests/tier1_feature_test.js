@@ -60,11 +60,11 @@ function runTier1Tests() {
     const hasNameOrNickname = /승민|Seungmin|seuuung/i.test(indexHtml);
     assert(hasNameOrNickname, 'Tier1-F1-06: About Me에 개발자 이름(승민/Seungmin) 명시');
 
-    const hasStackBadge = /id="about"/.test(indexHtml) && /깃허브에서 더 보기/.test(indexHtml);
-    assert(hasStackBadge, 'Tier1-F1-07: 한국어 소개 영역에서 개발자 작업으로 연결');
+    const hasStackBadge = /id="about"/.test(indexHtml) && /href="https:\/\/github.com\/seuuung"/.test(indexHtml);
+    assert(hasStackBadge, 'Tier1-F1-07: 소개 영역에서 개발자 작업으로 연결');
 
-    const hasProfileAvatarOrIcon = /class="about-emblem"/.test(indexHtml);
-    assert(hasProfileAvatarOrIcon, 'Tier1-F1-08: 프로필 아바타 또는 아이콘 시각 요소 존재');
+    const hasProfileAvatarOrIcon = /<h2 id="about-title">승민<\/h2>/.test(indexHtml);
+    assert(hasProfileAvatarOrIcon, 'Tier1-F1-08: 간결한 소개 영역에 제작자 이름 표시');
 
     const hasBioText = indexHtml.includes('개발자') || indexHtml.includes('프로젝트') || indexHtml.includes('실험실') || indexHtml.includes('소개');
     assert(hasBioText, 'Tier1-F1-09: About Me 자기소개 문구 존재');
@@ -78,9 +78,9 @@ function runTier1Tests() {
     // ----------------------------------------------------
     console.log('[Tier 1] F2: 4단계 카테고리 탭 필터 검증...');
     const allButtons = extractAllTags(indexHtml, 'button');
-    const allTabs = allButtons.filter(b => (b.rawAttributes.includes('filter') || b.rawAttributes.includes('category') || b.rawAttributes.includes('tab') || /all|app|game|lab/i.test(b.rawAttributes) || /전체|앱|게임|실험/i.test(b.innerHTML)));
+    const allTabs = allButtons.filter(b => b.attributes['data-filter']);
 
-    assertGreaterOrEqual(allTabs.length, 4, 'Tier1-F2-01: 4단계 탭 버튼(전체, 모바일 앱, 웹 게임, 밈&실험실) 4개 이상 배치');
+    assertEqual(allTabs.length, 3, 'Tier1-F2-01: 전체, 게임, 앱의 3개 탭만 배치');
 
     const hasTabAll = allTabs.some(t => /전체|all/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'all') || (t.attributes['data-category'] === 'all'));
     assert(hasTabAll, 'Tier1-F2-02: "전체(all)" 탭 버튼 존재');
@@ -92,7 +92,7 @@ function runTier1Tests() {
     assert(hasTabGame, 'Tier1-F2-04: "웹 게임(game)" 탭 버튼 존재');
 
     const hasTabLab = allTabs.some(t => /실험|밈|lab|meme/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'lab') || (t.attributes['data-category'] === 'lab'));
-    assert(hasTabLab, 'Tier1-F2-05: "밈 & 실험실(lab)" 탭 버튼 존재');
+    assert(!hasTabLab, 'Tier1-F2-05: 별도 실험 탭 제거');
 
     // data-category 속성 부여 확인
     const hasDataCategoryApp = indexHtml.includes('data-category="app"');
@@ -102,7 +102,7 @@ function runTier1Tests() {
     assert(hasDataCategoryGame, 'Tier1-F2-07: data-category="game" 속성을 가진 카드 존재');
 
     const hasDataCategoryLab = indexHtml.includes('data-category="lab"');
-    assert(hasDataCategoryLab, 'Tier1-F2-08: data-category="lab" 속성을 가진 카드 존재');
+    assert(!hasDataCategoryLab, 'Tier1-F2-08: 이전 실험 카드가 게임 분류로 통합');
 
     // 탭 필터링 바닐라 JS 로직 검증
     const hasFilterScript = indexHtml.includes('filter') || indexHtml.includes('data-category') || indexHtml.includes('querySelectorAll');
@@ -120,7 +120,7 @@ function runTier1Tests() {
     const hasTransitionOrAnimation = homeJs.includes('item.animate') && homeCss.includes('prefers-reduced-motion');
     assert(hasTransitionOrAnimation, 'Tier1-F2-13: 탭 필터 전환 시 애니메이션 / 트랜지션 클래스 적용');
 
-    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 11;
+    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 12;
     assert(hasCategoryBadgeOnCards, 'Tier1-F2-14: 각 쇼케이스 카드에 카테고리 뱃지 스타일 적용');
 
     const hasTabContainer = /aria-label="프로젝트 카테고리"/.test(indexHtml);
@@ -132,6 +132,7 @@ function runTier1Tests() {
     // ----------------------------------------------------
     console.log('[Tier 1] F4: 11개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
     const REQUIRED_PROJECTS = [
+        { id: 'selpick', name: 'SelPick', check: (h) => h.includes('id=com.selpick.app&amp;pcampaignid=web_share') && h.includes('<h3>SelPick</h3>') },
         { id: 'onsic', name: '온식 (OnSic)', check: (h) => h.includes('com.onsic.app') || h.includes('온식') },
         { id: 'spatial_mine', name: 'Spatial Mine', check: (h) => h.includes('spatialmine.app') || h.includes('Spatial Mine') },
         { id: 'slime_jump', name: '슬라임 점프', check: (h) => h.includes('game/slime_jump') },
@@ -151,10 +152,10 @@ function runTier1Tests() {
     });
 
     const glassCards = extractAllTags(indexHtml, 'a').filter(a => /project-card/.test(a.attributes.class || '') && !!a.attributes.href);
-    assertGreaterOrEqual(glassCards.length, 11, 'Tier1-F4-13: 11개 프로젝트 카드의 직접 실행 링크 존재');
+    assertEqual(glassCards.length, 12, 'Tier1-F4-13: 12개 프로젝트 카드의 직접 실행 링크 존재');
 
     const thumbContainers = indexHtml.match(/class="project-art art-[^"]+"/g) || [];
-    assertGreaterOrEqual(thumbContainers.length, 11, 'Tier1-F4-14: 11개 프로젝트의 전용 그래픽 존재');
+    assertEqual(thumbContainers.length, 12, 'Tier1-F4-14: 12개 프로젝트의 전용 그래픽 존재');
 
     const hasPlayButtons = indexHtml.includes('직접 해보기') && indexHtml.includes('앱 살펴보기');
     assert(hasPlayButtons, 'Tier1-F4-15: 쇼케이스 카드에 인터랙션 CTA 텍스트(플레이하기 등) 존재');
