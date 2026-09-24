@@ -50,8 +50,25 @@
         <div class="hero-copy"><h1 id="hero-title">승민의 실험실</h1></div>
         <div class="sculpture-stage">
           <div class="sculpture-halo" aria-hidden="true"></div>
-          <div class="sculpture-fallback" aria-hidden="true"><i></i><i></i><i></i></div>
-          <canvas id="sculpture" tabindex="0" role="img" aria-label="회전하는 금속 매듭. 드래그하거나 방향키로 회전할 수 있습니다."></canvas>
+          <div class="sculpture-fallback" aria-hidden="true">
+            <svg viewBox="-195 -145 390 290" fill="none">
+              <g id="mechanical-wing" stroke-linejoin="round">
+                <path d="M13 13 31-57 77-119 130-133 178-103 186-51 151-18 65-8Z" fill="#19343b" stroke="#8a9b96" stroke-width="5"/>
+                <path d="M14 17 73 18 143 36 171 83 139 124 94 126 40 74Z" fill="#28434a" stroke="#8a9b96" stroke-width="5"/>
+                <path d="M24 2 79-107M24 2 132-127M24 2 175-91M24 2 177-46M24 17 159 80M24 17 133 118M24 17 80 115" stroke="#bb7b42" stroke-width="3"/>
+                <path d="M66-9 112-103 163-87M71 17 124 45 141 94M35-44 82-44 133-29" stroke="#6c8583" stroke-width="2"/>
+                <circle cx="134" cy="-102" r="5" fill="#e8af67"/><circle cx="150" cy="74" r="5" fill="#e8af67"/>
+              </g>
+              <use href="#mechanical-wing" transform="scale(-1 1)"/>
+              <path d="M-6-57-29-118M6-57 29-118" stroke="#9daaa3" stroke-width="3" stroke-linecap="round"/>
+              <circle cy="-119" cx="-29" r="5" fill="#da7849"/><circle cy="-119" cx="29" r="5" fill="#da7849"/>
+              <path d="M0-62C26-62 24-30 17 31L10 91 0 108-10 91-17 31C-24-30-26-62 0-62Z" fill="#1b292c" stroke="#9daaa3" stroke-width="5"/>
+              <path d="M-14-1H14M-13 16H13M-12 33H12M-10 50H10M-8 67H8" stroke="#c89053" stroke-width="4"/>
+              <ellipse cy="-52" rx="16" ry="13" fill="#b9c8be" stroke="#26383b" stroke-width="4"/>
+              <circle cx="-9" cy="-52" r="3" fill="#84d8cd"/><circle cx="9" cy="-52" r="3" fill="#84d8cd"/>
+            </svg>
+          </div>
+          <canvas id="sculpture" tabindex="0" role="img" aria-label="정교한 기계식 나비. 두 날개가 움직이며 드래그하거나 방향키로 돌려볼 수 있습니다."></canvas>
           <div class="sculpture-shadow" aria-hidden="true"></div>
           <span class="sculpture-note"><i aria-hidden="true">↔</i> 드래그해서 돌려보세요</span>
           <button id="motion-toggle" class="motion-toggle" type="button" aria-label="모션 멈추기" aria-pressed="false">모션 멈추기 <span aria-hidden="true">Ⅱ</span></button>
