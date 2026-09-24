@@ -5,6 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const base = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(base, 'index.html'), 'utf8');
+const css = fs.readFileSync(path.join(base, 'home.css'), 'utf8');
 const code = fs.readFileSync(path.join(base, 'home.js'), 'utf8');
 const sculptureCode = fs.readFileSync(path.join(base, 'sculpture.js'), 'utf8');
 
@@ -159,83 +160,59 @@ test('analytics retains established project identities and destinations independ
   assert.equal(env.events.at(-1)[1], 'profile_click');
 });
 
-function makeSculpture(mode = 'supported') {
-  const root = new Element(); root.dataset.motion = 'running';
-  const document = new Element(); document.documentElement = root; document.hidden = false;
-  const canvas = new Element(), stage = new Element(), note = new Element();
-  const window = new Element(); window.devicePixelRatio = 3;
-  const uploads = [], rotations = [], scalars = [], frames = new Map(); let next = 1, draws = 0;
-  const gl = {
-    VERTEX_SHADER: 1, FRAGMENT_SHADER: 2, COMPILE_STATUS: 3, LINK_STATUS: 4, ARRAY_BUFFER: 5, ELEMENT_ARRAY_BUFFER: 6,
-    createShader: () => ({}), shaderSource() {}, compileShader() {}, getShaderParameter: () => true, deleteShader() {},
-    createProgram: () => ({}), attachShader() {}, linkProgram() {}, getProgramParameter: () => true, useProgram() {},
-    bindBuffer() {}, createBuffer: () => ({}), bufferData: (type, data) => uploads.push({ type, data }),
-    getAttribLocation: () => 0, enableVertexAttribArray() {}, vertexAttribPointer() {}, enable() {}, clearColor() {},
-    getUniformLocation: (_, name) => name, viewport() {}, clear() {}, uniform2f: (_, x, y) => rotations.push([x, y]), uniform1f: (name, value) => scalars.push([name, value]), drawElements: () => draws++
-  };
-  canvas.getContext = () => { if (mode === 'throw') throw new Error('GPU unavailable'); return mode === 'unsupported' ? null : gl; };
-  canvas.closest = () => stage; stage.querySelector = () => note;
-  document.getElementById = () => canvas;
-  const context = { document, window, requestAnimationFrame: fn => { const id = next++; frames.set(id, fn); return id; }, cancelAnimationFrame: id => frames.delete(id), Float32Array, Uint16Array };
-  vm.runInNewContext(sculptureCode, context);
-  return { root, document, canvas, stage, note, window, uploads, rotations, scalars, frames, get draws() { return draws; } };
+function makeSculpture(mode = 'loaded') {
+  const document = new Element();
+  const sculpture = new Element(), stage = new Element(), figure = new Element(), note = new Element();
+  const images = Array.from({ length: 5 }, () => ({ decode: () => mode === 'loaded' ? Promise.resolve() : Promise.reject(new Error('Image unavailable')) }));
+  sculpture.closest = () => stage;
+  sculpture.querySelector = () => figure;
+  stage.querySelector = () => note;
+  figure.querySelectorAll = () => images;
+  document.getElementById = () => sculpture;
+  vm.runInNewContext(sculptureCode, { document });
+  return { sculpture, stage, figure, note, images };
 }
 
-test('sculpture geometry has finite vertices, unit normals, and valid triangle indices', () => {
-  const env = makeSculpture();
-  const [positions, normals, indices] = env.uploads.map(x => x.data);
-  assert.equal(positions.length, normals.length);
-  assert.equal(indices.length % 3, 0);
-  assert.ok([...positions].every(Number.isFinite));
-  for (let i = 0; i < normals.length; i += 3) assert.ok(Math.abs(Math.hypot(normals[i], normals[i + 1], normals[i + 2]) - 1) < .00001);
-  assert.ok([...indices].every(index => index < positions.length / 3));
-  assert.equal(env.canvas.width, 720, 'mobile DPR is capped at 1.5');
-});
-
-test('robot butterfly keeps an angled front and moves upper and lower wings through a full stroke', () => {
-  const env = makeSculpture();
-  assert.ok(env.rotations[0][0] > 0 && env.rotations[0][1] > 0);
-  const wingIds = [...env.uploads.at(-1).data];
-  assert.ok([-2, -1, 1, 2].every(id => wingIds.includes(id)));
-  for (let i = 1; i <= 64; i++) {
-    const [id, callback] = env.frames.entries().next().value;
-    env.frames.delete(id);
-    callback(i * 16);
-  }
-  const flap = env.scalars.filter(([name]) => name === 'uFlap').map(([, value]) => value);
-  assert.ok(Math.max(...flap) - Math.min(...flap) > .6);
-});
-
-test('WebGL unavailable or blocked falls back cleanly without an unusable keyboard target', () => {
-  for (const mode of ['unsupported', 'throw']) {
-    const env = makeSculpture(mode);
-    assert.equal(env.note.hidden, true);
-    assert.equal(env.canvas.attrs.tabindex, undefined);
-    assert.equal(env.frames.size, 0);
+test('jewel butterfly has four separately moving wings and a stationary body layer', () => {
+  assert.equal((html.match(/class="butterfly-wing wing-/g) || []).length, 4);
+  assert.match(html, /class="butterfly-body"/);
+  assert.match(html, /class="sculpture-fallback"/);
+  assert.match(css, /@keyframes wing-upper-left-beat/);
+  assert.match(css, /@keyframes wing-lower-right-beat/);
+  assert.match(css, /\.motion-paused \*[^\n]*animation-play-state: paused/);
+  for (const name of ['poster', 'wings', 'body']) {
+    assert.ok(fs.existsSync(path.join(base, 'assets', 'hero', `robot-butterfly-${name}.webp`)));
   }
 });
 
-test('keyboard rotation still works when automatic motion is paused', () => {
+test('loaded image layers replace the poster and remain keyboard inspectable', async () => {
   const env = makeSculpture();
-  env.root.dataset.motion = 'paused'; env.window.fire('lab:motion');
-  assert.equal(env.frames.size, 0);
-  const before = env.rotations.at(-1)[1]; let prevented = false;
-  env.canvas.fire('keydown', { key: 'ArrowRight', preventDefault() { prevented = true; } });
-  assert.equal(prevented, true);
-  assert.ok(env.rotations.at(-1)[1] > before);
-  assert.equal(env.frames.size, 0);
+  await new Promise(setImmediate);
+  assert.equal(env.stage.classList.contains('sculpture-ready'), true);
+  env.sculpture.fire('keydown', { key: 'ArrowRight', preventDefault() {} });
+  assert.equal(env.figure.properties['--butterfly-y'], '13deg');
+  env.sculpture.fire('keydown', { key: 'Home', preventDefault() {} });
+  assert.equal(env.figure.properties['--butterfly-y'], '8deg');
 });
 
-test('hidden pages and WebGL context loss stop animation', () => {
-  const env = makeSculpture();
-  assert.equal(env.frames.size, 1);
-  env.document.hidden = true; env.document.fire('visibilitychange');
-  assert.equal(env.frames.size, 0);
-  env.document.hidden = false; env.document.fire('visibilitychange');
-  assert.equal(env.frames.size, 1);
-  env.canvas.fire('webglcontextlost', { preventDefault() {} });
-  assert.equal(env.frames.size, 0);
+test('failed image decoding keeps the complete poster and removes the keyboard target', async () => {
+  const env = makeSculpture('failed');
+  await new Promise(setImmediate);
   assert.equal(env.stage.classList.contains('sculpture-ready'), false);
+  assert.equal(env.note.hidden, true);
+  assert.equal(env.sculpture.attrs.tabindex, undefined);
+});
+
+test('drag changes the 3D viewing angle while the body remains anchored', async () => {
+  const env = makeSculpture();
+  await new Promise(setImmediate);
+  env.sculpture.fire('pointerdown', { button: 0, clientX: 10, clientY: 10, pointerId: 1 });
+  env.sculpture.fire('pointermove', { clientX: 60, clientY: 35 });
+  assert.equal(env.figure.properties['--butterfly-y'], '16deg');
+  assert.equal(env.figure.properties['--butterfly-x'], '-6deg');
+  env.sculpture.fire('pointerup');
+  env.sculpture.fire('pointermove', { clientX: 90, clientY: 90 });
+  assert.equal(env.figure.properties['--butterfly-y'], '16deg');
 });
 
 
