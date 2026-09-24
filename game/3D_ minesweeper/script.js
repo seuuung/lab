@@ -1,6 +1,7 @@
 // --- 게임 설정 및 상태 관리 (Game Configuration & State) ---
 const CONFIG = {
     gridSize: 5,            // 기본 격자 크기 (N x N x N)
+    boardShape: 'cube',     // 블록들이 모여 이루는 전체 지뢰밭의 형태
     mineCount: 15,          // 기본 지뢰 개수
     blockSize: 1,           // 블록 하나의 물리적 크기
     spacing: 1.05,          // 블록 간의 간격 (1.0이면 밀착, 1.05면 약간의 틈 발생)
@@ -9,6 +10,47 @@ const CONFIG = {
     highlightScale: 1.4,    // 강조 시 숫자 확대 비율
     autoMineRatio: 0.15     // 자동 지뢰 비율 (15%)
 };
+
+const BOARD_SHAPE_NAMES = {
+    cube: '정육면체', cross: '십자가', torus: '도넛', pyramid: '피라미드', sphere: '구'
+};
+const RANDOM_BOARD_SHAPES = ['cross', 'torus', 'pyramid', 'sphere'];
+
+function hasBoardCell(x, y, z, size, shape) {
+    if (shape === 'cube') return true;
+    const center = (size - 1) / 2;
+    const dx = x - center;
+    const dy = y - center;
+    const dz = z - center;
+    if (shape === 'cross') {
+        const arm = Math.max(0.5, Math.floor(size / 5));
+        return (Math.abs(dx) <= arm && Math.abs(dy) <= arm) ||
+            (Math.abs(dx) <= arm && Math.abs(dz) <= arm) ||
+            (Math.abs(dy) <= arm && Math.abs(dz) <= arm);
+    }
+    if (shape === 'torus') {
+        const ring = Math.hypot(dx, dz) - size * 0.34;
+        return ring * ring + dy * dy <= Math.pow(size * 0.16, 2);
+    }
+    if (shape === 'pyramid') {
+        const radius = (size - 1 - y) / 2;
+        return Math.abs(dx) <= radius && Math.abs(dz) <= radius;
+    }
+    if (shape === 'sphere') return dx * dx + dy * dy + dz * dz <= Math.pow(size * 0.48, 2);
+    throw new Error(`Unknown board shape: ${shape}`);
+}
+
+function countBoardCells(size, shape) {
+    let count = 0;
+    for (let x = 0; x < size; x++) {
+        for (let y = 0; y < size; y++) {
+            for (let z = 0; z < size; z++) {
+                if (hasBoardCell(x, y, z, size, shape)) count++;
+            }
+        }
+    }
+    return count;
+}
 
 const STATE = {
     cells: [],          // 전체 셀 데이터를 담는 선형 배열
@@ -271,6 +313,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.getElementById('btn-random-shape').addEventListener('click', () => {
+        const choices = RANDOM_BOARD_SHAPES.filter(shape => shape !== CONFIG.boardShape);
+        const shape = choices[Math.floor(Math.random() * choices.length)];
+        const size = 7;
+        const mines = Math.max(1, Math.floor(countBoardCells(size, shape) * CONFIG.autoMineRatio));
+        startGame(size, mines, shape);
+    });
+
     const checkAutoMines = document.getElementById('custom-auto-mines');
     const inputCustomSize = document.getElementById('custom-size');
     const inputCustomMines = document.getElementById('custom-mines');
@@ -448,9 +498,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Game Setup Logic ---
 
-    function startGame(size, mines) {
+    function startGame(size, mines, shape = 'cube') {
         CONFIG.gridSize = size;
         CONFIG.mineCount = mines;
+        CONFIG.boardShape = shape;
 
         const d = size * 1.5;
         dirLight.shadow.camera.left = -d;
@@ -467,7 +518,9 @@ document.addEventListener('DOMContentLoaded', () => {
         resetCamera(centerVec, size * 2.5);
 
         startMenuOverlay.style.display = 'none';
-        elGridDisplay.textContent = `${size} × ${size} × ${size}`;
+        elGridDisplay.textContent = shape === 'cube'
+            ? `정육면체 · ${size} × ${size} × ${size}`
+            : `${BOARD_SHAPE_NAMES[shape]} · ${countBoardCells(size, shape)}칸`;
 
         initGame();
     }
@@ -510,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         STATE.isFirstClick = true;
         STATE.status = 'playing';
         STATE.minesLeft = CONFIG.mineCount;
-        STATE.safeCellsRemaining = Math.pow(CONFIG.gridSize, 3) - CONFIG.mineCount;
+        STATE.safeCellsRemaining = 0;
         STATE.hoveredCell = null;
         STATE.highlightedCells = [];
         document.body.style.cursor = 'default';
@@ -535,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (child.type === 'Mesh') {
                 child.children.forEach(sub => {
                     if (sub.geometry && !sharedGeometries.has(sub.geometry)) sub.geometry.dispose();
-                    if (sub.material) sub.material.dispose();
+                    if (sub.material && sub.material !== lineMaterial) sub.material.dispose();
                 });
                 child.clear(); // 모든 자식 제거
             }
@@ -550,6 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let y = 0; y < CONFIG.gridSize; y++) {
                 STATE.cellGrid[x][y] = [];
                 for (let z = 0; z < CONFIG.gridSize; z++) {
+                    if (!hasBoardCell(x, y, z, CONFIG.gridSize, CONFIG.boardShape)) continue;
                     const mesh = new THREE.Mesh(blockGeo, MATERIALS.hidden.base);
                     mesh.position.set(x * CONFIG.spacing, y * CONFIG.spacing, z * CONFIG.spacing);
                     mesh.castShadow = true;
@@ -570,6 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+        STATE.safeCellsRemaining = STATE.cells.length - CONFIG.mineCount;
     }
 
     /**
@@ -578,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function getCell(x, y, z) {
         if (x < 0 || x >= CONFIG.gridSize || y < 0 || y >= CONFIG.gridSize || z < 0 || z >= CONFIG.gridSize) return null;
-        return STATE.cellGrid[x][y][z];
+        return STATE.cellGrid[x][y][z] || null;
     }
 
     /**

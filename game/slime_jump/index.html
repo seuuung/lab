@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0XQB053HX"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-T0XQB053HX');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T0XQB053HX');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#8dc8ef">
     <title>쫀득쫀득 슬라임 점프</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <!-- 실험실 홈으로 돌아가기 표준 플로팅 버튼 -->
     <a href="../../index.html" class="floating-home-btn" aria-label="실험실 홈으로 이동">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -28,102 +23,57 @@
         <span>실험실 홈</span>
     </a>
 
-    <!-- UI Layer -->
-    <div id="ui-layer"
-        class="absolute top-0 left-0 w-full p-2 sm:p-5 pt-16 sm:pt-5 pointer-events-none z-0 flex justify-between items-start text-white">
-        <div class="glass-panel px-2 sm:px-5 py-1 sm:py-2 rounded-xl sm:rounded-2xl flex flex-col items-center">
-            <span
-                class="text-[8px] sm:text-xs text-cyan-300 font-bold tracking-widest uppercase mb-0 sm:mb-1">Altitude</span>
-            <div class="text-xl sm:text-3xl font-black italic neon-text-white leading-none"><span
-                    id="scoreText">0</span><span class="text-xs sm:text-lg text-slate-400 ml-1">m</span></div>
+    <div id="ui-layer" aria-live="polite">
+        <div class="score-card">
+            <span class="score-label">ALTITUDE</span>
+            <strong><span id="scoreText">0</span><small>m</small></strong>
         </div>
-        <div
-            class="glass-panel px-2 sm:px-4 py-1 sm:py-2 rounded-xl sm:rounded-2xl flex flex-col items-center opacity-80">
-            <span
-                class="text-[6px] sm:text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-0 sm:mb-1">Best</span>
-            <div class="text-base sm:text-xl font-bold text-slate-200"><span id="highScoreText">0</span>m</div>
+        <div class="score-card seed-card">
+            <span class="score-label">별씨앗</span>
+            <strong>✦ <span id="seedText">0</span></strong>
+        </div>
+        <div class="score-card best-card">
+            <span class="score-label">BEST</span>
+            <strong><span id="highScoreText">0</span><small>m</small></strong>
         </div>
     </div>
 
-    <!-- Start Screen -->
+    <canvas id="gameCanvas" aria-label="떠 있는 섬 사이를 점프하는 슬라임 게임"></canvas>
+    <div id="play-hint"><span id="abilityText">준비 완료</span><span id="gameStatus" aria-live="polite">다음 섬을 향해 점프!</span></div>
+
     <div id="startScreen" class="overlay">
-        <h1
-            class="text-3xl sm:text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-cyan-300 via-blue-500 to-purple-600 mb-2 title-anim text-center leading-tight">
-            NEON<br>SLIME JUMP
-        </h1>
-        <div class="w-10 sm:w-16 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mb-4 sm:mb-8"></div>
-
-        <div
-            class="glass-panel p-3 sm:p-6 rounded-xl sm:rounded-2xl mb-4 sm:mb-8 max-w-sm w-[85%] sm:w-full mx-auto border border-slate-700">
-            <p class="text-slate-300 text-center text-[10px] sm:text-sm leading-relaxed mb-3 sm:mb-4 font-medium">
-                화면을 당겨서 슬라임을 날리세요!<br>벽에 찰싹 붙어 다시 도약할 수 있습니다.
-            </p>
-            <div class="grid grid-cols-2 gap-1.5 sm:gap-3 text-[8px] sm:text-xs">
-                <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-cyan-500 shadow-[0_0_8px_#06b6d4]"></div><span
-                        class="text-slate-200">일반 벽</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></div><span
-                        class="text-slate-200">튕기는 벽</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></div><span
-                        class="text-slate-200">부서지는 벽</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]"></div><span
-                        class="text-slate-200">부스트 구슬</span>
-                </div>
+        <div class="overlay-card w-[85%]">
+            <span class="eyebrow">A LITTLE SKY ADVENTURE</span>
+            <h1>SLIME<br><em>JUMP!</em></h1>
+            <p>통통 튀는 슬라임과 함께<br>구름 위 섬을 차례로 건너보세요.</p>
+            <div class="how-to">
+                <span class="gesture-icon" aria-hidden="true">↗</span>
+                <span><b>당겨서 점프 · 공중에서 한 번 더 탭</b><br>마우스 드래그도 가능해요 · 방향키 + 스페이스</span>
             </div>
+            <div class="mechanics" aria-label="섬 종류와 아이템">
+                <span><i class="spring-dot"></i> 높이 뛰는 섬</span>
+                <span><i class="fragile-dot"></i> 무너지는 섬</span>
+                <span><i class="moving-dot"></i> 움직이는 섬</span>
+                <span><i class="seed-dot"></i> 도약 충전 씨앗</span>
+            </div>
+            <button id="startBtn" class="play-button min-h-[44px] px-10 py-4">모험 시작하기 <span aria-hidden="true">→</span></button>
         </div>
-
-        <button id="startBtn"
-            class="min-h-[44px] min-w-[44px] px-8 py-3 sm:px-10 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full text-base sm:text-xl shadow-[0_0_20px_rgba(6,182,212,0.6)] hover:scale-105 active:scale-95 transition-all pointer-events-auto border border-cyan-300/30 tracking-wider inline-flex items-center justify-center">
-            START GAME
-        </button>
     </div>
 
-    <!-- Game Over Screen -->
     <div id="gameOverScreen" class="overlay hidden">
-        <h2
-            class="text-3xl sm:text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-red-400 to-red-600 mb-2 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] tracking-wider">
-            GAME OVER</h2>
-        <p class="text-purple-300 mb-4 sm:mb-8 font-semibold text-[10px] sm:text-sm tracking-widest uppercase">Lost in
-            the
-            void</p>
-
-        <div
-            class="glass-panel p-4 sm:p-8 rounded-2xl sm:rounded-3xl mb-6 sm:mb-10 w-48 sm:w-64 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-purple-500"></div>
-            <div class="text-center">
-                <p class="text-slate-400 text-[8px] sm:text-xs font-bold tracking-widest uppercase mb-1 sm:mb-2">Final
-                    Altitude
-                </p>
-                <p class="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6 neon-text-white"><span
-                        id="finalScore">0</span><span class="text-base sm:text-2xl text-slate-400 ml-1">m</span></p>
-
-                <p class="text-slate-500 text-[8px] sm:text-xs font-bold tracking-widest uppercase mb-1">Best Record
-                </p>
-                <p class="text-lg sm:text-2xl font-bold text-cyan-400 neon-text-cyan"><span
-                        id="finalHighScore">0</span>m</p>
+        <div class="overlay-card result-card w-[85%]">
+            <span class="eyebrow">ONE MORE JUMP?</span>
+            <h2>아직 더 높이<br>갈 수 있어요!</h2>
+            <p>섬을 놓쳐도 다음 도전이 기다려요.</p>
+            <div class="result-score">
+                <div><span>이번 기록</span><strong><span id="finalScore">0</span>m</strong></div>
+                <div><span>최고 기록</span><strong><span id="finalHighScore">0</span>m</strong></div>
+                <div class="seed-result"><span>모은 별씨앗</span><strong>✦ <span id="finalSeeds">0</span></strong></div>
             </div>
+            <button id="restartBtn" class="play-button min-h-[44px] px-10 py-4">다시 도전하기 <span aria-hidden="true">↗</span></button>
         </div>
-
-        <button id="restartBtn"
-            class="min-h-[44px] min-w-[44px] px-8 py-3 sm:px-10 sm:py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-full text-base sm:text-xl border border-white/20 hover:bg-white/20 active:scale-95 transition-all pointer-events-auto tracking-wider inline-flex items-center justify-center gap-2">
-            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                </path>
-            </svg>
-            RETRY
-        </button>
     </div>
-
-    <canvas id="gameCanvas"></canvas>
 
     <script src="game.js"></script>
 </body>
-
 </html>

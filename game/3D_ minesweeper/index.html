@@ -56,6 +56,8 @@
             <button class="diff-btn btn btn-red" style="padding: 1rem;" data-size="7" data-mines="50">고급 (7 × 7 × 7, 지뢰
                 50개)</button>
 
+            <button id="btn-random-shape" class="btn random-shape-btn" type="button">🎲 랜덤 모양 시작 · 십자가 / 도넛 / 피라미드 / 구</button>
+
             <!-- 사용자 정의 게임 설정 섹션 -->
             <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
                 <h3 class="font-bold" style="font-size: 1.25rem; margin-bottom: 1rem;">🛠️ 커스텀 설정</h3>
@@ -114,7 +116,8 @@
                 </h3>
                 <ul
                     style="font-size: 0.95rem; color: #cbd5e1; list-style: disc; margin-left: 1.5rem; line-height: 1.7;">
-                    <li>허공에 떠 있는 사각형 큐브 덩어리 안에는 <b>폭탄(지뢰)</b>들이 숨어있습니다.</li>
+                    <li>허공에 떠 있는 큐브 블록들 안에는 <b>폭탄(지뢰)</b>들이 숨어있습니다.</li>
+                    <li>메뉴의 <b>랜덤 모양</b>을 누르면 십자가·도넛·피라미드·구 형태의 지뢰밭이 만들어집니다. 지뢰는 실제로 있는 블록에만 배치됩니다.</li>
                     <li>폭탄을 피해서 <b>안전한 블록들만 파내면</b> 이기는 게임입니다. 빙글빙글 돌려가며 찾아보세요!</li>
                     <li>단 한 번이라도 폭탄이 있는 블록을 파내면 자폭하며 <b>게임 오버</b>됩니다!</li>
                     <li><span style="color: #fca5a5; font-weight: bold;">첫 클릭은 무조건 안전</span>하니 걱정 마세요. 아무 곳이나 시원하게
@@ -187,7 +190,7 @@
                 <h1 class="text-gradient font-black" style="font-size: 1.5rem; margin: 0;">3D 지뢰찾기</h1>
                 <div style="font-size: 1.1rem; margin-top: 0.5rem;">남은 지뢰: <span id="mine-count"
                         class="font-bold status-lost">0</span></div>
-                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.25rem;">격자: <span
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.25rem;">모양: <span
                         id="grid-size-display">-</span></div>
             </div>
 

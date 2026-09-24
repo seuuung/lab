@@ -1,0 +1,20 @@
+[
+  {
+    "id": "com.onsic.app",
+    "og:title": "온식 (OnSic) - 나의 음식 기록 & 푸드 캘린더 - Google Play 앱",
+    "og:image": "https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=s0-br30",
+    "local": "assets/thumbnails/onsic.png"
+  },
+  {
+    "id": "spatialmine.app",
+    "og:title": "공간지뢰 - 3D 지뢰찾기 - Google Play 앱",
+    "og:image": "https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA=s0-br30",
+    "local": "assets/thumbnails/spatial-mine.png"
+  },
+  {
+    "id": "com.selpick.app",
+    "og:title": "SelPick - 단 하나의 사진, 인생샷 월드컵 - Google Play 앱",
+    "og:image": "https://play-lh.googleusercontent.com/n1ihtZCBRJ1quEqMq8yJCUMM3rWBCrhnuTm1J7XdvGOokU5p8fb9DMlSisj2sJxyw2hVg0QG2ijtLkJVdxkN=s0-br30",
+    "local": "assets/thumbnails/selpick.png"
+  }
+]

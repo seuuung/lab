@@ -70,6 +70,8 @@ console.log('▶ [1/5] Testing slime_jump Canvas DPR & Extreme Resize...');
         closePath: () => {},
         moveTo: () => {},
         lineTo: () => {},
+        bezierCurveTo: () => {},
+        quadraticCurveTo: () => {},
         arc: () => {},
         ellipse: () => {},
         roundRect: () => {},
@@ -407,6 +409,7 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
         clear() { this.children = []; }
     }
 
+    let selectedMesh = null;
     const mockThree = {
         Scene: class {
             constructor() { this.fog = null; this.children = []; }
@@ -425,7 +428,8 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
         WebGLRenderer: class {
             constructor() {
                 this.domElement = {
-                    addEventListener: () => {},
+                    handlers: {},
+                    addEventListener(event, handler) { this.handlers[event] = handler; },
                     style: {}
                 };
                 this.shadowMap = {};
@@ -460,7 +464,7 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
         LineSegments: MockMesh,
         Raycaster: class {
             setFromCamera() {}
-            intersectObjects() { return []; }
+            intersectObjects(objects) { return selectedMesh && objects.includes(selectedMesh) ? [{ object: selectedMesh }] : []; }
         },
         MathUtils: {
             clamp: (v, min, max) => Math.max(min, Math.min(max, v))
@@ -484,7 +488,8 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
     const mockElement = () => ({
         style: {},
         classList: { add: () => {}, remove: () => {}, contains: () => false },
-        addEventListener: () => {},
+        handlers: {},
+        addEventListener(event, handler) { this.handlers[event] = handler; },
         dispatchEvent: () => {},
         textContent: '',
         innerHTML: '',
@@ -492,9 +497,9 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
         value: '4',
         max: '64'
     });
-
+    const elements = {};
     const mockDocument = {
-        getElementById: () => mockElement(),
+        getElementById: id => elements[id] ||= mockElement(),
         querySelectorAll: () => [mockElement()],
         addEventListener: (event, handler) => {
             if (!listeners[event]) listeners[event] = [];
@@ -548,7 +553,61 @@ console.log('\n▶ [3/5] Testing 3D_ minesweeper WebGL DPR & Extreme Resize...')
     check(scriptExecuted, '3D_ minesweeper: script.js initializes and executes DOMContentLoaded without errors');
 
     const evalInSandbox = (expr) => vm.runInContext(expr, sandbox);
+    if (scriptExecuted) {
+        const boards = evalInSandbox(`RANDOM_BOARD_SHAPES.map(shape => {
+            const cells = [];
+            for (let x = 0; x < 7; x++) for (let y = 0; y < 7; y++) for (let z = 0; z < 7; z++) {
+                if (hasBoardCell(x, y, z, 7, shape)) cells.push([x, y, z]);
+            }
+            return { shape, cells };
+        })`);
+        const counts = boards.map(board => board.cells.length);
+        check(counts.every(count => count > 2 && count < 343) && new Set(counts).size === 4,
+            '3D_ minesweeper: random boards have distinct non-cube cell counts');
+        const connected = boards.every(board => {
+            const keys = new Set(board.cells.map(cell => cell.join(',')));
+            const visited = new Set([board.cells[0].join(',')]);
+            const queue = [board.cells[0]];
+            while (queue.length) {
+                const [x, y, z] = queue.shift();
+                for (const [dx, dy, dz] of [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]]) {
+                    const next = [x + dx, y + dy, z + dz];
+                    const key = next.join(',');
+                    if (keys.has(key) && !visited.has(key)) { visited.add(key); queue.push(next); }
+                }
+            }
+            return visited.size === keys.size;
+        });
+        check(connected, '3D_ minesweeper: every random board is one connected volume');
+        check(!evalInSandbox("hasBoardCell(3, 3, 3, 7, 'torus')") &&
+            evalInSandbox("hasBoardCell(0, 3, 3, 7, 'cross')") &&
+            !evalInSandbox("hasBoardCell(0, 6, 0, 7, 'pyramid')"),
+        '3D_ minesweeper: donut hole, cross arms, and pyramid taper are present');
 
+        elements['btn-random-shape'].handlers.click();
+        check(evalInSandbox('RANDOM_BOARD_SHAPES.includes(CONFIG.boardShape) && STATE.cells.length === countBoardCells(CONFIG.gridSize, CONFIG.boardShape) && STATE.safeCellsRemaining === STATE.cells.length - CONFIG.mineCount && STATE.cells.every(cell => cell.mesh.geometry === blockGeo && cell.mesh.userData.cell === cell)'),
+            '3D_ minesweeper: random button starts a shaped board with cube cells and correct win count');
+        const firstShape = evalInSandbox('CONFIG.boardShape');
+        elements['btn-random-shape'].handlers.click();
+        check(evalInSandbox(`CONFIG.boardShape !== '${firstShape}' && STATE.cells.length === countBoardCells(CONFIG.gridSize, CONFIG.boardShape) && gridGroup.children.length === STATE.cells.length && STATE.safeCellsRemaining === STATE.cells.length - CONFIG.mineCount`),
+            '3D_ minesweeper: another random game replaces the board and changes its shape');
+        selectedMesh = evalInSandbox('STATE.cells[0].mesh');
+        const pointer = { pointerId: 1, clientX: 400, clientY: 300, button: 0, pointerType: 'mouse' };
+        const pointerHandlers = evalInSandbox('renderer.domElement.handlers');
+        pointerHandlers.pointerdown(pointer);
+        pointerHandlers.pointerup(pointer);
+        check(evalInSandbox('!STATE.isFirstClick && !STATE.cells[0].isMine && STATE.cells.filter(cell => cell.isMine).length === CONFIG.mineCount && STATE.safeCellsRemaining < STATE.cells.length - CONFIG.mineCount'),
+            '3D_ minesweeper: first dig is safe and places the correct number of mines on the shaped board');
+        check(evalInSandbox(`STATE.cells.every(cell => {
+            if (cell.isMine) return true;
+            let nearby = 0;
+            for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) for (let dz = -1; dz <= 1; dz++) {
+                if (dx === 0 && dy === 0 && dz === 0) continue;
+                if (STATE.cellGrid[cell.x + dx]?.[cell.y + dy]?.[cell.z + dz]?.isMine) nearby++;
+            }
+            return nearby === cell.neighborMines;
+        })`), '3D_ minesweeper: sparse-board number hints count only existing neighboring mines');
+    }
     // 100회 리사이즈 스트레스
     let nanAspect = false;
     for (let i = 0; i < 100; i++) {
@@ -825,6 +884,7 @@ console.log('\n▶ [5/5] Testing shadow_puzzle WebGL DPR & Extreme Resize...');
         DirectionalLight: class {
             constructor(){
                 this.position=new MockVector3();
+                this.target={position:new MockVector3()};
                 this.shadow={mapSize:{},camera:{}};
             }
         },
@@ -868,6 +928,9 @@ console.log('\n▶ [5/5] Testing shadow_puzzle WebGL DPR & Extreme Resize...');
         THREE: mockThree,
         window: mockWindow,
         document: mockDocument,
+        localStorage: { getItem: () => null, setItem: () => {} },
+        performance: { now: () => 0 },
+        navigator: { userAgent: '' },
         console: { log: () => {}, error: () => {}, warn: () => {} },
         Math: Math,
         Date: Date,
