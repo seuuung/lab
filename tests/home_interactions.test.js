@@ -164,21 +164,21 @@ function makeSculpture(mode = 'supported') {
   const document = new Element(); document.documentElement = root; document.hidden = false;
   const canvas = new Element(), stage = new Element(), note = new Element();
   const window = new Element(); window.devicePixelRatio = 3;
-  const uploads = [], rotations = [], frames = new Map(); let next = 1, draws = 0;
+  const uploads = [], rotations = [], scalars = [], frames = new Map(); let next = 1, draws = 0;
   const gl = {
     VERTEX_SHADER: 1, FRAGMENT_SHADER: 2, COMPILE_STATUS: 3, LINK_STATUS: 4, ARRAY_BUFFER: 5, ELEMENT_ARRAY_BUFFER: 6,
     createShader: () => ({}), shaderSource() {}, compileShader() {}, getShaderParameter: () => true, deleteShader() {},
     createProgram: () => ({}), attachShader() {}, linkProgram() {}, getProgramParameter: () => true, useProgram() {},
     bindBuffer() {}, createBuffer: () => ({}), bufferData: (type, data) => uploads.push({ type, data }),
     getAttribLocation: () => 0, enableVertexAttribArray() {}, vertexAttribPointer() {}, enable() {}, clearColor() {},
-    getUniformLocation: (_, name) => name, viewport() {}, clear() {}, uniform2f: (_, x, y) => rotations.push([x, y]), uniform1f() {}, drawElements: () => draws++
+    getUniformLocation: (_, name) => name, viewport() {}, clear() {}, uniform2f: (_, x, y) => rotations.push([x, y]), uniform1f: (name, value) => scalars.push([name, value]), drawElements: () => draws++
   };
   canvas.getContext = () => { if (mode === 'throw') throw new Error('GPU unavailable'); return mode === 'unsupported' ? null : gl; };
   canvas.closest = () => stage; stage.querySelector = () => note;
   document.getElementById = () => canvas;
   const context = { document, window, requestAnimationFrame: fn => { const id = next++; frames.set(id, fn); return id; }, cancelAnimationFrame: id => frames.delete(id), Float32Array, Uint16Array };
   vm.runInNewContext(sculptureCode, context);
-  return { root, document, canvas, stage, note, window, uploads, rotations, frames, get draws() { return draws; } };
+  return { root, document, canvas, stage, note, window, uploads, rotations, scalars, frames, get draws() { return draws; } };
 }
 
 test('sculpture geometry has finite vertices, unit normals, and valid triangle indices', () => {
@@ -190,6 +190,20 @@ test('sculpture geometry has finite vertices, unit normals, and valid triangle i
   for (let i = 0; i < normals.length; i += 3) assert.ok(Math.abs(Math.hypot(normals[i], normals[i + 1], normals[i + 2]) - 1) < .00001);
   assert.ok([...indices].every(index => index < positions.length / 3));
   assert.equal(env.canvas.width, 720, 'mobile DPR is capped at 1.5');
+});
+
+test('robot butterfly keeps an angled front and moves upper and lower wings through a full stroke', () => {
+  const env = makeSculpture();
+  assert.ok(env.rotations[0][0] > 0 && env.rotations[0][1] > 0);
+  const wingIds = [...env.uploads.at(-1).data];
+  assert.ok([-2, -1, 1, 2].every(id => wingIds.includes(id)));
+  for (let i = 1; i <= 64; i++) {
+    const [id, callback] = env.frames.entries().next().value;
+    env.frames.delete(id);
+    callback(i * 16);
+  }
+  const flap = env.scalars.filter(([name]) => name === 'uFlap').map(([, value]) => value);
+  assert.ok(Math.max(...flap) - Math.min(...flap) > .6);
 });
 
 test('WebGL unavailable or blocked falls back cleanly without an unusable keyboard target', () => {

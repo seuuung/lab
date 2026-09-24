@@ -41,9 +41,11 @@
       vec3 p = aPosition;
       vec3 n = aNormal;
       if (aWing != 0.) {
-        float pivot = aWing * .13;
+        float side = sign(aWing);
+        float pivot = side * .13;
         p.x -= pivot;
-        mat3 hinge = rotateY(-uFlap * aWing);
+        float stroke = uFlap * (abs(aWing) > 1.5 ? .72 : 1.);
+        mat3 hinge = rotateY(-stroke * side);
         p = hinge * p;
         p.x += pivot;
         n = hinge * n;
@@ -55,7 +57,8 @@
       vPosition = p;
       vNormal = n;
       vColor = aColor;
-      gl_Position = vec4(p.x * .52 / max(uAspect, 1.), p.y * .52, -p.z * .18, 1.);
+      float perspective = 5.0 / (5.0 - p.z);
+      gl_Position = vec4(p.x * .52 * perspective / max(uAspect, 1.), p.y * .52 * perspective, -p.z * .18, 1.);
     }
   `;
   const fragmentSource = `
@@ -162,30 +165,31 @@
     for (const [outline, center, tint] of [
       [upper, [.85,.78], palette.petrol], [lower, [.83,-.48], palette.teal]
     ]) {
+      const wing = outline === upper ? side : side * 2;
       // Individual inset panels leave dark, precise seams between the titanium ribs.
       const c = point(center, .015);
       for (let i = 0; i < outline.length; i++) {
         const a = point(outline[i], .015), b = point(outline[(i + 1) % outline.length], .015);
         const tile = [mix(c, a, .15), mix(c, a, .84), mix(c, b, .84), mix(c, b, .15)];
-        panel(tile, i % 4 === 0 ? palette.carbon : tint, palette.void, side);
+        panel(tile, i % 4 === 0 ? palette.carbon : tint, palette.void, wing);
         if (i % 2 === 0) {
           const seam = [mix(c, a, .24), mix(c, a, .7), mix(c, b, .7), mix(c, b, .24)];
-          panel(seam.map(p => [p[0], p[1], p[2] + .048]), i % 4 === 0 ? palette.titanium : palette.graphite, palette.void, side, .012);
+          panel(seam.map(p => [p[0], p[1], p[2] + .048]), i % 4 === 0 ? palette.titanium : palette.graphite, palette.void, wing, .012);
         }
         if (i > 1 && i < outline.length - 1) {
           const rivet = mix(c, a, .78);
-          ellipsoid([rivet[0], rivet[1], .09], [.023,.023,.012], palette.gold, side, 7, 4);
+          ellipsoid([rivet[0], rivet[1], .09], [.023,.023,.012], palette.gold, wing, 7, 4);
         }
       }
-      tube(outline.map(p => point(p, .06)).concat([point(outline[0], .06)]), .027, palette.silver, side);
-      tube(outline.map(p => point(p, -.015)).concat([point(outline[0], -.015)]), .013, palette.brass, side, 5);
+      tube(outline.map(p => point(p, .06)).concat([point(outline[0], .06)]), .027, palette.silver, wing);
+      tube(outline.map(p => point(p, -.015)).concat([point(outline[0], -.015)]), .013, palette.brass, wing, 5);
       for (let i = 1; i < outline.length; i += 2) {
         const target = point(outline[i], .075);
-        tube([point([.17,.11], .08), mix(point([.17,.11], .08), target, .5).map((v, k) => k === 2 ? v + .07 : v), target], .016, i % 3 ? palette.titanium : palette.brass, side, 6);
+        tube([point([.17,.11], .08), mix(point([.17,.11], .08), target, .5).map((v, k) => k === 2 ? v + .07 : v), target], .016, i % 3 ? palette.titanium : palette.brass, wing, 6);
       }
       for (const fraction of [.38,.63]) {
         const arc = outline.slice(1, -1).map(p => mix(c, point(p, .1), fraction));
-        tube(arc, fraction === .38 ? .012 : .009, fraction === .38 ? palette.brass : palette.silver, side, 5);
+        tube(arc, fraction === .38 ? .012 : .009, fraction === .38 ? palette.brass : palette.silver, wing, 5);
       }
     }
     // Wing drive: toothed bearing, linked levers, concentric seals and amber axis light.
@@ -284,7 +288,8 @@
   const aspectUniform = gl.getUniformLocation(program,'uAspect');
   const flapUniform = gl.getUniformLocation(program,'uFlap');
   const floatUniform = gl.getUniformLocation(program,'uFloat');
-  let rotationX = -.08, rotationY = -.16, targetX = -.08, targetY = -.16;
+  const restingPitch = .16, restingYaw = .24;
+  let rotationX = restingPitch, rotationY = restingYaw, targetX = restingPitch, targetY = restingYaw;
   let hoverX = 0, hoverY = 0, phase = 0, frame = 0, previousTime = 0;
   let active = true, lost = false, dragging = false, pointerX = 0, pointerY = 0;
   const isPaused = () => root.dataset.motion === 'paused';
@@ -300,8 +305,9 @@
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniform2f(rotationUniform,rotationX+hoverY,rotationY+hoverX);
     gl.uniform1f(aspectUniform,width/height);
-    gl.uniform1f(flapUniform,.13+.25*(.5+.5*Math.sin(phase*4.8)));
-    gl.uniform1f(floatUniform,.025*Math.sin(phase*2.2));
+    const stroke = .5 - .5 * Math.cos(phase * 6.4);
+    gl.uniform1f(flapUniform,.1 + .74 * stroke);
+    gl.uniform1f(floatUniform,.035*Math.sin(phase*3.2));
     gl.drawElements(gl.TRIANGLES,indices.length,gl.UNSIGNED_SHORT,0);
   }
   function tick(time) {
@@ -311,8 +317,8 @@
     previousTime = time;
     phase += delta;
     if (!dragging) {
-      targetY = -.16 + Math.sin(phase*.48)*.1;
-      targetX = -.08 + Math.sin(phase*.39)*.045;
+      targetY = restingYaw + Math.sin(phase*.46)*.055;
+      targetX = restingPitch + Math.sin(phase*.58)*.035;
     }
     rotationX += (targetX-rotationX)*.1;
     rotationY += (targetY-rotationY)*.1;
@@ -354,7 +360,7 @@
     if (event.key==='ArrowRight') targetY+=.12;
     if (event.key==='ArrowUp') targetX-=.12;
     if (event.key==='ArrowDown') targetX+=.12;
-    if (event.key==='Home') { targetX=-.08; targetY=-.16; }
+    if (event.key==='Home') { targetX=restingPitch; targetY=restingYaw; }
     targetX=Math.max(-.55,Math.min(.55,targetX));
     targetY=Math.max(-.72,Math.min(.72,targetY));
     updateManual();
