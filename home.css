@@ -165,10 +165,10 @@ h1 em:after { content: ''; position: absolute; height: 4px; bottom: -7px; backgr
 .butterfly-wing { transform-style: preserve-3d; backface-visibility: hidden; will-change: transform; }
 .butterfly-wing img { display: block; width: 100%; height: 100%; }
 .butterfly-body { display: block; z-index: 3; transform: translateZ(7px); pointer-events: none; }
-.wing-upper-left { z-index: 2; clip-path: polygon(0 0, 50% 0, 50% 56%, 44% 56%, 28% 47%, 0 47%); transform-origin: 44.5% 54%; animation: wing-upper-left-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
-.wing-upper-right { z-index: 2; clip-path: polygon(50% 0, 100% 0, 100% 47%, 72% 47%, 56% 56%, 50% 56%); transform-origin: 52% 54%; animation: wing-upper-right-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
-.wing-lower-left { z-index: 1; clip-path: polygon(0 47%, 28% 47%, 44% 56%, 50% 56%, 50% 88%, 0 88%); transform-origin: 44.5% 56%; animation: wing-lower-left-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
-.wing-lower-right { z-index: 1; clip-path: polygon(50% 56%, 56% 56%, 72% 47%, 100% 47%, 100% 88%, 50% 88%); transform-origin: 52% 56%; animation: wing-lower-right-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
+.wing-upper-left { z-index: 2; clip-path: polygon(0 0, 50% 0, 50% 56%, 44% 56%, 43% 55%, 39% 53%, 35% 51%, 33% 50%, 28% 49%, 0 49%); transform-origin: 44.5% 54%; animation: wing-upper-left-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
+.wing-upper-right { z-index: 2; clip-path: polygon(50% 0, 100% 0, 100% 51%, 72% 51%, 62% 53%, 56% 55%, 52% 57%, 50% 57%); transform-origin: 52% 54%; animation: wing-upper-right-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
+.wing-lower-left { z-index: 1; clip-path: polygon(0 49%, 28% 49%, 33% 50%, 35% 51%, 39% 53%, 43% 55%, 44% 56%, 50% 56%, 50% 88%, 0 88%); transform-origin: 44.5% 56%; animation: wing-lower-left-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
+.wing-lower-right { z-index: 1; clip-path: polygon(50% 57%, 52% 57%, 56% 55%, 62% 53%, 72% 51%, 100% 51%, 100% 88%, 50% 88%); transform-origin: 52% 56%; animation: wing-lower-right-beat 1.55s cubic-bezier(.42,0,.25,1) infinite; }
 @keyframes wing-upper-left-beat { 0%,100% { transform: rotateY(-2deg); } 43% { transform: rotateY(-55deg) rotateX(3deg); } }
 @keyframes wing-upper-right-beat { 0%,100% { transform: rotateY(2deg); } 43% { transform: rotateY(55deg) rotateX(3deg); } }
 @keyframes wing-lower-left-beat { 0%,100% { transform: rotateY(-1deg); } 48% { transform: rotateY(-36deg) rotateX(-2deg); } }
