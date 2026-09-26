@@ -9,25 +9,127 @@ let hintLevel = 0;
 let scenarioId;
 let scenarioData = {};
 let fileSystem = {};
+const scenarioNames = {
+    1: '숨겨진 파일', 2: '권한과 비밀번호', 3: '이중 인코딩',
+    4: '해시와 단어 사전', 5: 'API와 JWT', 6: 'SUID 취약점'
+};
+const scenarioSteps = {
+    1: [
+        { id: 'briefing', label: '임무 확인', tip: '홈 폴더의 안내 파일부터 읽어 목표를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'hidden', label: '숨김 파일 찾기', tip: '파일명 앞의 점(.)은 일반 목록에서 보이지 않습니다.', command: 'ls -la' },
+        { id: 'password', label: '비밀번호 단서 읽기', tip: '찾아낸 .secret_note의 내용을 읽으세요.', command: 'cat .secret_note' },
+        { id: 'admin', label: '관리자 계정으로 전환', tip: 'su를 실행한 뒤 찾은 암호를 입력하세요. $PASS도 사용할 수 있습니다.', command: 'su admin' },
+        { id: 'unlock', label: '시스템 복구', tip: '관리자 권한으로 잠금 해제 프로그램을 실행하세요.', command: '/sbin/sys_unlock' }
+    ],
+    2: [
+        { id: 'briefing', label: '임무 확인', tip: '안내 파일에서 조사할 위치를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'directory', label: '/etc 조사', tip: '설정 파일이 모인 디렉터리의 목록을 살펴보세요.', command: 'ls /etc' },
+        { id: 'password', label: '관리자 설정 읽기', tip: 'admin_config.txt에 임시 암호가 적혀 있습니다.', command: 'cat /etc/admin_config.txt' },
+        { id: 'admin', label: '관리자 계정으로 전환', tip: 'su를 실행한 뒤 찾은 암호를 입력하세요. $PASS도 사용할 수 있습니다.', command: 'su admin' },
+        { id: 'unlock', label: '시스템 복구', tip: '관리자 권한으로 잠금 해제 프로그램을 실행하세요.', command: '/sbin/sys_unlock' }
+    ],
+    3: [
+        { id: 'briefing', label: '임무 확인', tip: '안내 파일에서 백업 단서를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'directory', label: '백업 폴더 조사', tip: '/var/backups의 파일 목록을 살펴보세요.', command: 'ls /var/backups' },
+        { id: 'encrypted', label: '암호문 확인', tip: 'admin_pass.crypt의 내용을 읽으세요.', command: 'cat /var/backups/admin_pass.crypt' },
+        { id: 'base64', label: 'Base64 해독', tip: '파이프(|)로 파일 내용을 base64 디코더에 넘기세요.', command: 'cat /var/backups/admin_pass.crypt | base64 -d' },
+        { id: 'password', label: 'ROT13 해독', tip: '아직 글자가 뒤바뀌었다면 ROT13을 한 번 더 적용하세요.', command: "cat /var/backups/admin_pass.crypt | base64 -d | tr 'A-Za-z' 'N-ZA-Mn-za-m'" },
+        { id: 'admin', label: '관리자 계정으로 전환', tip: '해독한 암호로 로그인하세요. $PASS도 사용할 수 있습니다.', command: 'su admin' },
+        { id: 'unlock', label: '시스템 복구', tip: '잠금 해제 프로그램을 실행하세요.', command: '/sbin/sys_unlock' }
+    ],
+    4: [
+        { id: 'briefing', label: '임무 확인', tip: '안내 파일에서 해시 파일의 위치를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'hashfile', label: '해시 파일 찾기', tip: '임시 디렉터리에 유출된 파일이 있습니다.', command: 'ls /tmp' },
+        { id: 'envfile', label: '솔트 설정 찾기', tip: '숨긴 .env 파일을 검색하세요.', command: 'find / -name *.env*' },
+        { id: 'salt', label: '솔트 값 읽기', tip: '/opt/.env에 HASH_SALT가 기록되어 있습니다.', command: 'cat /opt/.env' },
+        { id: 'password', label: '단어 사전 대조', tip: '읽은 솔트와 단어 사전으로 해시를 대조하세요. $SALT를 사용할 수 있습니다.', command: 'crack --salt $SALT --wordlist /usr/share/wordlists/rockyou.txt /tmp/shadow.bak' },
+        { id: 'admin', label: '관리자 계정으로 전환', tip: '찾은 암호로 로그인하세요. $PASS도 사용할 수 있습니다.', command: 'su admin' },
+        { id: 'unlock', label: '시스템 복구', tip: '잠금 해제 프로그램을 실행하세요.', command: '/sbin/sys_unlock' }
+    ],
+    5: [
+        { id: 'briefing', label: '임무 확인', tip: '안내 파일에서 API 침투 목표를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'port', label: '서버 포트 찾기', tip: '열린 로컬 포트를 확인하세요.', command: 'netstat -tuln' },
+        { id: 'secret', label: '서명 키 찾기', tip: 'API 설정 파일의 jwt_secret을 읽으세요.', command: 'cat /opt/api/config.js' },
+        { id: 'token', label: '관리자 토큰 만들기', tip: '찾은 키로 admin 역할의 토큰을 만드세요. $SECRET을 사용할 수 있습니다.', command: 'jwt-forge --role=admin --secret=$SECRET' },
+        { id: 'unlock', label: 'API로 잠금 해제', tip: '생성 토큰과 확인한 포트로 /unlock에 요청하세요. $TOKEN과 $PORT를 사용할 수 있습니다.', command: 'curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:$PORT/unlock' }
+    ],
+    6: [
+        { id: 'briefing', label: '임무 확인', tip: '안내 파일에서 권한 상승 목표를 확인하세요.', command: 'cat readme.txt' },
+        { id: 'binary', label: 'SUID 파일 찾기', tip: '/usr/bin 목록에서 권한에 s가 있는 파일을 찾으세요.', command: 'ls -la /usr/bin' },
+        { id: 'probe', label: '프로그램 시험', tip: '찾은 파일에 짧은 입력을 주고 동작을 확인하세요.', command: '/usr/bin/vuln_prog test' },
+        { id: 'root', label: '긴 입력으로 권한 상승', tip: '40자를 넘는 입력으로 취약점을 재현하세요.', command: '/usr/bin/vuln_prog AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
+        { id: 'unlock', label: '시스템 복구', tip: 'root 권한으로 잠금 해제 프로그램을 실행하세요.', command: '/sbin/sys_unlock' }
+    ]
+};
+
+function trainingHash(password, salt) {
+    // 가상 해시지만 실제 단어 사전의 각 후보와 비교한다.
+    let hash = 2166136261;
+    for (const char of `${salt}:${password}`) {
+        hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+    }
+    return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+function makeToken(role, secret) {
+    const header = btoa(JSON.stringify({ alg: 'SIM', typ: 'JWT' }));
+    const payload = btoa(JSON.stringify({ user: 'guest', role }));
+    return `${header}.${payload}.${btoa(`${secret}:${header}.${payload}`)}`;
+}
+
+function validAdminToken(token, secret) {
+    try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return false;
+        const payload = JSON.parse(atob(parts[1]));
+        return payload.role === 'admin' && parts[2] === btoa(`${secret}:${parts[0]}.${parts[1]}`);
+    } catch (_) { return false; }
+}
+
+function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+}
+
+function currentStep() {
+    return scenarioSteps[scenarioId].find(step => !scenarioData.progress.has(step.id));
+}
+
+function updateProgressUI() {
+    const steps = scenarioSteps[scenarioId];
+    const step = currentStep();
+    scenarioLabel.textContent = '미션 ' + scenarioId + ' · ' + scenarioNames[scenarioId];
+    stepLabel.textContent = step
+        ? '진행 ' + scenarioData.progress.size + '/' + steps.length + ' · 다음: ' + step.label
+        : '완료 · 시스템 복구 성공';
+    suggestionButton.disabled = !step;
+}
+
+function markStep(id) {
+    const steps = scenarioSteps[scenarioId];
+    const index = steps.findIndex(step => step.id === id);
+    if (index < 0 || scenarioData.progress.has(id)) return;
+    for (let i = 0; i <= index; i++) scenarioData.progress.add(steps[i].id);
+    hintLevel = 0;
+    updateProgressUI();
+    const next = currentStep();
+    if (next) print('[진행 ' + scenarioData.progress.size + '/' + steps.length + '] ' + next.label + ' — ' + next.tip, 'system');
+}
 
 function initBootMenu() {
     gameState = 'BOOT_MENU';
+    awaitingPasswordFor = null;
+    bootHeader.hidden = false;
+    bootActions.hidden = false;
+    quickActions.hidden = true;
     outputDiv.innerHTML = '';
-    print("GNU GRUB  version 2.06 - HARDCORE CTF EDTION", "system");
+    print("GNU GRUB  version 2.06 - HACKER CTF EDITION", "system");
     print("-----------------------------------------", "system");
-    print("시스템 복구 시나리오를 선택하세요:", "system");
-    print("  [1] 튜토리얼 1: 숨겨진 파일 찾기 (기초 이동 및 탐색)");
-    print("  [2] 튜토리얼 2: 권한과 비밀번호 (권한 탈취 기초)");
-    print("  [3] 시나리오 1: 다중 암호화 해독 (ROT13 + Base64)");
-    print("  [4] 시나리오 2: 해시 크래킹 및 단어 사전 (Wordlist + Salt)");
-    print("  [5] 시나리오 3: 원격 API 침투 및 JWT 위조 (JWT Forgery)");
-    print("  [6] 시나리오 4: SUID 버퍼 오버플로우 (Buffer Overflow)");
-    print("  [7] 랜덤 시나리오 배정 (Random Scenario)");
-    print("-----------------------------------------", "system");
-    print("💡 처음이라면 1번부터 차근차근 시작하는 것을 권장합니다.", "success");
+    print("위에서 미션을 선택하거나 숫자 1-7을 입력하세요. 처음이라면 1번을 권장합니다.", "success");
     promptSpan.innerHTML = "선택 (1-7): ";
     cmdInput.type = 'text';
+    cmdInput.value = '';
     promptSpan.style.display = 'inline';
+    window.scrollTo(0, 0);
 }
 
 // ROT13 암호화/복호화 (알파벳만 변환)
@@ -40,8 +142,11 @@ function rot13(str) {
 function loadScenario(id) {
     scenarioId = id;
     if (scenarioId === 7) scenarioId = Math.floor(Math.random() * 6) + 1;
+    bootHeader.hidden = true;
+    bootActions.hidden = true;
+    quickActions.hidden = false;
     gameState = 'PLAYING';
-    scenarioData = {};
+    scenarioData = { progress: new Set() };
     hintLevel = 0;
     currentUser = 'guest';
     currentPath = ['home', 'guest'];
@@ -89,6 +194,7 @@ function loadScenario(id) {
             },
             "bin": { _type: "dir", perms: "drwxr-xr-x", owner: "root" }
         },
+        "root": { _type: "dir", perms: "drwx------", owner: "root" },
         "home": {
             _type: "dir", perms: "drwxr-xr-x", owner: "root",
             "guest": {
@@ -142,9 +248,9 @@ function loadScenario(id) {
         scenarioData.password = targetPass;
 
         fileSystem.home.guest["readme.txt"] = {
-            _type: "file", perms: "-rw-r--r--", owner: "guest", size: "480", content: guideText + "목표: /sbin/sys_unlock 파일을 실행하여 시스템을 복구하세요.\n\n시스템 임시 폴더 근처에 권한 관리를 위한 주요 백업 파일이 유출되었습니다.\n또한 시스템에 적용된 보안 설정값(Salt) 문서를 찾아, 무차별 대입(Bruteforce) 공격을 통해 관리자 계정('admin') 비밀번호를 알아내야 합니다."
+            _type: "file", perms: "-rw-r--r--", owner: "guest", size: "480", content: guideText + "목표: /sbin/sys_unlock 파일을 실행하여 시스템을 복구하세요.\n\n시스템 임시 폴더 근처에 권한 관리를 위한 주요 백업 파일이 유출되었습니다.\n또한 시스템에 적용된 보안 설정값(Salt) 문서를 찾아, 단어 사전으로 관리자 계정('admin') 비밀번호를 알아내야 합니다. 해시 형식은 이 미션을 위한 학습용 가상 방식입니다."
         }; fileSystem.tmp["shadow.bak"] = {
-            _type: "file", perms: "-rw-r--r--", owner: "root", content: `root:*:18353:7:::\nadmin:$1$${salt}$e2a11ef721d1542d8:18353:7:::\nguest:*:18353:7:::`
+            _type: "file", perms: "-rw-r--r--", owner: "root", content: `root:*:18353:7:::\nadmin:$sim$${salt}$${trainingHash(targetPass, salt)}:18353:7:::\nguest:*:18353:7:::`
         };
         fileSystem.usr.share.wordlists["rockyou.txt"] = {
             _type: "file", perms: "-rw-r--r--", owner: "root", content: "123456\npassword\napple123\nadmin\nqwerty"
@@ -158,10 +264,10 @@ function loadScenario(id) {
         const secret = "SUPER_SECRET_" + Math.random().toString(36).substr(2, 5);
         scenarioData.port = Math.floor(8000 + Math.random() * 1000);
         scenarioData.secret = secret;
-        scenarioData.oldToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZ3Vlc3QiLCJyb2xlIjoidXNlciJ9.SIGNATUREDUMMY";
+        scenarioData.oldToken = makeToken('user', secret);
 
         fileSystem.home.guest["readme.txt"] = {
-            _type: "file", perms: "-rw-r--r--", owner: "guest", size: "480", content: guideText + "목표: 서버의 백도어 API를 호출하여 시스템 권한을 우회하세요.\n\n로컬 네트워크 상의 숨겨진 백그라운드 포트를 추적하고, 취약한 인증(JWT) 관리 서버의 비밀 키를 탈취하세요. 위조된 인증 토큰을 만들어 관리자 권한으로 API에 접근해야 합니다."
+            _type: "file", perms: "-rw-r--r--", owner: "guest", size: "480", content: guideText + "목표: 서버의 백도어 API를 호출하여 시스템 권한을 우회하세요.\n\n로컬 네트워크 상의 숨겨진 백그라운드 포트를 추적하고, 취약한 인증(JWT) 관리 서버의 비밀 키를 탈취하세요. 위조된 인증 토큰을 만들어 관리자 권한으로 API에 접근해야 합니다.\n이 미션의 JWT 서명은 학습용 가상 방식입니다. 생성한 토큰은 $TOKEN으로 다시 사용할 수 있습니다."
         }; fileSystem.opt.api = {
             _type: "dir", perms: "drwxr-xr-x", owner: "root",
             "config.js": { _type: "file", perms: "-rw-r--r--", owner: "root", content: `module.exports = {\n  port: ${scenarioData.port},\n  jwt_secret: '${secret}'\n}` }
@@ -191,15 +297,63 @@ function loadScenario(id) {
     }
 
     print("Ubuntu 22.04.1 LTS linux-core tty1", "system");
-    print(`[INFO] Hacking Scenario #${scenarioId} loaded.`, "system");
+    print(`[INFO] ${scenarioNames[scenarioId]} 미션이 시작되었습니다.`, "system");
     print("Welcome to Linux. Type 'help' for a list of available commands.");
     print("💡 [SYSTEM] 시작하려면 <span class='system'>cat readme.txt</span> 를 입력하여 미션 목표를 확인하세요.<br>");
     updatePrompt();
+    updateProgressUI();
+    print('[첫 단계] ' + currentStep().tip + ' 추천 명령 버튼을 눌러 입력창에 명령어를 넣을 수 있습니다.', 'system');
 }
 
 const outputDiv = document.getElementById('output');
 const cmdInput = document.getElementById('cmd');
 const promptSpan = document.getElementById('prompt');
+const bootHeader = document.getElementById('boot-header');
+const bootActions = document.getElementById('boot-actions');
+const quickActions = document.getElementById('quick-actions');
+const scenarioLabel = document.getElementById('scenario-label');
+const stepLabel = document.getElementById('step-label');
+const suggestionButton = document.getElementById('suggestion-button');
+
+bootActions.addEventListener('click', event => {
+    const button = event.target.closest('button[data-scenario]');
+    if (!button || gameState !== 'BOOT_MENU') return;
+    cmdInput.value = button.dataset.scenario;
+    cmdInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    cmdInput.focus();
+});
+
+quickActions.addEventListener('click', event => {
+    const button = event.target.closest('button[data-command]');
+    if (!button || cmdInput.disabled) return;
+    if (awaitingPasswordFor) {
+        if (button.dataset.command === 'reboot') {
+            cmdInput.type = 'text';
+            initBootMenu();
+        } else {
+            print('암호 입력 중입니다. 찾은 암호를 입력하거나 $PASS를 사용하세요.', 'system');
+        }
+        cmdInput.focus();
+        return;
+    }
+    cmdInput.value = button.dataset.command;
+    cmdInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    cmdInput.focus();
+});
+
+suggestionButton.addEventListener('click', () => {
+    if (suggestionButton.disabled || gameState !== 'PLAYING') return;
+    if (awaitingPasswordFor) {
+        if (!scenarioData.knownPassword) {
+            print('아직 암호 단서를 읽지 않았습니다. 찾은 암호를 직접 입력하세요.', 'system');
+            return;
+        }
+        cmdInput.value = '$PASS';
+    } else {
+        cmdInput.value = currentStep().command;
+    }
+    cmdInput.focus();
+});
 
 function getDisplayPath() {
     const pathStr = '/' + currentPath.join('/');
@@ -219,14 +373,18 @@ function print(text, className = '') {
     div.innerHTML = text;
     outputDiv.appendChild(div);
 
+    const scrollToOutput = () => {
+        if (gameState !== 'BOOT_MENU') window.scrollTo(0, document.body.scrollHeight);
+    };
     if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-        MathJax.typesetPromise([div]).then(() => window.scrollTo(0, document.body.scrollHeight));
-    } else {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
+        MathJax.typesetPromise([div]).then(scrollToOutput);
+    } else scrollToOutput();
 }
 
 function winGame(msg) {
+    if (gameState === 'WON') return;
+    gameState = 'WON';
+    markStep('unlock');
     print("\n=========================================", "success");
     print("[SUCCESS] SYSTEM HACKED AND RECOVERED!", "success");
     print(`[INFO] Msg: ${msg}`, "success");
@@ -244,7 +402,7 @@ function winGame(msg) {
 
     print("\n🎉 시스템 권한을 성공적으로 복구했습니다! 축하합니다! 🎉", "success");
     print("=========================================", "success");
-    print("[INFO] 서버를 재시작하려면 'reboot'을 입력하세요.", "system");
+    print("[INFO] 다른 미션을 시작하려면 'reboot'을 입력하세요.", "system");
 }
 
 function checkPerm(node, user, actionType) {
@@ -293,8 +451,8 @@ function getTargetNode(pathArray) {
 
 function getAllFilesRecursive(dir, pathStr = "", result = []) {
     for (const key in dir) {
-        if (key.startsWith('_')) continue;
         const node = dir[key];
+        if (!node || typeof node !== 'object' || !node._type) continue;
         const fullPath = pathStr + "/" + key;
         result.push({ name: key, path: fullPath, node: node });
         if (node._type === 'dir') {
@@ -306,11 +464,12 @@ function getAllFilesRecursive(dir, pathStr = "", result = []) {
 
 cmdInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
+        e.preventDefault();
         const inputVal = cmdInput.value.trim();
         cmdInput.value = '';
 
         if (gameState === 'BOOT_MENU') {
-            print(`<div>${promptSpan.innerHTML} ${inputVal}</div>`);
+            print(`<div>${promptSpan.innerHTML} ${escapeHtml(inputVal)}</div>`);
 
             if (['1', '2', '3', '4', '5', '6', '7'].includes(inputVal)) {
                 loadScenario(parseInt(inputVal));
@@ -319,19 +478,26 @@ cmdInput.addEventListener('keydown', function (e) {
         }
 
         if (awaitingPasswordFor) {
+            if (inputVal === 'reboot') {
+                cmdInput.type = 'text';
+                initBootMenu();
+                return;
+            }
             cmdInput.type = 'text';
             promptSpan.style.display = 'inline';
             print(`<div>Password: ********</div>`);
 
             let success = false;
             if ((scenarioId === 1 || scenarioId === 2 || scenarioId === 3 || scenarioId === 4) && awaitingPasswordFor === 'admin') {
-                if (inputVal === scenarioData.password) success = true;
+                if (inputVal === scenarioData.password || (inputVal === '$PASS' && scenarioData.knownPassword === scenarioData.password)) success = true;
             }
 
             if (success) {
                 currentUser = awaitingPasswordFor;
                 currentPath = ['home', currentUser];
                 updatePrompt();
+                print(`[OK] ${currentUser} 계정으로 전환했습니다. 다음 목표는 /sbin/sys_unlock 실행입니다.`, "success");
+                markStep('admin');
             } else print(`su: Authentication failure`, "error");
             awaitingPasswordFor = null;
             return;
@@ -341,7 +507,11 @@ cmdInput.addEventListener('keydown', function (e) {
             history.push(inputVal);
             historyIndex = history.length;
         }
-        print(`<div>${promptSpan.innerHTML} ${inputVal}</div>`);
+        print(`<div>${promptSpan.innerHTML} ${escapeHtml(inputVal)}</div>`);
+        if (gameState === 'WON' && inputVal !== 'reboot') {
+            print("미션을 완료했습니다. 다른 미션을 시작하려면 reboot을 입력하세요.", "system");
+            return;
+        }
         if (inputVal) processPipeline(inputVal);
     }
     else if (e.key === 'ArrowUp') {
@@ -368,20 +538,23 @@ function processPipeline(input) {
 }
 
 function executeCommand(input, pipeInput, printOutput) {
-    // 간단하게 공백 분리 및 따옴표 제거
+    // 공백과 작은따옴표/큰따옴표를 해석한다. 힌트의 명령어를 그대로 붙여 넣을 수 있다.
     const args = [];
-    let inQuotes = false;
+    let quote = null;
     let currentArg = "";
     for (let i = 0; i < input.length; i++) {
-        if (input[i] === '"') { inQuotes = !inQuotes; }
-        else if (input[i] === ' ' && !inQuotes) {
+        if (input[i] === quote) { quote = null; }
+        else if ((input[i] === '"' || input[i] === "'") && !quote) { quote = input[i]; }
+        else if (input[i] === ' ' && !quote) {
             if (currentArg.length > 0) { args.push(currentArg); currentArg = ""; }
         } else currentArg += input[i];
     }
     if (currentArg.length > 0) args.push(currentArg);
 
     let cmd = args[0];
+    if (!cmd) return null;
     let outData = "";
+    let completedStep = null;
 
     if (cmd.includes('/')) {
         const execNode = getTargetNode(resolvePath(cmd));
@@ -389,12 +562,24 @@ function executeCommand(input, pipeInput, printOutput) {
         if (execNode._type !== 'exec' || !checkPerm(execNode, currentUser, 'exec')) { print(`bash: ${cmd}: Permission denied`, "error"); return null; }
         const result = execNode.fn(args.slice(1));
         if (printOutput && result.out) print(result.out, result.success ? "success" : (result.err ? "error" : ""));
+        if (scenarioId === 6 && cmd === '/usr/bin/vuln_prog' && !result.err) {
+            markStep(currentUser === 'root' ? 'root' : 'probe');
+        } else if (scenarioId === 6 && currentUser === 'root' && cmd === '/usr/bin/vuln_prog') {
+            markStep('root');
+        }
         return result.out;
     }
 
     switch (cmd) {
         case 'help':
-            outData = "Available commands:\n\n [📁 File & Navigation]\n  ls [-a] [-l] [dir]  : List directory contents\n  cd [dir]            : Change directory\n  cat [file]          : Print file content\n  head [-n N] [file]  : Print first N lines\n  tail [-n N] [file]  : Print last N lines\n  find [path] -name   : Find files by name\n  file [path]         : Determine file type\n  strings [file]      : Extract readable strings\n  touch [file]        : Create empty file\n  mkdir [dir]         : Create directory\n  rm [file]           : Remove file\n  cp [src] [dst]      : Copy file\n  chmod [mode] [file] : Change permissions (root)\n\n [📝 Text Processing]\n  echo [text]         : Print text\n  grep [keyword]      : Filter lines by keyword\n  sort [file]         : Sort lines\n  uniq [file]         : Remove duplicate lines\n  wc [file]           : Count lines/words/bytes\n  base64 -d [file]    : Decode base64 data\n  tr [set1] [set2]    : Translate characters\n\n [🖥️ System Info]\n  whoami / id         : User identity info\n  pwd                 : Working directory\n  uname [-a]          : System info\n  hostname / date     : Host name / Date-time\n  env / printenv      : Environment variables\n  ps [aux]            : List processes\n  history             : Command history\n  man [cmd]           : Manual page\n\n [🌐 Network]\n  netstat -tuln       : Network connections\n  ifconfig            : Network interfaces\n  ping [host]         : Test connectivity\n  ssh [user@host]     : SSH connection\n  wget / curl [url]   : Transfer data\n\n [🔧 CTF Tools]\n  crack [opts] [file] : Hash bruteforce\n  jwt-forge [opts]    : Forge JWT tokens\n  su [user]           : Switch user\n  hint                : Get a hint\n  clear / reboot      : Clear screen / Restart";
+            outData = "Available commands:\n\n [📁 File & Navigation]\n  ls [-a] [-l] [dir]  : List directory contents\n  cd [dir]            : Change directory\n  cat [file]          : Print file content\n  head [-n N] [file]  : Print first N lines\n  tail [-n N] [file]  : Print last N lines\n  find [path] -name   : Find files by name\n  file [path]         : Determine file type\n  strings [file]      : Extract readable strings\n  touch [file]        : Create empty file\n  mkdir [dir]         : Create directory\n  rm [file]           : Remove file\n  cp [src] [dst]      : Copy file\n  chmod [mode] [file] : Change permissions (root)\n\n [📝 Text Processing]\n  echo [text]         : Print text\n  grep [keyword]      : Filter lines by keyword\n  sort [file]         : Sort lines\n  uniq [file]         : Remove duplicate lines\n  wc [file]           : Count lines/words/bytes\n  base64 -d [file]    : Decode base64 data\n  tr [set1] [set2]    : Translate characters\n\n [🖥️ System Info]\n  whoami / id         : User identity info\n  pwd                 : Working directory\n  uname [-a]          : System info\n  hostname / date     : Host name / Date-time\n  env / printenv      : Environment variables\n  ps [aux]            : List processes\n  history             : Command history\n  man [cmd]           : Manual page\n\n [🌐 Network]\n  netstat -tuln       : Network connections\n  ifconfig            : Network interfaces\n  ping [host]         : Test connectivity\n  ssh [user@host]     : SSH connection\n  wget / curl [url]   : Transfer data\n\n [🔧 CTF Tools]\n  crack [opts] [file] : Hash bruteforce\n  jwt-forge [opts]    : Forge JWT tokens\n  su [user]           : Switch user\n  mission / hint      : 목표 확인 / 단계별 힌트\n  clear / reboot      : Clear screen / Restart";
+            break;
+        case 'mission':
+            outData = '[미션 ' + scenarioId + '] ' + scenarioNames[scenarioId]
+                + '\n' + fileSystem.home.guest['readme.txt'].content.split('목표: ')[1].split('\n')[0]
+                + '\n진행 ' + scenarioData.progress.size + '/' + scenarioSteps[scenarioId].length
+                + '\n다음 단계: ' + (currentStep() ? currentStep().label : '완료')
+                + '\n상세 설명: cat /home/guest/readme.txt\n막히면 hint를 입력하세요.';
             break;
         case 'grep':
             if (args.length < 2) { print("Usage: grep [keyword]", "error"); return null; }
@@ -410,47 +595,16 @@ function executeCommand(input, pipeInput, printOutput) {
             if (args.includes("-name")) filterName = args[args.indexOf("-name") + 1].replace(/\*/g, '');
             const allFiles = getAllFilesRecursive(findNode, searchPath === '/' ? "" : searchPath);
             outData = allFiles.filter(f => !filterName || f.name.includes(filterName)).map(f => f.path).join('\n');
+            if (scenarioId === 4 && outData.split('\n').includes('/opt/.env')) completedStep = 'envfile';
             break;
-        case 'hint':
-            hintLevel++;
-            outData = `--- HINT LEVEL ${Math.min(hintLevel, 5)} ---\n`;
-            if (scenarioId === 1) { // 튜토리얼 1
-                if (hintLevel === 1) outData += "현재 디렉토리에 숨겨진 파일이 있는지 확인하세요.\n명령어: `ls -la`";
-                else if (hintLevel === 2) outData += ".secret_note 라는 파일이 보일 것입니다. 내부에 적힌 글씨를 읽어보세요.\n명령어: `cat .secret_note`";
-                else if (hintLevel === 3) outData += "비밀번호 'easyadmin'을 알아냈습니다. 이제 관리자 권한을 획득해야 합니다.\n명령어: `su admin` 이후 'easyadmin'을 입력하세요.";
-                else outData += "권한을 얻었다면 잠금 해제 스크립트를 실행해 목표를 달성하세요.\n명령어: `/sbin/sys_unlock`";
-            } else if (scenarioId === 2) { // 튜토리얼 2
-                if (hintLevel === 1) outData += "/etc 디렉토리로 이동하여 내부를 살펴보세요.\n명령어: `cd /etc` 이어서 `ls`";
-                else if (hintLevel === 2) outData += "디렉토리 안에 보이는 admin_config.txt 파일의 내용을 읽어 비밀번호를 파악하세요.\n명령어: `cat admin_config.txt`";
-                else if (hintLevel === 3) outData += "비밀번호 'root2026'을 기억하고, 관리자로 전환하세요.\n명령어: `su admin` 이후 'root2026'을 입력하세요.";
-                else outData += "관리자가 되었다면 시스템 복구 스크립트를 실행하세요.\n명령어: `/sbin/sys_unlock`";
-            } else if (scenarioId === 3) { // 시나리오 1
-                if (hintLevel === 1) outData += "시스템 백업 디렉토리가 의심스럽습니다. 디렉토리를 열어 확인하세요.\n명령어: `ls -la /var/backups`";
-                else if (hintLevel === 2) outData += "암호화된 파일(admin_pass.crypt)의 내용을 확인하세요.\n명령어: `cat /var/backups/admin_pass.crypt`";
-                else if (hintLevel === 3) outData += "데이터가 Base64로 인코딩 되어 있습니다. 파이프(|)를 사용해 복호화(디코딩) 하세요.\n명령어: `cat /var/backups/admin_pass.crypt | base64 -d`";
-                else if (hintLevel === 4) outData += "디코딩 결과가 이상한 철자라면 ROT13 암호화가 이중으로 걸려있기 때문입니다. tr 명령어로 다시 문자를 치환하세요.\n명령어: `cat /var/backups/admin_pass.crypt | base64 -d | tr 'A-Za-z' 'N-ZA-Mn-za-m'`";
-                else outData += "이제 올바른 비밀번호를 찾았습니다. su 명령어로 로그인 후 복구를 실행하세요.\n1. `su admin` 입력 후 해독한 비밀번호 입력\n2. `/sbin/sys_unlock` 실행";
-            } else if (scenarioId === 4) { // 시나리오 2
-                if (hintLevel === 1) outData += "임시 폴더(tmp)에 유출된 섀도우 파일을 찾으세요.\n명령어: `ls /tmp`";
-                else if (hintLevel === 2) outData += "해시를 무차별 대입하려면 환경 설정에 들어간 솔트(salt)값을 알아야 합니다. 전체 시스템에서 .env 파일을 검색하세요.\n명령어: `find / -name *.env*`";
-                else if (hintLevel === 3) outData += "검색된 /opt/.env 파일의 내용을 읽어서, 내부의 솔트(HASH_SALT) 값을 알아내 복사해두세요.\n명령어: `cat /opt/.env`";
-                else if (hintLevel === 4) outData += "이제 알아낸 솔트값과 리눅스용 해킹 사전 파일(rockyou)을 결합하여 해시 크랙을 실행하세요.\n명령어: `crack --salt [적혀있던솔트값] --wordlist /usr/share/wordlists/rockyou.txt /tmp/shadow.bak`";
-                else outData += "크랙이 완료되어 [apple123] 이라는 원래 비밀번호가 나왔습니다!\n1. `su admin` 입력 후 apple123 입력\n2. `/sbin/sys_unlock` 실행";
-            } else if (scenarioId === 5) { // 시나리오 3
-                if (hintLevel === 1) outData += "현재 구동 중인 숨겨진 프로세스와 포트를 탐색하세요.\n명령어: `netstat -tuln`";
-                else if (hintLevel === 2) outData += "발견된 백그라운드 포트와 관련된 API 서버 설정 파일을 찾아 시크릿 키를 구하세요.\n/opt/api 디렉토리를 열어보세요. 명령어: `cat /opt/api/config.js`";
-                else if (hintLevel === 3) outData += "설정 파일에서 jwt_secret 문자열을 복사한 뒤, jwt-forge를 이용해 위조된 관리자 토큰을 생성하세요.\n명령어: `jwt-forge --role=admin --secret=[복사한secret키]`";
-                else if (hintLevel === 4) outData += "생성된 토큰을 활용해 방금 1번 힌트에서 알아낸 포트로 curl 통신 요청을 보내 백도어를 승인받아야 합니다.";
-                else outData += "다음 명령어를 입력해서 조작한 헤더 데이터를 함께 전송하세요.\n명령어: `curl -H \"Authorization: Bearer [아까위조한토큰]\" http://127.0.0.1:[확인된포트]/unlock`";
-            } else if (scenarioId === 6) { // 시나리오 4
-                if (hintLevel === 1) outData += "잘못된 권한이 부여된 실행 파일을 찾아야 합니다. 보통 /usr/bin 폴더 안에 있습니다.\n명령어: `ls -la /usr/bin`";
-                else if (hintLevel === 2) outData += "빨간색 표시 등에 's' 권한(SUID)이 들어간 의심스러운 'vuln_prog' 실행 프로그램을 찾았을 것입니다. 일단 문자를 넣어 실행해 보세요.\n명령어: `/usr/bin/vuln_prog test`";
-                else if (hintLevel === 3) outData += "이 프로그램은 문자 입력을 제한 없이 받고 있어서 보안 취약점이 존재합니다. 의도적으로 긴 문자를 입력해 버퍼를 터뜨리세요.";
-                else if (hintLevel === 4) outData += "명령행에 A 글자를 대략 40개 이상 꽉 채워 넣어 프로그램 메모리를 강제로 손상시키세요.\n명령어: `/usr/bin/vuln_prog AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA`";
-                else outData += "성공적으로 프로그램이 오작동하며 root(최고 관리자) 셸이 켜졌습니다. 이제 모든 권한이 허용됩니다.\n마지막 명령어: `/sbin/sys_unlock`";
-            }
-            if (hintLevel >= 5) { outData += "\n\n(모든 힌트가 공개되었습니다. 위 명령어들을 그대로 따라하시면 클리어할 수 있습니다!)"; hintLevel = 5; }
+        case 'hint': {
+            const step = currentStep();
+            if (!step) { outData = '미션을 완료했습니다. reboot으로 다른 미션을 선택하세요.'; break; }
+            hintLevel = Math.min(hintLevel + 1, 2);
+            outData = '[현재 단계 ' + (scenarioData.progress.size + 1) + '/' + scenarioSteps[scenarioId].length + '] ' + step.label + '\n' + step.tip;
+            if (hintLevel === 2) outData += '\n추천 명령어: ' + step.command + '\n상단 버튼을 누르면 입력창에 명령어가 채워집니다.';
             break;
+        }
         case 'reboot':
             print("The system is going down for reboot NOW!", "system");
             cmdInput.disabled = true;
@@ -478,13 +632,18 @@ function executeCommand(input, pipeInput, printOutput) {
             if (lsNode._type !== 'dir') { outData = targetDirArg; break; }
             if (!checkPerm(lsNode, currentUser, 'read')) { print(`ls: Permission denied`, "error"); return null; }
             for (const key in lsNode) {
-                if (key.startsWith('_')) continue;
-                if (!showHidden && key.startsWith('.')) continue;
                 const item = lsNode[key];
+                if (!item || typeof item !== 'object' || !item._type) continue;
+                if (!showHidden && key.startsWith('.')) continue;
                 let spanClass = item._type === 'dir' ? "dir" : (item._type === 'exec' ? "exec" : "");
                 if (longFormat) outData += `${item.perms} 1 ${item.owner.padEnd(6)} ${item.owner.padEnd(6)} ${(item.size || '4.0K').padStart(5)} ${item.date || 'Oct 24 10:00'} <span class="${spanClass}">${key}</span>\n`;
                 else outData += `<span class="${spanClass}">${key}</span>  `;
             }
+            if (scenarioId === 1 && lsNode === fileSystem.home.guest && showHidden) completedStep = 'hidden';
+            if (scenarioId === 2 && lsNode === fileSystem.etc) completedStep = 'directory';
+            if (scenarioId === 3 && lsNode === fileSystem.var.backups) completedStep = 'directory';
+            if (scenarioId === 4 && lsNode === fileSystem.tmp) completedStep = 'hashfile';
+            if (scenarioId === 6 && lsNode === fileSystem.usr.bin) completedStep = 'binary';
             break;
         case 'cd':
             const newPath = resolvePath(args[1] || '~');
@@ -498,7 +657,27 @@ function executeCommand(input, pipeInput, printOutput) {
             const catFile = getTargetNode(resolvePath(args[1]));
             if (!catFile || catFile._type !== 'file') print(`cat: ${args[1]}: File not found`, "error");
             else if (!checkPerm(catFile, currentUser, 'read')) print(`cat: Permission denied`, "error");
-            else outData = catFile.content;
+            else {
+                outData = catFile.content;
+                if (catFile === fileSystem.home.guest['readme.txt']) completedStep = 'briefing';
+                if (scenarioId === 1 && catFile === fileSystem.home.guest['.secret_note']) {
+                    scenarioData.knownPassword = scenarioData.password;
+                    completedStep = 'password';
+                }
+                if (scenarioId === 2 && catFile === fileSystem.etc['admin_config.txt']) {
+                    scenarioData.knownPassword = scenarioData.password;
+                    completedStep = 'password';
+                }
+                if (scenarioId === 3 && catFile === fileSystem.var.backups['admin_pass.crypt']) completedStep = 'encrypted';
+                if (scenarioId === 4 && catFile === fileSystem.opt['.env']) {
+                    scenarioData.knownSalt = catFile.content.match(/HASH_SALT=(.+)/)[1];
+                    completedStep = 'salt';
+                }
+                if (scenarioId === 5 && catFile === fileSystem.opt.api['config.js']) {
+                    scenarioData.knownSecret = scenarioData.secret;
+                    completedStep = 'secret';
+                }
+            }
             break;
         case 'base64':
             let contentToDecode = pipeInput;
@@ -508,43 +687,55 @@ function executeCommand(input, pipeInput, printOutput) {
             }
             if (contentToDecode) {
                 try { outData = atob(contentToDecode.trim()); } catch (e) { print("base64: invalid input", "error"); return null; }
+                if (scenarioId === 3 && outData === rot13(scenarioData.password)) completedStep = 'base64';
             } else { print("Usage: base64 -d [file] or pipe data", "error"); return null; }
             break;
         case 'tr':
             if (args.length >= 3 && pipeInput) {
                 // Very simplified tr for ROT13
-                if (args[1] === "'A-Za-z'" && args[2] === "'N-ZA-Mn-za-m'") {
+                if (args[1] === "A-Za-z" && args[2] === "N-ZA-Mn-za-m") {
                     outData = rot13(pipeInput);
+                    if (scenarioId === 3 && outData === scenarioData.password) {
+                        scenarioData.knownPassword = outData;
+                        completedStep = 'password';
+                    }
                 } else outData = pipeInput;
             } else { print("Usage: tr [set1] [set2]", "error"); return null; }
             break;
         case 'crack':
-            let wordlist = "", salt = "";
-            let targetHashFile = args[args.length - 1];
-            for (let i = 1; i < args.length - 1; i++) {
-                if (args[i] === '--wordlist') wordlist = args[i + 1];
-                if (args[i] === '--salt') salt = args[i + 1];
-            }
-            const hashFile = getTargetNode(resolvePath(targetHashFile));
-            if (hashFile && hashFile._type === 'file' && checkPerm(hashFile, currentUser, 'read')) {
-                cmdInput.disabled = true;
-                print("Loading rainbow tables and executing attack...");
-                setTimeout(() => {
-                    if (scenarioId === 4 && wordlist.includes("rockyou.txt")) {
-                        const actualSalt = fileSystem.opt[".env"].content.match(/HASH_SALT=(.+)/)[1];
-                        if (salt === actualSalt) {
-                            print(`[+] SUCCESS! Hash cracked! admin : ${scenarioData.password}`, "success");
-                        } else {
-                            print("crack: Attack failed. Incorrect salt value. (hint: find / -name *.env*)", "error");
-                        }
-                    } else {
-                        print("crack: Attack failed. Check arguments (--salt, --wordlist required).", "error");
-                    }
-                    cmdInput.disabled = false;
-                    cmdInput.focus();
-                }, 1500);
+            const saltIndex = args.indexOf('--salt');
+            const listIndex = args.indexOf('--wordlist');
+            if (saltIndex < 0 || listIndex < 0 || !args[saltIndex + 1] || !args[listIndex + 1] || args.length < 6) {
+                print("Usage: crack --salt [salt] --wordlist [file] [hashfile]", "error");
                 return null;
-            } else print(`crack: File not found`, "error");
+            }
+            const salt = args[saltIndex + 1] === '$SALT' ? scenarioData.knownSalt : args[saltIndex + 1];
+            const wordlist = getTargetNode(resolvePath(args[listIndex + 1]));
+            const hashFile = getTargetNode(resolvePath(args[args.length - 1]));
+            if (!wordlist || wordlist._type !== 'file' || !checkPerm(wordlist, currentUser, 'read')) {
+                print("crack: 단어 사전 파일을 읽을 수 없습니다.", "error");
+                return null;
+            }
+            if (!hashFile || hashFile._type !== 'file' || !checkPerm(hashFile, currentUser, 'read')) {
+                print("crack: 해시 파일을 읽을 수 없습니다.", "error");
+                return null;
+            }
+            const record = hashFile.content.match(/admin:\$sim\$([^$:\n]+)\$([0-9a-f]{8})/);
+            if (!record) {
+                print("crack: admin 해시를 찾지 못했습니다.", "error");
+                return null;
+            }
+            if (salt !== record[1]) {
+                print("crack: 솔트가 해시 기록과 일치하지 않습니다. /opt/.env를 확인하세요.", "error");
+                return null;
+            }
+            const match = wordlist.content.split(/\r?\n/).find(candidate => trainingHash(candidate, salt) === record[2]);
+            if (match) {
+                scenarioData.knownPassword = match;
+                print(`[+] 해시 해독 성공! admin 비밀번호: ${escapeHtml(match)}`, "success");
+                markStep('password');
+            }
+            else print("crack: 단어 사전에서 일치하는 비밀번호를 찾지 못했습니다.", "error");
             return null;
         case 'jwt-forge':
             let role = "", secretKey = "";
@@ -552,40 +743,43 @@ function executeCommand(input, pipeInput, printOutput) {
                 if (args[i].startsWith('--role=')) role = args[i].split('=')[1];
                 if (args[i].startsWith('--secret=')) secretKey = args[i].split('=')[1];
             }
+            if (secretKey === '$SECRET') secretKey = scenarioData.knownSecret || '';
             if (role && secretKey) {
-                outData = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZ3Vlc3QiLCJyb2xlIjoi${role}In0.${btoa(secretKey)}`;
-                print(`Token Generated:\n${outData}`, "success");
+                outData = makeToken(role, secretKey);
+                scenarioData.lastToken = outData;
+                print(`토큰 생성 완료:\n${outData}\n\n긴 토큰을 복사하지 않아도 됩니다. curl 명령에서 $TOKEN을 사용하세요.`, "success");
+                if (scenarioId === 5 && role === 'admin' && secretKey === scenarioData.secret) markStep('token');
                 return null;
             } else print("Usage: jwt-forge --role=[role] --secret=[secret_key]", "error");
             return null;
         case 'netstat':
             if (args[1] === '-tuln') {
                 outData = "Active Internet connections\nProto Local Address           State\ntcp   0.0.0.0:22              LISTEN";
-                if (scenarioId === 5) outData += `\ntcp   127.0.0.1:${scenarioData.port}       LISTEN`;
+                if (scenarioId === 5) {
+                    outData += `\ntcp   127.0.0.1:${scenarioData.port}       LISTEN`;
+                    scenarioData.knownPort = scenarioData.port;
+                    completedStep = 'port';
+                }
             } else print("Usage: netstat -tuln");
             break;
         case 'curl':
-            const url = args[args.length - 1];
+            const url = args[args.length - 1].replace('$PORT', scenarioData.knownPort || '$PORT');
             let authHeader = "";
             // -H 옵션 파싱: curl -H "Authorization: Bearer TOKEN" URL
             for (let ci = 1; ci < args.length - 1; ci++) {
                 if (args[ci] === '-H' && args[ci + 1]) { authHeader = args[ci + 1]; ci++; }
             }
-            if (scenarioId === 5 && url.includes(`127.0.0.1:${scenarioData.port}`) && url.includes('/unlock')) {
-                // jwt-forge가 생성하는 토큰 형식: header.payload.signature
-                // signature = btoa(secret) 형식이므로, 토큰에서 서명 부분을 추출하여 검증
-                const expectedSig = btoa(scenarioData.secret);
-                const hasBearer = authHeader.includes('Bearer');
-                const hasAdminRole = authHeader.includes('admin');
-                const hasValidSig = authHeader.includes(expectedSig);
-                if (hasBearer && hasAdminRole && hasValidSig) {
+            let requestUrl;
+            try { requestUrl = new URL(url); } catch (_) { requestUrl = null; }
+            if (scenarioId === 5 && requestUrl && requestUrl.hostname === '127.0.0.1' && requestUrl.port === String(scenarioData.port) && requestUrl.pathname === '/unlock') {
+                const bearer = authHeader.match(/^Authorization:\s*Bearer\s+(.+)$/i);
+                const token = bearer && (bearer[1] === '$TOKEN' ? scenarioData.lastToken : bearer[1]);
+                if (token && validAdminToken(token, scenarioData.secret)) {
                     winGame("API call authorized with forged JWT. Core unlocked remotely.");
                 } else {
-                    if (!hasBearer) outData = `{"error": "Missing Authorization header."}`;
-                    else if (!hasAdminRole) outData = `{"error": "Insufficient role. Admin role required."}`;
-                    else outData = `{"error": "Invalid JWT signature."}`;
+                    outData = bearer ? '{"error": "Invalid token, role, or secret. Check jwt-forge inputs."}' : '{"error": "Missing Authorization: Bearer token."}';
                 }
-            } else if (scenarioId === 5 && url.includes(`127.0.0.1:${scenarioData.port}`)) {
+            } else if (scenarioId === 5 && requestUrl && requestUrl.hostname === '127.0.0.1' && requestUrl.port === String(scenarioData.port)) {
                 outData = `{"error": "404 Not Found. Try /unlock endpoint."}`;
             } else outData = `curl: (7) Failed to connect to port`;
             break;
@@ -777,6 +971,7 @@ function executeCommand(input, pipeInput, printOutput) {
     }
 
     if (printOutput && outData) print(outData);
+    if (completedStep) markStep(completedStep);
     return outData;
 }
 

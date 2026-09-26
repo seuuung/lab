@@ -3,7 +3,7 @@
  * 
  * Matrix 1: 탭 필터(4종: all, app, game, lab) × 카드 카테고리 필터링 정합성 조합
  * Matrix 2: 뷰포트 크기(320px Mobile, 768px Tablet, 1440px Desktop) × DPR 스케일링(1.0, 2.0, 3.0) 캔버스 버퍼 조합
- * Matrix 3: 10개 하위 게임 각각 진입 -> 플로팅 홈 버튼 복귀 경로 결합
+ * Matrix 3: 10개 하위 게임 각각 진입 -> 홈 버튼 복귀 경로 결합
  */
 
 const path = require('path');
@@ -32,7 +32,7 @@ function runTier3Tests() {
     // ----------------------------------------------------
     console.log('[Tier 3] Matrix 1: 탭 필터 × 카테고리 필터링 조합...');
 
-    // 12개 카드 정의
+    // 13개 카드 정의
     const sampleCards = [...indexHtml.matchAll(/<article class="project-item" data-category="([^"]+)"[\s\S]*?<h3>([^<]+)<\/h3>/g)]
         .map(match => ({ category: match[1], name: match[2] }));
 
@@ -44,9 +44,9 @@ function runTier3Tests() {
         });
     }
 
-    // 1-1. 'all' 탭: 12개 전체 카드 표시
+    // 1-1. 'all' 탭: 13개 전체 카드 표시
     const allResults = simulateFilter('all');
-    assertEqual(allResults.length, 12, 'Tier3-M1-01: "all" 탭 활성화 시 12개 전체 카드 노출');
+    assertEqual(allResults.length, 13, 'Tier3-M1-01: "all" 탭 활성화 시 13개 전체 카드 노출');
     assert(allResults.some(c => c.category === 'app'), 'Tier3-M1-02: "all" 탭에 app 카테고리 포함');
     assert(allResults.some(c => c.category === 'game'), 'Tier3-M1-03: "all" 탭에 game 카테고리 포함');
     assert(allResults.some(c => c.name === 'SelPick'), 'Tier3-M1-04: 전체 목록에 SelPick 포함');
@@ -56,9 +56,9 @@ function runTier3Tests() {
     assertEqual(appResults.length, 3, 'Tier3-M1-05: "app" 탭 활성화 시 3개 앱 카드만 노출');
     assert(appResults.every(c => c.category === 'app'), 'Tier3-M1-06: "app" 탭 결과의 모든 카드가 app 카테고리');
 
-    // 1-3. 'game' 탭: 9개 게임 카드만 표시
+    // 1-3. 'game' 탭: 10개 게임 카드만 표시
     const gameResults = simulateFilter('game');
-    assertEqual(gameResults.length, 9, 'Tier3-M1-07: "game" 탭 활성화 시 9개 게임 카드만 노출');
+    assertEqual(gameResults.length, 10, 'Tier3-M1-07: "game" 탭 활성화 시 10개 게임 카드만 노출');
     assert(gameResults.every(c => c.category === 'game'), 'Tier3-M1-08: "game" 탭 결과의 모든 카드가 game 카테고리');
 
     // 1-4. 'lab' 탭: 4개 밈&실험실 카드만 표시
@@ -70,7 +70,7 @@ function runTier3Tests() {
     currentCards = simulateFilter('app');
     assertEqual(currentCards.length, 3, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
     currentCards = simulateFilter('all');
-    assertEqual(currentCards.length, 12, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
+    assertEqual(currentCards.length, 13, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
 
 
     // ----------------------------------------------------
@@ -113,9 +113,9 @@ function runTier3Tests() {
 
 
     // ----------------------------------------------------
-    // Matrix 3: 9개 하위 게임 각각 진입 -> 복귀 내비게이션 결합 (9 assertions)
+    // Matrix 3: 10개 하위 게임 각각 진입 -> 복귀 내비게이션 결합
     // ----------------------------------------------------
-    console.log('[Tier 3] Matrix 3: 9개 하위 게임 진입 -> 홈 버튼 복귀 경로 결합...');
+    console.log('[Tier 3] Matrix 3: 10개 하위 게임 진입 -> 홈 버튼 복귀 경로 결합...');
 
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');

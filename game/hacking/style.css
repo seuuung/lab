@@ -12,9 +12,128 @@ body {
 
 #terminal {
     width: 100%;
-    height: 100%;
-    min-height: 90vh;
     cursor: text;
+}
+
+.boot-header {
+    margin-bottom: 18px;
+}
+
+.boot-header[hidden] {
+    display: none;
+}
+
+.boot-header span {
+    color: #88b99a;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+}
+
+.boot-header h1 {
+    margin: 5px 0;
+    color: #9ee6aa;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.1;
+}
+
+.boot-header p {
+    margin: 8px 0 0;
+    color: #c2d8ca;
+}
+
+.boot-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.boot-actions[hidden] {
+    display: none;
+}
+
+.boot-actions button {
+    display: grid;
+    gap: 4px;
+    min-height: 64px;
+    padding: 10px 12px;
+    border: 1px solid #365248;
+    border-radius: 9px;
+    background: #101b17;
+    color: #d7f9de;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.boot-actions button span {
+    color: #abc4b0;
+    font-size: 13px;
+}
+
+.boot-actions button:hover,
+.boot-actions button:focus-visible {
+    background: #1b3025;
+    border-color: #9ee6aa;
+}
+
+.quick-actions {
+    position: sticky;
+    top: max(68px, calc(env(safe-area-inset-top, 0px) + 52px));
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1px solid #365248;
+    border-radius: 10px;
+    background: #111d19;
+    color: #9ee6aa;
+}
+
+.quick-actions[hidden] {
+    display: none;
+}
+
+.mission-summary {
+    display: grid;
+    gap: 3px;
+}
+
+#step-label {
+    font-size: 13px;
+    color: #c2d8ca;
+}
+
+.quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.quick-buttons button {
+    min-height: 40px;
+    padding: 7px 12px;
+    border: 1px solid #4d7662;
+    border-radius: 7px;
+    background: #1b3025;
+    color: #d7f9de;
+    font: inherit;
+    cursor: pointer;
+}
+
+.quick-buttons button:hover,
+.quick-buttons button:focus-visible {
+    background: #294d35;
+    outline-color: #9ee6aa;
+}
+
+.quick-buttons button:disabled {
+    opacity: 0.5;
+    cursor: default;
 }
 
 #output {
@@ -61,6 +180,8 @@ body {
     font-family: inherit;
     font-size: 16px;
     flex-grow: 1;
+    min-width: 160px;
+    min-height: 40px;
 }
 
 .error {

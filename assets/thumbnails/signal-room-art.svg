@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">신호 분기실 게임 커버</title>
+  <desc id="desc">어두운 분기실에서 빛나는 신호가 네 갈래 출구로 향한다.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="80%"><stop stop-color="#1c4651"/><stop offset=".52" stop-color="#0d2531"/><stop offset="1" stop-color="#07131d"/></radialGradient>
+    <linearGradient id="rail" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a8fff0"/><stop offset=".5" stop-color="#62e6de"/><stop offset="1" stop-color="#258a9a"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#173d47"/><stop offset="1" stop-color="#09232d"/></linearGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="35"/></filter>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#7bd9d1" stroke-opacity=".09" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect width="1200" height="750" fill="url(#grid)"/>
+  <circle cx="615" cy="400" r="320" fill="#44e7d4" opacity=".12" filter="url(#soft)"/>
+  <g fill="none" stroke="#b5fff2" stroke-opacity=".08"><circle cx="600" cy="390" r="245"/><circle cx="600" cy="390" r="310"/><circle cx="600" cy="390" r="375"/></g>
+  <path d="M97 467H345L565 299L862 166M565 299L862 342M345 467L565 580L862 494M565 580L862 670" fill="none" stroke="#4e6970" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" opacity=".32"/>
+  <path d="M97 467H345L565 299L862 166M565 299L862 342M345 467L565 580L862 494M565 580L862 670" fill="none" stroke="#456d71" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M97 467H345L565 299L862 166" fill="none" stroke="url(#rail)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <path d="M345 467L565 580L862 494" fill="none" stroke="#70d8cf" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
+  <g fill="url(#panel)" stroke="#a4f4e8" stroke-width="5" filter="url(#glow)"><circle cx="345" cy="467" r="42"/><circle cx="565" cy="299" r="42"/><circle cx="565" cy="580" r="42"/></g>
+  <g fill="#eafff8" font-family="Arial,sans-serif" font-size="38" font-weight="900" text-anchor="middle" dominant-baseline="middle"><text x="345" y="467">A</text><text x="565" y="299">B</text><text x="565" y="580">C</text></g>
+  <g filter="url(#glow)"><circle cx="101" cy="467" r="30" fill="#d9fff4"/><circle cx="430" cy="402" r="24" fill="#ff7d78"/><circle cx="724" cy="228" r="22" fill="#ff7d78"/></g>
+  <text x="101" y="474" text-anchor="middle" fill="#0d2d32" font-family="Arial,sans-serif" font-size="18" font-weight="900">IN</text>
+  <g filter="url(#glow)"><circle cx="862" cy="166" r="32" fill="#ff7d78"/><path d="M862 308l34 34-34 34-34-34z" fill="#54e4f2"/><rect x="829" y="461" width="66" height="66" rx="7" fill="#ffd46a"/><path d="M862 632l37 64h-74z" fill="#ba9cff"/></g>
+  <g fill="#d9f8ee" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="3"><text x="926" y="171">CORAL</text><text x="926" y="348">CYAN</text><text x="926" y="501">AMBER</text><text x="926" y="676">VIOLET</text></g>
+  <rect x="45" y="38" width="265" height="38" rx="7" fill="#b4fff0" fill-opacity=".09" stroke="#99eadc" stroke-opacity=".35"/>
+  <text x="63" y="63" fill="#84ebdf" font-family="Arial,sans-serif" font-size="16" font-weight="700" letter-spacing="4">LAB EXPERIMENT 10</text>
+  <text x="48" y="161" fill="#edfff7" font-family="Arial,sans-serif" font-size="91" font-weight="900" letter-spacing="-5">SIGNAL</text>
+  <text x="48" y="251" fill="#73eadf" font-family="Arial,sans-serif" font-size="91" font-weight="900" letter-spacing="-5">ROOM</text>
+  <text x="53" y="301" fill="#a7d9d4" font-family="Arial,sans-serif" font-size="19" letter-spacing="6">ROUTE BEFORE ARRIVAL</text>
+  <rect x="46" y="670" width="241" height="36" rx="18" fill="#68e7d9"/><text x="166" y="694" text-anchor="middle" fill="#0b2c32" font-family="Arial,sans-serif" font-size="17" font-weight="800" letter-spacing="2">24 SIGNALS / 4 WAVES</text>
+</svg>

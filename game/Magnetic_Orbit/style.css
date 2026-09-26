@@ -26,6 +26,30 @@ html {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.control-guide {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.control-guide[hidden] { display: none; }
+
+.control-guide p {
+    margin: 0;
+    padding: 12px 8px;
+    border: 1px solid rgba(103, 232, 249, 0.2);
+    border-radius: 10px;
+    background: rgba(8, 47, 73, 0.32);
+}
+
+.control-guide span,
+.control-guide strong { display: block; }
+
+.control-guide span { color: #67e8f9; font-size: 12px; margin-bottom: 4px; }
+.control-guide strong { color: #f8fafc; font-size: 13px; font-weight: 600; }
+
 .safe-padding {
     padding-top: max(1rem, env(safe-area-inset-top, 1rem));
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 1rem));

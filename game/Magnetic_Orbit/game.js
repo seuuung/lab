@@ -7,6 +7,7 @@ const startBtn = document.getElementById('startBtn');
 const scoreDisplay = document.getElementById('scoreDisplay');
 const menuTitle = document.getElementById('menuTitle');
 const menuSubtitle = document.getElementById('menuSubtitle');
+const howToPlay = document.getElementById('howToPlay');
 const finalScoreContainer = document.getElementById('finalScoreContainer');
 const finalScore = document.getElementById('finalScore');
 const statusIcon = document.getElementById('statusIcon');
@@ -103,14 +104,13 @@ resizeCanvas();
 
 // 입력 이벤트 핸들러
 function handleInteractionStart(e) {
-    if (e.target === startBtn || e.target.closest('#menuScreen')) return;
+    if (GAME_STATE !== 'PLAYING' || e.target !== canvas) return;
     if (e.cancelable) e.preventDefault();
     isPressing = true;
 }
 
 function handleInteractionEnd(e) {
-    if (e.target === startBtn || e.target.closest('#menuScreen')) return;
-    if (e.cancelable) e.preventDefault();
+    if (e.cancelable && e.target === canvas) e.preventDefault();
     isPressing = false;
 }
 
@@ -194,6 +194,7 @@ function gameOver() {
         menuTitle.innerText = "CRITICAL HIT";
         menuTitle.className = "text-2xl md:text-4xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-orange-500 tracking-tight";
         menuSubtitle.innerText = "파편과 충돌하여 궤도를 잃었습니다.";
+        howToPlay.hidden = true;
 
         finalScoreContainer.classList.remove('hidden');
         finalScore.innerText = Math.floor(score);

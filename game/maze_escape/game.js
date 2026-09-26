@@ -18,6 +18,7 @@
 
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
         let joyDelta = { x: 0, y: 0 };
+        let resetMobileInput = () => { joyDelta = { x: 0, y: 0 }; };
 
         let prevTime = performance.now();
 
@@ -61,13 +62,14 @@
             document.getElementById('timer-display').innerText = '00:00';
 
             moveForward = false; moveBackward = false; moveLeft = false; moveRight = false;
-            joyDelta = { x: 0, y: 0 };
+            resetMobileInput();
             prevTime = performance.now();
 
             // 4. UI 초기화
             document.getElementById('win-screen').style.display = 'none';
             document.getElementById('blocker').style.display = 'flex';
             document.getElementById('crosshair').style.display = 'none';
+            document.getElementById('mobile-ui').style.display = 'none';
 
             // 5. 미로 재생성 및 화면 재구성
             generateMaze();
@@ -164,7 +166,6 @@
                 setupMobileControls();
 
                 instructions.addEventListener('click', startGameMobile);
-                instructions.addEventListener('touchstart', startGameMobile);
             } else {
                 controls = new THREE.PointerLockControls(camera, document.body);
                 scene.add(controls.getObject());
@@ -243,6 +244,9 @@
         // --- 모바일 대응 ---
         function startGameMobile(e) {
             e.preventDefault();
+            if (gameStarted || gameWon) return;
+            resetMobileInput();
+            prevTime = performance.now();
             gameStarted = true;
             document.getElementById('blocker').style.display = 'none';
             document.getElementById('crosshair').style.display = 'block';
@@ -256,92 +260,86 @@
             const joyBase = document.getElementById('joystick-base');
             const joyThumb = document.getElementById('joystick-thumb');
             const actionBtn = document.getElementById('action-btn');
+            let joyPointerId = null, lookPointerId = null;
+            let lastLook = { x: 0, y: 0 };
 
-            if (joyZone) joyZone.style.touchAction = 'none';
-            if (lookZone) lookZone.style.touchAction = 'none';
-            if (actionBtn) actionBtn.style.touchAction = 'none';
+            function updateJoystick(clientX, clientY) {
+                const rect = joyBase.getBoundingClientRect();
+                const dx = clientX - (rect.left + rect.width / 2);
+                const dy = clientY - (rect.top + rect.height / 2);
+                const distance = Math.hypot(dx, dy);
+                const limit = 44;
+                const limited = Math.min(distance, limit);
+                const scale = distance ? limited / distance : 0;
+                joyThumb.style.transform = 'translate(calc(-50% + ' + (dx * scale) + 'px), calc(-50% + ' + (dy * scale) + 'px))';
+                const strength = Math.max(0, (limited - 5) / (limit - 5));
+                joyDelta = distance ? { x: dx / distance * strength, y: dy / distance * strength } : { x: 0, y: 0 };
+            }
 
-            let joyId = null, lookId = null;
-            let joyStart = { x: 0, y: 0 }, lastLook = { x: 0, y: 0 };
-
-            actionBtn.addEventListener('touchstart', (e) => {
-                if (e.cancelable) e.preventDefault();
-                handleMarkerAction();
-            }, { passive: false });
-
-            joyZone.addEventListener('touchstart', (e) => {
-                if (e.cancelable) e.preventDefault();
-                const touch = e.changedTouches[0];
-                joyId = touch.identifier;
-                joyStart = { x: touch.clientX, y: touch.clientY };
-
-                joyBase.style.display = 'block';
-                joyBase.style.left = touch.clientX + 'px';
-                joyBase.style.top = touch.clientY + 'px';
-                joyThumb.style.transform = `translate(-50%, -50%)`;
+            function stopJoystick(e) {
+                if (e && e.pointerId !== joyPointerId) return;
+                joyPointerId = null;
                 joyDelta = { x: 0, y: 0 };
-            }, { passive: false });
+                joyThumb.style.transform = 'translate(-50%, -50%)';
+            }
 
-            lookZone.addEventListener('touchstart', (e) => {
-                if (e.cancelable) e.preventDefault();
-                const touch = e.changedTouches[0];
-                lookId = touch.identifier;
-                lastLook = { x: touch.clientX, y: touch.clientY };
-            }, { passive: false });
+            function stopLooking(e) {
+                if (e && e.pointerId !== lookPointerId) return;
+                lookPointerId = null;
+            }
 
-            window.addEventListener('touchmove', (e) => {
-                for (let touch of e.changedTouches) {
-                    if (touch.identifier === joyId) {
-                        if (e.cancelable) e.preventDefault();
-                        let dx = touch.clientX - joyStart.x;
-                        let dy = touch.clientY - joyStart.y;
-                        const maxDist = 40;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+            resetMobileInput = () => { stopJoystick(); stopLooking(); };
 
-                        if (dist > maxDist) {
-                            dx = (dx / dist) * maxDist;
-                            dy = (dy / dist) * maxDist;
-                        }
+            actionBtn.addEventListener('pointerdown', (e) => {
+                if (!gameStarted || gameWon || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                e.preventDefault();
+                e.stopPropagation();
+                handleMarkerAction();
+            });
+            actionBtn.addEventListener('click', (e) => {
+                if (e.detail === 0 && gameStarted && !gameWon) handleMarkerAction();
+            });
 
-                        joyThumb.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+            joyZone.addEventListener('pointerdown', (e) => {
+                if (!gameStarted || gameWon || joyPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                e.preventDefault();
+                joyPointerId = e.pointerId;
+                if (joyZone.setPointerCapture) joyZone.setPointerCapture(e.pointerId);
+                updateJoystick(e.clientX, e.clientY);
+            });
+            joyZone.addEventListener('pointermove', (e) => {
+                if (e.pointerId === joyPointerId) updateJoystick(e.clientX, e.clientY);
+            });
+            joyZone.addEventListener('pointerup', stopJoystick);
+            joyZone.addEventListener('pointercancel', stopJoystick);
+            joyZone.addEventListener('lostpointercapture', stopJoystick);
 
-                        joyDelta.x = dx / maxDist;
-                        joyDelta.y = dy / maxDist;
-                    }
-                    if (touch.identifier === lookId) {
-                        if (e.cancelable) e.preventDefault();
-                        const deltaX = touch.clientX - lastLook.x;
-                        const deltaY = touch.clientY - lastLook.y;
-                        lastLook = { x: touch.clientX, y: touch.clientY };
-
-                        const lookSpeed = 0.006;
-                        const euler = new THREE.Euler(0, 0, 0, 'YXZ');
-                        euler.setFromQuaternion(camera.quaternion);
-
-                        euler.y -= deltaX * lookSpeed;
-                        euler.x -= deltaY * lookSpeed;
-                        euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
-
-                        camera.quaternion.setFromEuler(euler);
-                    }
-                }
-            }, { passive: false });
-
-            const endTouch = (e) => {
-                for (let touch of e.changedTouches) {
-                    if (touch.identifier === joyId) {
-                        joyId = null;
-                        joyBase.style.display = 'none';
-                        joyDelta = { x: 0, y: 0 };
-                    }
-                    if (touch.identifier === lookId) {
-                        lookId = null;
-                    }
-                }
-            };
-
-            window.addEventListener('touchend', endTouch, { passive: false });
-            window.addEventListener('touchcancel', endTouch, { passive: false });
+            lookZone.addEventListener('pointerdown', (e) => {
+                if (!gameStarted || gameWon || lookPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                e.preventDefault();
+                lookPointerId = e.pointerId;
+                lastLook = { x: e.clientX, y: e.clientY };
+                if (lookZone.setPointerCapture) lookZone.setPointerCapture(e.pointerId);
+            });
+            lookZone.addEventListener('pointermove', (e) => {
+                if (e.pointerId !== lookPointerId) return;
+                const deltaX = e.clientX - lastLook.x;
+                const deltaY = e.clientY - lastLook.y;
+                lastLook = { x: e.clientX, y: e.clientY };
+                const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+                euler.setFromQuaternion(camera.quaternion);
+                euler.y -= deltaX * 0.008;
+                euler.x -= deltaY * 0.008;
+                euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+                camera.quaternion.setFromEuler(euler);
+            });
+            lookZone.addEventListener('pointerup', stopLooking);
+            lookZone.addEventListener('pointercancel', stopLooking);
+            lookZone.addEventListener('lostpointercapture', stopLooking);
+            window.addEventListener('blur', resetMobileInput);
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) resetMobileInput();
+            });
         }
 
         function startTimer() {
@@ -514,6 +512,7 @@
 
                     if (!isMobile) controls.unlock();
                     document.getElementById('mobile-ui').style.display = 'none';
+                    resetMobileInput();
                     document.getElementById('crosshair').style.display = 'none';
                     document.getElementById('blocker').style.display = 'none';
                     document.getElementById('win-screen').style.display = 'flex';

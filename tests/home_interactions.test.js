@@ -55,9 +55,9 @@ function makeHome({ hash = '', reduced = false } = {}) {
   return { context, items, cards, buttons, ids, grid, root, window, document, media, events, github };
 }
 
-test('12 projects remain available without JavaScript, with valid destinations and safe external links', () => {
+test('13 projects remain available without JavaScript, with valid destinations and safe external links', () => {
   const articles = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/g)];
-  assert.equal(articles.length, 12);
+  assert.equal(articles.length, 13);
   for (const [, attributes, content] of articles) {
     assert.doesNotMatch(attributes, /\bhidden\b/);
     const link = content.match(/<a\b([^>]+)>/)[1];
@@ -70,8 +70,8 @@ test('12 projects remain available without JavaScript, with valid destinations a
 test('game cards use generated artwork while app cards keep store artwork with local fallbacks', () => {
   const gameImages = [...html.matchAll(/<article class="project-item" data-category="game"[\s\S]*?<img class="project-thumbnail game-thumbnail" src="([^"]+)"/g)].map(match => match[1]);
   const appImages = [...html.matchAll(/<article class="project-item" data-category="app"[\s\S]*?<img class="project-thumbnail app-thumbnail" src="([^"]+)" data-fallback="([^"]+)"/g)];
-  assert.equal(gameImages.length, 9);
-  assert.ok(gameImages.every(src => /-art\.png$/.test(src)));
+  assert.equal(gameImages.length, 10);
+  assert.ok(gameImages.every(src => /-art\.(png|svg)$/.test(src) && fs.existsSync(path.join(base, src))));
   assert.equal(appImages.length, 3);
   assert.ok(appImages.every(([, src, fallback]) => src.startsWith('https://play-lh.googleusercontent.com/') && /^assets\/thumbnails\/.+\.(png|jpg)$/.test(fallback)));
 });
@@ -85,6 +85,7 @@ test('project names retain their source language instead of forced Korean transl
   assert.equal(names['game/maze_escape/index.html'], 'Maze Runner');
   assert.equal(names['game/3D_%20minesweeper/index.html'], '3D 지뢰찾기');
   assert.equal(names['game/choi_circle/index.html'], '최원형');
+  assert.equal(names['game/signal_room/index.html'], 'Signal Room');
   assert.ok(Object.values(names).includes('Spatial Mine'));
 });
 
@@ -101,7 +102,7 @@ test('category filters show exactly the right projects and accessible pressed st
     button.fire('click');
     const category = button.dataset.filter;
     const visible = env.items.filter(item => !item.hidden);
-    assert.equal(visible.length, { all: 12, game: 9, app: 3 }[category]);
+    assert.equal(visible.length, { all: 13, game: 10, app: 3 }[category]);
     assert.ok(visible.every(item => category === 'all' || item.dataset.category === category));
     assert.equal(env.buttons.filter(b => b.attrs['aria-pressed'] === 'true').length, 1);
     assert.equal(button.attrs['aria-pressed'], 'true');
@@ -114,17 +115,17 @@ test('deep links and hash navigation restore filters; section anchors do not cle
   const env = makeHome({ hash: '#app' });
   assert.equal(env.items.filter(item => !item.hidden).length, 3);
   env.context.location.hash = '#lab'; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 9);
+  assert.equal(env.items.filter(item => !item.hidden).length, 10);
   env.context.location.hash = '#about'; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 9);
+  assert.equal(env.items.filter(item => !item.hidden).length, 10);
   env.context.location.hash = ''; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 12);
+  assert.equal(env.items.filter(item => !item.hidden).length, 13);
 });
 
 test('unknown or inherited category hashes leave the full list usable', () => {
   for (const hash of ['#not-a-category', '#constructor', '#__proto__']) {
     const env = makeHome({ hash });
-    assert.equal(env.items.filter(item => !item.hidden).length, 12);
+    assert.equal(env.items.filter(item => !item.hidden).length, 13);
   }
 });
 
@@ -151,7 +152,7 @@ test('analytics retains established project identities and destinations independ
   const env = makeHome();
   env.cards.forEach(card => card.fire('click'));
   const clicks = env.events.filter(event => event[1] === 'game_enter');
-  assert.equal(clicks.length, 12);
+  assert.equal(clicks.length, 13);
   clicks.forEach((event, index) => {
     assert.equal(event[2].game_name, env.cards[index].dataset.name);
     assert.equal(event[2].target_url, env.cards[index].attrs.href);

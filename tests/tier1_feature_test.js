@@ -4,7 +4,7 @@
  * F1: About Me 프로필 카드
  * F2: 4단계 카테고리 탭 필터
  * F3: 삼척 기상토토 쇼케이스 카드
- * F4: 12개 프로젝트 쇼케이스 카드 전수 존재성 & 글래스모피즘
+ * F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 & 글래스모피즘
  * F13: 10개 하위 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용
  * F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성
  */
@@ -120,7 +120,7 @@ function runTier1Tests() {
     const hasTransitionOrAnimation = homeJs.includes('item.animate') && homeCss.includes('prefers-reduced-motion');
     assert(hasTransitionOrAnimation, 'Tier1-F2-13: 탭 필터 전환 시 애니메이션 / 트랜지션 클래스 적용');
 
-    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 12;
+    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 13;
     assert(hasCategoryBadgeOnCards, 'Tier1-F2-14: 각 쇼케이스 카드에 카테고리 뱃지 스타일 적용');
 
     const hasTabContainer = /aria-label="프로젝트 카테고리"/.test(indexHtml);
@@ -128,9 +128,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F4: 11개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘 (19 assertions)
+    // F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘
     // ----------------------------------------------------
-    console.log('[Tier 1] F4: 11개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
+    console.log('[Tier 1] F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
     const REQUIRED_PROJECTS = [
         { id: 'selpick', name: 'SelPick', check: (h) => h.includes('id=com.selpick.app&amp;pcampaignid=web_share') && h.includes('<h3>SelPick</h3>') },
         { id: 'onsic', name: '온식 (OnSic)', check: (h) => h.includes('com.onsic.app') || h.includes('온식') },
@@ -152,10 +152,10 @@ function runTier1Tests() {
     });
 
     const glassCards = extractAllTags(indexHtml, 'a').filter(a => /project-card/.test(a.attributes.class || '') && !!a.attributes.href);
-    assertEqual(glassCards.length, 12, 'Tier1-F4-13: 12개 프로젝트 카드의 직접 실행 링크 존재');
+    assertEqual(glassCards.length, 13, 'Tier1-F4-13: 13개 프로젝트 카드의 직접 실행 링크 존재');
 
     const thumbContainers = indexHtml.match(/class="project-art art-[^"]+"/g) || [];
-    assertEqual(thumbContainers.length, 12, 'Tier1-F4-14: 12개 프로젝트의 전용 그래픽 존재');
+    assertEqual(thumbContainers.length, 13, 'Tier1-F4-14: 13개 프로젝트의 전용 그래픽 존재');
 
     const hasPlayButtons = indexHtml.includes('직접 해보기') && indexHtml.includes('앱 살펴보기');
     assert(hasPlayButtons, 'Tier1-F4-15: 쇼케이스 카드에 인터랙션 CTA 텍스트(플레이하기 등) 존재');
@@ -177,9 +177,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F13: 9개 하위 게임 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용 (18 assertions)
+    // F13: 10개 하위 게임 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용
     // ----------------------------------------------------
-    console.log('[Tier 1] F13: 9개 하위 게임 프로젝트 표준 홈 내비게이션 검증...');
+    console.log('[Tier 1] F13: 10개 하위 게임 프로젝트 표준 홈 내비게이션 검증...');
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');
         assertFileExists(gameIndexPath, `Tier1-F13-${String(idx * 2 + 1).padStart(2, '0')}: [${dir}] index.html 존재`);
@@ -199,9 +199,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F14: 9개 하위 프로젝트 파일 무결성 및 링크 정합성 (14 assertions)
+    // F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성
     // ----------------------------------------------------
-    console.log('[Tier 1] F14: 9개 하위 프로젝트 파일 무결성 및 링크 정합성 검증...');
+    console.log('[Tier 1] F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성 검증...');
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const gameIndexPath = path.join(dir, 'index.html');
         const content = readFile(gameIndexPath);
@@ -213,7 +213,7 @@ function runTier1Tests() {
     const hasBrokenHref = robotHtml.includes('href="undefined"') || robotHtml.includes('src="undefined"') || robotHtml.includes('href="#"');
     assert(!hasBrokenHref, 'Tier1-F14-11: game/robot/index.html 내 undefined 또는 빈 앵커 깨진 링크 부재');
 
-    // 상대 경로 정합성 검증 (index.html 내 9개 게임 경로가 실제 로컬에 존재하는지)
+    // 상대 경로 정합성 검증 (index.html 내 10개 게임 경로가 실제 로컬에 존재하는지)
     SUBPROJECT_DIRS.forEach((dir, idx) => {
         const fullPath = path.join(PROJECT_ROOT, dir, 'index.html');
         const exists = fs.existsSync(fullPath);

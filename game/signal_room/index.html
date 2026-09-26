@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#08151d">
+    <meta name="description" content="분기기를 전환해 색깔 신호를 목적지로 보내는 짧은 전략 게임">
+    <title>신호 분기실 — 승민의 실험실</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="rules.js"></script>
+    <script defer src="game.js"></script>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <a class="home-link" href="../../index.html" aria-label="실험실 홈으로 이동">← <span>실험실 홈</span></a>
+            <div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span>SIGNAL <strong>ROOM</strong></span></div>
+            <button id="pause-button" class="top-button" type="button" disabled>일시정지 <span class="shortcut">Space</span></button>
+        </header>
+
+        <main class="game-layout">
+            <div class="intro-line">
+                <div>
+                    <p class="eyebrow">LAB EXPERIMENT 10 / ROUTING</p>
+                    <h1>신호 분기실</h1>
+                    <p class="subtitle">도착 전에 경로를 바꿔, 신호를 같은 모양의 출구로 보내세요.</p>
+                </div>
+                <div class="goal-note"><span>임무</span><strong>24개 중 20개 성공</strong></div>
+            </div>
+
+            <section class="game-panel" aria-label="신호 분기 게임">
+                <div class="hud">
+                    <div class="hud-cell"><span>점수</span><strong id="score-value">0000</strong></div>
+                    <div class="hud-cell"><span>전송</span><strong id="progress-value">0 / 24</strong></div>
+                    <div class="hud-cell"><span>정확도</span><strong id="success-value">0 / 20</strong></div>
+                    <div class="hud-cell health-cell"><span>허용 오류</span><strong id="health-value" aria-label="남은 오류 5회">● ● ● ● ●</strong></div>
+                    <div class="hud-cell"><span>최고점</span><strong id="best-value">0000</strong></div>
+                </div>
+
+                <div class="queue-bar">
+                    <div class="wave-label"><span class="live-dot" aria-hidden="true"></span><span id="wave-value">WAVE 01 / 04</span></div>
+                    <div class="next-queue" aria-label="다음 신호"><span class="queue-caption">다음 신호</span><div id="queue-items" class="queue-items"></div></div>
+                </div>
+
+                <div id="board-shell" class="board-shell">
+                    <canvas id="board" aria-label="신호 경로 게임판. 분기기를 터치하거나 아래 버튼으로 경로를 바꾸세요."></canvas>
+                    <div id="overlay" class="overlay">
+                        <div class="overlay-card">
+                            <span id="overlay-kicker" class="overlay-kicker">ROUTE THE SIGNAL</span>
+                            <h2 id="overlay-title">흐름을 설계하세요</h2>
+                            <p id="overlay-text">A 분기기에서 B·C 경로를 고르고, B 또는 C 분기기에서 같은 색과 모양의 출구를 선택하세요. 신호가 분기기에 도착하는 순간 경로가 결정됩니다.</p>
+                            <div id="overlay-detail" class="overlay-detail">분기기 탭 또는 아래 버튼 · 키보드 1 / 2 / 3</div>
+                            <button id="overlay-button" class="primary-button" type="button">게임 시작 <span aria-hidden="true">→</span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-caption"><span>분기기 제어</span><span>신호 도착 전까지 전환 가능</span></div>
+                <div class="switch-controls">
+                    <button class="switch-button" type="button" data-switch="A" aria-label="A 분기기 전환" disabled><span class="switch-key">01</span><span><strong>A 분기</strong><small id="switch-a-label">B 경로</small></span><span class="switch-arrow" aria-hidden="true">↗</span></button>
+                    <button class="switch-button" type="button" data-switch="B" aria-label="B 분기기 전환" disabled><span class="switch-key">02</span><span><strong>B 분기</strong><small id="switch-b-label">● 코랄</small></span><span class="switch-arrow" aria-hidden="true">↗</span></button>
+                    <button class="switch-button" type="button" data-switch="C" aria-label="C 분기기 전환" disabled><span class="switch-key">03</span><span><strong>C 분기</strong><small id="switch-c-label">■ 앰버</small></span><span class="switch-arrow" aria-hidden="true">↗</span></button>
+                </div>
+                <p class="hint">색깔과 모양을 함께 확인하세요. 잘못 보내도 네 번까지 다시 도전할 수 있습니다. <span>단축키 1·2·3 / 일시정지 Space</span></p>
+            </section>
+            <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+        </main>
+    </div>
+</body>
+</html>

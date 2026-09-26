@@ -27,7 +27,7 @@
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 
 <body>
@@ -40,15 +40,41 @@
         <span>실험실 홈</span>
     </a>
 
+    <header id="boot-header" class="boot-header">
+        <span>LINUX CORE · TRAINING TERMINAL</span>
+        <h1>HACKER CTF</h1>
+        <p>파일을 조사하고 단서를 연결해 시스템을 복구하세요. 입문 미션부터 시작할 수 있습니다.</p>
+    </header>
+    <nav id="boot-actions" class="boot-actions" aria-label="미션 선택">
+        <button type="button" data-scenario="1"><strong>01 · 숨겨진 파일</strong><span>입문 · 파일 탐색</span></button>
+        <button type="button" data-scenario="2"><strong>02 · 권한과 비밀번호</strong><span>입문 · 계정 전환</span></button>
+        <button type="button" data-scenario="3"><strong>03 · 이중 인코딩</strong><span>응용 · 파이프라인</span></button>
+        <button type="button" data-scenario="4"><strong>04 · 해시와 단어 사전</strong><span>응용 · 단서 조합</span></button>
+        <button type="button" data-scenario="5"><strong>05 · API와 JWT</strong><span>심화 · 토큰 위조</span></button>
+        <button type="button" data-scenario="6"><strong>06 · SUID 취약점</strong><span>심화 · 권한 상승</span></button>
+        <button type="button" data-scenario="7"><strong>랜덤 미션</strong><span>여섯 미션 중 하나</span></button>
+    </nav>
+    <div id="quick-actions" class="quick-actions" hidden>
+        <div class="mission-summary">
+            <strong id="scenario-label"></strong>
+            <span id="step-label" aria-live="polite"></span>
+        </div>
+        <div class="quick-buttons">
+            <button type="button" id="suggestion-button">추천 명령 입력</button>
+            <button type="button" data-command="mission">목표</button>
+            <button type="button" data-command="hint">힌트</button>
+            <button type="button" data-command="reboot">미션 선택</button>
+        </div>
+    </div>
     <div id="terminal" onclick="document.getElementById('cmd').focus()">
         <div id="output"></div>
         <div class="input-line">
             <span id="prompt"></span>
-            <input type="text" id="cmd" autocomplete="off" spellcheck="false" autofocus>
+            <input type="text" id="cmd" aria-label="터미널 명령어 입력" autocomplete="off" spellcheck="false" autofocus>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=4"></script>
 </body>
 
 </html>

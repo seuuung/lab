@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>3D 랜덤 미로 탈출</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 </head>
@@ -41,18 +41,22 @@
 
     <!-- 모바일 터치 UI 레이어 -->
     <div id="mobile-ui">
-        <div id="joystick-zone" class="touch-zone">
+        <div id="look-zone" class="touch-zone">
+            <span class="look-hint">화면을 밀어 시점 회전</span>
+        </div>
+        <div id="joystick-zone" class="touch-zone" aria-label="이동 조이스틱">
             <div id="joystick-base">
                 <div id="joystick-thumb"></div>
             </div>
+            <span class="control-label">이동</span>
         </div>
-        <div id="look-zone" class="touch-zone"></div>
-        <div id="action-btn">
-            <svg viewBox="0 0 24 24">
+        <button id="action-btn" type="button" aria-label="마커 칠하기 또는 지우기">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
                     d="M12.5 2a2.5 2.5 0 0 0-2.5 2.5V7H8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-2V4.5A2.5 2.5 0 0 0 12.5 2zM7 12v8a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-8H7zm4 2h2v5h-2v-5z" />
             </svg>
-        </div>
+            <span>마커</span>
+        </button>
     </div>
 
     <div id="blocker">
@@ -71,8 +75,8 @@
             </div>
             <div id="mobile-desc" style="display: none;">
                 <p>
-                    <strong>화면 좌측</strong> : 이동 조이스틱<br>
-                    <strong>화면 우측</strong> : 시야 조작<br>
+                    <strong>왼쪽 하단</strong> : 이동 조이스틱<br>
+                    <strong>조이스틱 밖 화면</strong> : 밀어서 시야 조작<br>
                     <strong>우측 하단 버튼</strong> : 마커 칠하기/지우기<br>
                     <br>빛나는 <strong style="color: #00f0ff;">파란색 포탈</strong>을 찾아 탈출하세요!
                 </p>
@@ -92,7 +96,7 @@
         </div>
     </div>
 
-    <script src="game.js"></script>
+    <script src="game.js?v=2"></script>
 </body>
 
 </html>

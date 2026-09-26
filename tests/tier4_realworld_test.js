@@ -102,7 +102,7 @@ function runTier4Tests() {
     assert(choiHtml.length > 100 && hellHtml.length > 100 && robotHtml.length > 100, 'Tier4-S10-01: 3개 밈 프로젝트(최원형, 회원가입, 로봇) 정상 로드');
 
     // ----------------------------------------------------
-    // Scenario 11: 9개 하위 게임 전수 순회 및 404 깨진 링크 0건 E2E 무결성 검증
+    // Scenario 11: 10개 하위 게임 전수 순회 및 404 깨진 링크 0건 E2E 무결성 검증
     // ----------------------------------------------------
     console.log('[Tier 4] Scenario 11: 전수 404 및 링크 무결성 검증...');
     let allSubprojectsReachable = true;
@@ -112,7 +112,7 @@ function runTier4Tests() {
             allSubprojectsReachable = false;
         }
     });
-    assert(allSubprojectsReachable, 'Tier4-S11-01: 9개 하위 게임 전체가 포털에서 404 없이 도달 가능함');
+    assert(allSubprojectsReachable, 'Tier4-S11-01: 10개 하위 게임 전체가 포털에서 404 없이 도달 가능함');
 
     // ----------------------------------------------------
     // Scenario 12: Safe-Area & 뷰포트 반응형 종합 안정성 검증

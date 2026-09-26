@@ -141,6 +141,7 @@ const SUBPROJECT_DIRS = [
     'game/hacking',
     'game/maze_escape',
     'game/robot',
+    'game/signal_room',
     'game/shadow_puzzle',
     'game/sign_up_for_hell',
     'game/slime_jump'
