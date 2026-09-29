@@ -4,17 +4,23 @@
             ('ontouchstart' in window && window.innerWidth <= 1024) ||
             (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
 
-        const MAZE_SIZE = 35;
+        const MODE_SIZES = { explore: 25, chase: 21 };
+        let MAZE_SIZE = MODE_SIZES.explore;
         const CELL_SIZE = 10;
         const WALL_HEIGHT = 12;
         const PLAYER_HEIGHT = 5;
         const PLAYER_SPEED = 30.0;
         const PLAYER_SIZE = 2;
+        const MONSTER_SPEED = 17;
+        const CHASE_GRACE = 10;
+        const chaseRules = window.MazeChaseRules;
 
         let camera, scene, renderer, controls;
         let mazeGroup; // [추가] 리셋을 쉽게 하기 위해 미로 구성요소들을 담을 그룹
         let maze = [], walls = [], markers = [];
-        let exitMesh;
+        let exitMesh, monster;
+        let monsterCell = null, monsterNext = null, chaseDelay = 0;
+        let mode = 'explore';
 
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
         let joyDelta = { x: 0, y: 0 };
@@ -22,7 +28,7 @@
 
         let prevTime = performance.now();
 
-        let gameStarted = false, gameWon = false;
+        let gameStarted = false, gameEnded = false;
         let startTime = null, timerInterval = null;
 
         const raycaster = new THREE.Raycaster();
@@ -36,26 +42,34 @@
         // 페이지 새로고침(reload) 에러를 방지하기 위한 소프트 리셋 함수
         function resetGame() {
             // 1. 기존 그룹(미로, 마커 등)에서 모든 오브젝트 제거 및 메모리 해제
+            const geometries = new Set();
+            const materials = new Set();
             for (let i = mazeGroup.children.length - 1; i >= 0; i--) {
                 const child = mazeGroup.children[i];
                 mazeGroup.remove(child);
-                if (child.geometry) child.geometry.dispose();
-                if (child.material) {
-                    if (Array.isArray(child.material)) {
-                        child.material.forEach(m => m.dispose());
-                    } else {
-                        child.material.dispose();
-                    }
-                }
+                child.traverse(node => {
+                    if (node.geometry && node.geometry !== markGeo) geometries.add(node.geometry);
+                    if (Array.isArray(node.material)) {
+                        node.material.forEach(material => { if (material !== markMat) materials.add(material); });
+                    } else if (node.material && node.material !== markMat) materials.add(node.material);
+                });
             }
+            geometries.forEach(geometry => geometry.dispose());
+            materials.forEach(material => {
+                if (material.map) material.map.dispose();
+                material.dispose();
+            });
 
             // 2. 변수 및 배열 초기화
             walls = [];
             markers = [];
             exitMesh = null;
+            monster = null;
+            monsterCell = monsterNext = null;
+            chaseDelay = 0;
 
             // 3. 상태 및 타이머 초기화
-            gameWon = false;
+            gameEnded = false;
             gameStarted = false;
             startTime = null;
             clearInterval(timerInterval);
@@ -67,46 +81,76 @@
 
             // 4. UI 초기화
             document.getElementById('win-screen').style.display = 'none';
+            document.getElementById('win-screen').classList.remove('caught');
             document.getElementById('blocker').style.display = 'flex';
             document.getElementById('crosshair').style.display = 'none';
             document.getElementById('mobile-ui').style.display = 'none';
+            document.getElementById('start-button').firstChild.textContent = mode === 'chase' ? '추격 시작 ' : '탐험 시작 ';
+            document.querySelectorAll('.mode-option').forEach(button => { button.disabled = false; });
+            updateObjective();
 
             // 5. 미로 재생성 및 화면 재구성
             generateMaze();
             build3DMaze();
         }
 
-        // 1. 순수 코드로 사이버펑크 벽 패턴(Grid) 텍스처 생성 함수
+        // Canvas textures keep the maze art self-contained and crisp without image downloads.
         function createWallTexture() {
             const canvas = document.createElement('canvas');
             canvas.width = 512; canvas.height = 512;
             const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = '#303242';
+            ctx.fillStyle = '#20363d';
             ctx.fillRect(0, 0, 512, 512);
-
-            ctx.strokeStyle = '#00f0ff';
-            ctx.globalAlpha = 0.2;
-            ctx.lineWidth = 4;
-
-            ctx.beginPath();
-            for (let i = 0; i <= 4; i++) {
-                ctx.moveTo(0, i * 128);
-                ctx.lineTo(512, i * 128);
-                ctx.moveTo(i * 128, 0);
-                ctx.lineTo(i * 128, 512);
+            for (let row = 0; row < 4; row++) {
+                const y = row * 128;
+                ctx.fillStyle = row % 2 ? '#273f45' : '#2b454b';
+                ctx.fillRect(12, y + 9, 488, 110);
+                ctx.strokeStyle = '#5b8581';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(16, y + 13, 480, 102);
+                ctx.fillStyle = '#132b33';
+                ctx.fillRect(32, y + 27, 448, 75);
+                ctx.fillStyle = '#4a756f';
+                ctx.fillRect(42, y + 38, 428, 2);
+                ctx.fillRect(42, y + 91, 428, 2);
+                ctx.fillStyle = '#b99a64';
+                ctx.fillRect(46, y + 48, 5, 35);
+                ctx.fillRect(461, y + 48, 5, 35);
             }
-            ctx.stroke();
-
-            ctx.strokeStyle = '#1a1c28';
-            ctx.globalAlpha = 1.0;
-            ctx.lineWidth = 10;
-            ctx.strokeRect(0, 0, 512, 512);
+            ctx.fillStyle = '#8de4d2';
+            ctx.fillRect(0, 0, 512, 7);
+            ctx.fillRect(0, 505, 512, 7);
+            ctx.strokeStyle = '#8de4d255';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(2, 2, 508, 508);
 
             const texture = new THREE.CanvasTexture(canvas);
             texture.wrapS = THREE.RepeatWrapping;
             texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(2, 2);
+            texture.repeat.set(1, 1);
+            return texture;
+        }
+
+        function createFloorTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#263e41';
+            ctx.fillRect(0, 0, 256, 256);
+            ctx.strokeStyle = '#708f80';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(9, 9, 238, 238);
+            ctx.strokeStyle = '#3e6561';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(23, 23, 210, 210);
+            ctx.fillStyle = '#a88958';
+            for (const [x, y] of [[35, 35], [221, 35], [35, 221], [221, 221]]) {
+                ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+            }
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(MAZE_SIZE, MAZE_SIZE);
             return texture;
         }
 
@@ -118,11 +162,11 @@
 
             ctx.clearRect(0, 0, 256, 256);
 
-            ctx.strokeStyle = '#ff0055';
+            ctx.strokeStyle = '#ffc174';
             ctx.lineWidth = 28;
             ctx.lineCap = 'round';
             ctx.shadowBlur = 15;
-            ctx.shadowColor = '#ff0055';
+            ctx.shadowColor = '#ffc174';
 
             ctx.beginPath();
             ctx.moveTo(40, 40); ctx.lineTo(216, 216);
@@ -134,8 +178,8 @@
 
         function init() {
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x1e1e28);
-            scene.fog = new THREE.Fog(0x1e1e28, 0, CELL_SIZE * 10);
+            scene.background = new THREE.Color(0x172a32);
+            scene.fog = new THREE.Fog(0x172a32, CELL_SIZE * 3, CELL_SIZE * 12);
 
             // 초기 미로 구성요소들을 관리할 그룹 씬에 추가
             mazeGroup = new THREE.Group();
@@ -149,8 +193,12 @@
             document.body.appendChild(renderer.domElement);
 
             const blocker = document.getElementById('blocker');
-            const instructions = document.getElementById('instructions');
+            const startButton = document.getElementById('start-button');
             const crosshair = document.getElementById('crosshair');
+            document.querySelectorAll('.mode-option').forEach(button => {
+                button.addEventListener('click', () => selectMode(button.dataset.mode));
+            });
+            selectMode('explore');
 
             markGeo = new THREE.PlaneGeometry(4, 4);
             markMat = new THREE.MeshBasicMaterial({
@@ -165,23 +213,23 @@
                 document.getElementById('mobile-desc').style.display = 'block';
                 setupMobileControls();
 
-                instructions.addEventListener('click', startGameMobile);
+                startButton.addEventListener('click', startGameMobile);
             } else {
                 controls = new THREE.PointerLockControls(camera, document.body);
                 scene.add(controls.getObject());
 
-                instructions.addEventListener('click', () => controls.lock());
+                startButton.addEventListener('click', () => controls.lock());
                 controls.addEventListener('lock', () => {
-                    gameStarted = true;
+                    beginRound();
                     blocker.style.display = 'none';
                     crosshair.style.display = 'block';
-                    startTimer();
                 });
                 controls.addEventListener('unlock', () => {
-                    if (!gameWon) {
+                    if (!gameEnded) {
                         gameStarted = false;
                         blocker.style.display = 'flex';
                         crosshair.style.display = 'none';
+                        startButton.firstChild.textContent = '계속하기 ';
                     }
                 });
 
@@ -192,20 +240,20 @@
                 });
             }
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xd6f3e7, 0.85);
             scene.add(ambientLight);
 
-            const flashLight = new THREE.PointLight(0xffffff, 1.2, CELL_SIZE * 7);
+            const flashLight = new THREE.PointLight(0xffdfa3, 1.35, CELL_SIZE * 7);
             camera.add(flashLight);
 
             const floorGeo = new THREE.PlaneGeometry(MAZE_SIZE * CELL_SIZE, MAZE_SIZE * CELL_SIZE);
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x222233, roughness: 0.9 });
+            const floorMat = new THREE.MeshStandardMaterial({ map: createFloorTexture(), roughness: 0.95 });
             const floor = new THREE.Mesh(floorGeo, floorMat);
             floor.rotation.x = -Math.PI / 2;
             floor.position.set((MAZE_SIZE * CELL_SIZE) / 2 - CELL_SIZE / 2, 0, (MAZE_SIZE * CELL_SIZE) / 2 - CELL_SIZE / 2);
             scene.add(floor);
 
-            const ceiling = new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ color: 0x151520 }));
+            const ceiling = new THREE.Mesh(floorGeo, new THREE.MeshStandardMaterial({ color: 0x182b31, roughness: 1 }));
             ceiling.rotation.x = Math.PI / 2;
             ceiling.position.set((MAZE_SIZE * CELL_SIZE) / 2 - CELL_SIZE / 2, WALL_HEIGHT, (MAZE_SIZE * CELL_SIZE) / 2 - CELL_SIZE / 2);
             scene.add(ceiling);
@@ -241,17 +289,60 @@
             }
         }
 
+        function selectMode(nextMode) {
+            if (startTime || (nextMode !== 'explore' && nextMode !== 'chase')) return;
+            mode = nextMode;
+            const sizeChanged = MAZE_SIZE !== MODE_SIZES[mode];
+            MAZE_SIZE = MODE_SIZES[mode];
+            document.querySelectorAll('.mode-option').forEach(button => {
+                const selected = button.dataset.mode === mode;
+                button.classList.toggle('selected', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+            document.getElementById('start-button').firstChild.textContent = mode === 'chase' ? '추격 시작 ' : '탐험 시작 ';
+            updateObjective();
+            if (sizeChanged && maze.length) resetGame();
+        }
+
+        function updateObjective() {
+            const hud = document.getElementById('hud');
+            let message = '출구 문을 찾으세요';
+            let danger = false;
+            if (mode === 'chase' && gameStarted && !gameEnded) {
+                if (chaseDelay > 0) message = `괴물 등장까지 ${Math.ceil(chaseDelay)}초`;
+                else if (monster) {
+                    const distance = Math.hypot(camera.position.x - monster.position.x, camera.position.z - monster.position.z);
+                    danger = distance < CELL_SIZE * 2.4;
+                    message = danger ? '괴물이 가까이 있어요!' : '괴물을 피해 출구를 찾으세요';
+                }
+            } else if (mode === 'chase') message = '괴물을 피해 출구를 찾으세요';
+            const label = document.getElementById('objective-text');
+            if (label.textContent !== message) label.textContent = message;
+            hud.classList.toggle('danger', danger);
+            hud.classList.toggle('chase-mode', mode === 'chase');
+        }
+
+        function beginRound() {
+            gameStarted = true;
+            prevTime = performance.now();
+            if (!startTime) {
+                chaseDelay = mode === 'chase' ? CHASE_GRACE : 0;
+                document.querySelectorAll('.mode-option').forEach(button => { button.disabled = true; });
+                startTimer();
+            }
+            updateObjective();
+        }
+
         // --- 모바일 대응 ---
         function startGameMobile(e) {
             e.preventDefault();
-            if (gameStarted || gameWon) return;
+            if (gameStarted || gameEnded) return;
             resetMobileInput();
             prevTime = performance.now();
-            gameStarted = true;
+            beginRound();
             document.getElementById('blocker').style.display = 'none';
             document.getElementById('crosshair').style.display = 'block';
             document.getElementById('mobile-ui').style.display = 'block';
-            startTimer();
         }
 
         function setupMobileControls() {
@@ -291,17 +382,17 @@
             resetMobileInput = () => { stopJoystick(); stopLooking(); };
 
             actionBtn.addEventListener('pointerdown', (e) => {
-                if (!gameStarted || gameWon || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                if (!gameStarted || gameEnded || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 e.preventDefault();
                 e.stopPropagation();
                 handleMarkerAction();
             });
             actionBtn.addEventListener('click', (e) => {
-                if (e.detail === 0 && gameStarted && !gameWon) handleMarkerAction();
+                if (e.detail === 0 && gameStarted && !gameEnded) handleMarkerAction();
             });
 
             joyZone.addEventListener('pointerdown', (e) => {
-                if (!gameStarted || gameWon || joyPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                if (!gameStarted || gameEnded || joyPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 e.preventDefault();
                 joyPointerId = e.pointerId;
                 if (joyZone.setPointerCapture) joyZone.setPointerCapture(e.pointerId);
@@ -315,7 +406,7 @@
             joyZone.addEventListener('lostpointercapture', stopJoystick);
 
             lookZone.addEventListener('pointerdown', (e) => {
-                if (!gameStarted || gameWon || lookPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
+                if (!gameStarted || gameEnded || lookPointerId !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
                 e.preventDefault();
                 lookPointerId = e.pointerId;
                 lastLook = { x: e.clientX, y: e.clientY };
@@ -374,34 +465,178 @@
 
         // --- 맵 생성 및 3D 빌드 ---
         function generateMaze() {
-            maze = Array(MAZE_SIZE).fill().map(() => Array(MAZE_SIZE).fill(1));
-            function carve(x, z) {
-                maze[z][x] = 0;
-                const dirs = [[0, -2], [0, 2], [-2, 0], [2, 0]].sort(() => Math.random() - 0.5);
-                for (let i = 0; i < dirs.length; i++) {
-                    const nx = x + dirs[i][0], nz = z + dirs[i][1];
-                    if (nx > 0 && nx < MAZE_SIZE - 1 && nz > 0 && nz < MAZE_SIZE - 1 && maze[nz][nx] === 1) {
-                        maze[z + dirs[i][1] / 2][x + dirs[i][0] / 2] = 0;
-                        carve(nx, nz);
+            const maxRoute = mode === 'chase' ? 70 : 90;
+            let bestMaze = null, bestDistance = Infinity;
+            for (let attempt = 0; attempt < 8; attempt++) {
+                maze = Array.from({ length: MAZE_SIZE }, () => Array(MAZE_SIZE).fill(1));
+                function carve(x, z) {
+                    maze[z][x] = 0;
+                    const dirs = [[0, -2], [0, 2], [-2, 0], [2, 0]];
+                    for (let index = dirs.length - 1; index > 0; index--) {
+                        const swap = Math.floor(Math.random() * (index + 1));
+                        [dirs[index], dirs[swap]] = [dirs[swap], dirs[index]];
                     }
-                }
-            }
-            carve(1, 1);
-
-            const LOOP_CHANCE = 0.08;
-            for (let z = 1; z < MAZE_SIZE - 1; z++) {
-                for (let x = 1; x < MAZE_SIZE - 1; x++) {
-                    if (maze[z][x] === 1) {
-                        if (maze[z][x - 1] === 0 && maze[z][x + 1] === 0 && maze[z - 1][x] === 1 && maze[z + 1][x] === 1) {
-                            if (Math.random() < LOOP_CHANCE) maze[z][x] = 0;
-                        } else if (maze[z - 1][x] === 0 && maze[z + 1][x] === 0 && maze[z][x - 1] === 1 && maze[z][x + 1] === 1) {
-                            if (Math.random() < LOOP_CHANCE) maze[z][x] = 0;
+                    for (const [dx, dz] of dirs) {
+                        const nx = x + dx, nz = z + dz;
+                        if (nx > 0 && nx < MAZE_SIZE - 1 && nz > 0 && nz < MAZE_SIZE - 1 && maze[nz][nx] === 1) {
+                            maze[z + dz / 2][x + dx / 2] = 0;
+                            carve(nx, nz);
                         }
                     }
                 }
+                carve(1, 1);
+
+                const LOOP_CHANCE = 0.08;
+                for (let z = 1; z < MAZE_SIZE - 1; z++) {
+                    for (let x = 1; x < MAZE_SIZE - 1; x++) {
+                        if (maze[z][x] === 1) {
+                            if (maze[z][x - 1] === 0 && maze[z][x + 1] === 0 && maze[z - 1][x] === 1 && maze[z + 1][x] === 1) {
+                                if (Math.random() < LOOP_CHANCE) maze[z][x] = 0;
+                            } else if (maze[z - 1][x] === 0 && maze[z + 1][x] === 0 && maze[z][x - 1] === 1 && maze[z][x + 1] === 1) {
+                                if (Math.random() < LOOP_CHANCE) maze[z][x] = 0;
+                            }
+                        }
+                    }
+                }
+                maze[1][1] = 0; maze[1][2] = 0; maze[2][1] = 0;
+                maze[MAZE_SIZE - 2][MAZE_SIZE - 2] = 2;
+                maze[MAZE_SIZE - 2][MAZE_SIZE - 3] = 0;
+                maze[MAZE_SIZE - 3][MAZE_SIZE - 2] = 0;
+
+                const distance = chaseRules.distances(maze, { x: 1, z: 1 })[MAZE_SIZE - 2][MAZE_SIZE - 2];
+                if (distance < bestDistance) { bestMaze = maze; bestDistance = distance; }
+                if (distance <= maxRoute) return;
             }
-            maze[1][1] = 0; maze[1][2] = 0; maze[2][1] = 0;
-            maze[MAZE_SIZE - 2][MAZE_SIZE - 2] = 2; maze[MAZE_SIZE - 2][MAZE_SIZE - 3] = 0; maze[MAZE_SIZE - 3][MAZE_SIZE - 2] = 0;
+            maze = bestMaze;
+        }
+
+        function createExitDoor() {
+            const door = new THREE.Group();
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0xc7ac79, roughness: 0.65 });
+            const panelMat = new THREE.MeshStandardMaterial({ color: 0x31625c, roughness: 0.8 });
+            const detailMat = new THREE.MeshStandardMaterial({ color: 0xe3c886, roughness: 0.4, metalness: 0.25 });
+            function part(width, height, depth, x, y, z, material) {
+                const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material);
+                mesh.position.set(x, y, z);
+                door.add(mesh);
+            }
+            part(6.3, 7.8, .5, 0, 4.15, 0, panelMat);
+            part(.75, 9, .95, -3.55, 4.5, 0, frameMat);
+            part(.75, 9, .95, 3.55, 4.5, 0, frameMat);
+            part(8, .8, 1.15, 0, 9.15, 0, frameMat);
+            part(.09, 6.6, .58, 0, 4.1, 0, detailMat);
+            part(.4, .4, .2, 1.65, 4.2, .4, detailMat);
+            part(.4, .4, .2, -1.65, 4.2, -.4, detailMat);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 160;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#e7d6a8';
+            ctx.fillRect(8, 8, 496, 144);
+            ctx.strokeStyle = '#304c47';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(13, 13, 486, 134);
+            ctx.fillStyle = '#25443e';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = 'bold 70px sans-serif';
+            ctx.fillText('출구  EXIT', 256, 82);
+            const sign = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
+            sign.position.set(0, 10.55, .15);
+            sign.scale.set(7.5, 2.35, 1);
+            door.add(sign);
+            // Both possible approaches see the door at an angle; the sign faces the player.
+            door.rotation.y = -Math.PI / 4;
+            return door;
+        }
+
+        function createMonster() {
+            const creature = new THREE.Group();
+            const skin = new THREE.MeshStandardMaterial({ color: 0x392e3e, roughness: 0.9 });
+            const shadow = new THREE.MeshStandardMaterial({ color: 0x211e2b, roughness: 1 });
+            const eyes = new THREE.MeshBasicMaterial({ color: 0xff8b6c });
+            function sphere(radius, x, y, z, material, sx = 1, sy = 1, sz = 1) {
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(radius, 12, 10), material);
+                mesh.position.set(x, y, z);
+                mesh.scale.set(sx, sy, sz);
+                creature.add(mesh);
+            }
+            sphere(1.5, 0, 3, 0, skin, 1, 1.3, .8);
+            sphere(1.35, 0, 5.4, .25, shadow, 1, .9, .9);
+            sphere(.22, -.48, 5.55, 1.3, eyes);
+            sphere(.22, .48, 5.55, 1.3, eyes);
+            sphere(.5, -1.15, 6.45, .05, skin, .7, 1.4, .7);
+            sphere(.5, 1.15, 6.45, .05, skin, .7, 1.4, .7);
+            sphere(.55, -1.55, 2.8, .15, shadow, .65, 1.7, .7);
+            sphere(.55, 1.55, 2.8, .15, shadow, .65, 1.7, .7);
+            sphere(.6, -.7, .8, 0, shadow, .7, 1.4, .8);
+            sphere(.6, .7, .8, 0, shadow, .7, 1.4, .8);
+            return creature;
+        }
+
+        function playerCell() {
+            return { x: Math.round(camera.position.x / CELL_SIZE), z: Math.round(camera.position.z / CELL_SIZE) };
+        }
+
+        function spawnMonster() {
+            const cell = chaseRules.spawnCell(maze, playerCell());
+            if (!cell) return;
+            monsterCell = cell;
+            monsterNext = null;
+            monster = createMonster();
+            monster.position.set(cell.x * CELL_SIZE, 0, cell.z * CELL_SIZE);
+            mazeGroup.add(monster);
+        }
+
+        function updateMonster(delta) {
+            if (mode !== 'chase') return;
+            if (chaseDelay > 0) {
+                chaseDelay = Math.max(0, chaseDelay - delta);
+                if (chaseDelay === 0) spawnMonster();
+                updateObjective();
+                return;
+            }
+            if (!monster) return;
+            const targetCell = playerCell();
+            let remaining = MONSTER_SPEED * delta;
+            while (remaining > 0) {
+                if (!monsterNext) monsterNext = chaseRules.nextStep(maze, monsterCell, targetCell);
+                if (!monsterNext && (monsterCell.x !== targetCell.x || monsterCell.z !== targetCell.z)) break;
+                const targetX = monsterNext ? monsterNext.x * CELL_SIZE : camera.position.x;
+                const targetZ = monsterNext ? monsterNext.z * CELL_SIZE : camera.position.z;
+                const dx = targetX - monster.position.x, dz = targetZ - monster.position.z;
+                const distance = Math.hypot(dx, dz);
+                if (distance < .001) {
+                    if (monsterNext) { monsterCell = monsterNext; monsterNext = null; continue; }
+                    break;
+                }
+                const travel = Math.min(remaining, distance);
+                monster.position.x += dx / distance * travel;
+                monster.position.z += dz / distance * travel;
+                remaining -= travel;
+                if (travel >= distance - .001 && monsterNext) { monsterCell = monsterNext; monsterNext = null; }
+            }
+            monster.lookAt(camera.position.x, 0, camera.position.z);
+            updateObjective();
+            const sameCell = Math.round(monster.position.x / CELL_SIZE) === targetCell.x && Math.round(monster.position.z / CELL_SIZE) === targetCell.z;
+            if (sameCell && Math.hypot(camera.position.x - monster.position.x, camera.position.z - monster.position.z) < 3.2) finishRound(false);
+        }
+
+        function finishRound(escaped) {
+            if (gameEnded) return;
+            gameEnded = true;
+            clearInterval(timerInterval);
+            document.getElementById('final-time').innerText = document.getElementById('timer-display').innerText;
+            document.getElementById('result-kicker').textContent = escaped ? 'THE LOST LABYRINTH · COMPLETE' : 'THE LOST LABYRINTH · CAUGHT';
+            document.getElementById('result-title').textContent = escaped ? '탈출 성공!' : '괴물에게 잡혔어요';
+            document.getElementById('result-description').textContent = escaped ? '길을 찾아 미로를 빠져나왔습니다.' : '다음에는 흔적을 남기며 다른 길을 찾아보세요.';
+            document.getElementById('win-screen').classList.toggle('caught', !escaped);
+            if (!isMobile) controls.unlock();
+            document.getElementById('mobile-ui').style.display = 'none';
+            resetMobileInput();
+            document.getElementById('crosshair').style.display = 'none';
+            document.getElementById('blocker').style.display = 'none';
+            document.getElementById('win-screen').style.display = 'flex';
         }
 
         function build3DMaze() {
@@ -420,15 +655,9 @@
                         mazeGroup.add(wall); // scene 대신 mazeGroup에 추가
                         walls.push(wall);
                     } else if (maze[z][x] === 2) {
-                        const exitGeo = new THREE.TorusKnotGeometry(CELL_SIZE / 3, CELL_SIZE / 10, 100, 16);
-                        const exitMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true });
-                        exitMesh = new THREE.Mesh(exitGeo, exitMat);
-                        exitMesh.position.set(x * CELL_SIZE, PLAYER_HEIGHT, z * CELL_SIZE);
-                        mazeGroup.add(exitMesh); // scene 대신 mazeGroup에 추가
-
-                        const exitLight = new THREE.PointLight(0x00f0ff, 2, CELL_SIZE * 3);
-                        exitLight.position.copy(exitMesh.position);
-                        mazeGroup.add(exitLight); // scene 대신 mazeGroup에 추가
+                        exitMesh = createExitDoor();
+                        exitMesh.position.set(x * CELL_SIZE, 0, z * CELL_SIZE);
+                        mazeGroup.add(exitMesh);
                     }
                 }
             }
@@ -462,7 +691,7 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            if (gameWon || !gameStarted) {
+            if (gameEnded || !gameStarted) {
                 if (gameStarted) renderer.render(scene, camera);
                 return;
             }
@@ -503,21 +732,13 @@
             camera.position.y = PLAYER_HEIGHT;
 
             if (exitMesh) {
-                exitMesh.rotation.x += 1 * delta;
-                exitMesh.rotation.y += 2 * delta;
-                if (camera.position.distanceTo(exitMesh.position) < CELL_SIZE) {
-                    gameWon = true;
-                    clearInterval(timerInterval);
-                    document.getElementById('final-time').innerText = document.getElementById('timer-display').innerText;
-
-                    if (!isMobile) controls.unlock();
-                    document.getElementById('mobile-ui').style.display = 'none';
-                    resetMobileInput();
-                    document.getElementById('crosshair').style.display = 'none';
-                    document.getElementById('blocker').style.display = 'none';
-                    document.getElementById('win-screen').style.display = 'flex';
+                const exitDistance = Math.hypot(camera.position.x - exitMesh.position.x, camera.position.z - exitMesh.position.z);
+                if (exitDistance < CELL_SIZE * .4) {
+                    finishRound(true);
                 }
             }
+
+            if (!gameEnded) updateMonster(delta);
 
             renderer.render(scene, camera);
         }

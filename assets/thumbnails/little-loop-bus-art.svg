@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">한 바퀴 버스 게임 커버</title>
+  <desc id="desc">밝은 마을에서 갈림길을 따라 네 가지 정류장으로 향하는 작은 버스</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a6ddd0"/><stop offset="1" stop-color="#eef3c8"/></linearGradient>
+    <linearGradient id="grass" x2="0" y2="1"><stop stop-color="#cce8a5"/><stop offset="1" stop-color="#97ca83"/></linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter>
+    <g id="tree"><rect x="-5" y="6" width="10" height="38" rx="3" fill="#866c4b"/><circle r="30" fill="#69b382"/><circle cx="-15" cy="-5" r="22" fill="#79c58d"/><circle cx="15" cy="-6" r="22" fill="#5fae78"/></g>
+  </defs>
+  <rect width="1200" height="750" fill="url(#sky)"/>
+  <circle cx="1012" cy="117" r="68" fill="#fff5bc"/>
+  <g fill="#fffdf2" opacity=".8"><ellipse cx="150" cy="155" rx="100" ry="23"/><ellipse cx="208" cy="141" rx="48" ry="24"/><ellipse cx="841" cy="75" rx="63" ry="18"/></g>
+  <path d="M0 389Q229 304 425 393T822 378T1200 385V750H0Z" fill="#d7ebaf"/>
+  <path d="M0 488Q218 386 400 476T791 440T1200 460V750H0Z" fill="url(#grass)"/>
+  <path d="M0 628Q237 527 460 597T850 562T1200 586V750H0Z" fill="#83bc7d"/>
+  <g opacity=".8"><use href="#tree" transform="translate(93 405) scale(.9)"/><use href="#tree" transform="translate(1060 591) scale(1.1)"/><use href="#tree" transform="translate(569 703) scale(.68)"/></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 510H358L571 325L854 171M571 325L855 337M358 510L571 614L854 508M571 614L854 677" stroke="#6d996f" stroke-opacity=".36" stroke-width="86" filter="url(#shadow)"/>
+    <path d="M70 510H358L571 325L854 171M571 325L855 337M358 510L571 614L854 508M571 614L854 677" stroke="#caa77c" stroke-width="69"/>
+    <path d="M70 510H358L571 325L854 171M571 325L855 337M358 510L571 614L854 508M571 614L854 677" stroke="#fff2d8" stroke-width="55"/>
+  </g>
+  <g fill="#fff9e9" stroke="#d58558" stroke-width="8"><circle cx="358" cy="510" r="49"/><circle cx="571" cy="325" r="42"/><circle cx="571" cy="614" r="42"/></g>
+  <g fill="#3c684f" font-family="Segoe UI, sans-serif" font-weight="900" text-anchor="middle"><text x="358" y="526" font-size="44">A</text><text x="571" y="339" font-size="35">B</text><text x="571" y="628" font-size="35">C</text></g>
+  <g font-family="Segoe UI, sans-serif" font-weight="900" text-anchor="middle">
+    <g transform="translate(872 171)"><rect x="-69" y="-53" width="139" height="106" rx="23" fill="#fff9ea" stroke="#e47769" stroke-width="7"/><circle r="19" fill="#e47769"/><text y="41" fill="#715446" font-size="19">STRAWBERRY</text></g>
+    <g transform="translate(872 337)"><rect x="-69" y="-53" width="139" height="106" rx="23" fill="#fff9ea" stroke="#61b7c7" stroke-width="7"/><path d="M0-20 19 0 0 20-19 0Z" fill="#61b7c7"/><text y="41" fill="#715446" font-size="19">OCEAN</text></g>
+    <g transform="translate(872 508)"><rect x="-69" y="-53" width="139" height="106" rx="23" fill="#fff9ea" stroke="#e2ac4d" stroke-width="7"/><rect x="-18" y="-18" width="36" height="36" fill="#e2ac4d"/><text y="41" fill="#715446" font-size="19">SUNSHINE</text></g>
+    <g transform="translate(872 677)"><rect x="-69" y="-53" width="139" height="106" rx="23" fill="#fff9ea" stroke="#ae8cc5" stroke-width="7"/><path d="M0-21 20 19H-20Z" fill="#ae8cc5"/><text y="41" fill="#715446" font-size="19">FLOWER</text></g>
+  </g>
+  <g transform="translate(245 503)">
+    <ellipse cx="0" cy="40" rx="100" ry="23" fill="#416d4b" opacity=".28"/>
+    <rect x="-93" y="-45" width="187" height="79" rx="21" fill="#e77767" stroke="#b4564d" stroke-width="5"/>
+    <rect x="-66" y="-36" width="53" height="31" rx="7" fill="#b8e7df"/><rect x="-3" y="-36" width="53" height="31" rx="7" fill="#b8e7df"/>
+    <rect x="-19" y="7" width="37" height="22" rx="7" fill="#fff3cd"/><circle cx="0" cy="18" r="8" fill="#e77767"/>
+    <circle cx="-56" cy="37" r="18" fill="#344d46"/><circle cx="56" cy="37" r="18" fill="#344d46"/><circle cx="-56" cy="37" r="9" fill="#f5e3bd"/><circle cx="56" cy="37" r="9" fill="#f5e3bd"/>
+    <circle cx="82" cy="7" r="9" fill="#fff4ae"/>
+  </g>
+  <g fill="#f8eac1"><circle cx="457" cy="444" r="8"/><circle cx="483" cy="455" r="5"/><circle cx="700" cy="449" r="7"/></g>
+  <rect x="37" y="29" width="488" height="180" rx="26" fill="#fffaf0" opacity=".96"/>
+  <text x="68" y="79" fill="#d2774d" font-family="Segoe UI, sans-serif" font-size="22" font-weight="900" letter-spacing="4">A QUICK ROUTE GAME</text>
+  <text x="64" y="146" fill="#2d5845" font-family="Segoe UI, sans-serif" font-size="61" font-weight="900" letter-spacing="-2">LITTLE LOOP</text>
+  <text x="68" y="190" fill="#2d5845" font-family="Segoe UI, sans-serif" font-size="34" font-weight="900" letter-spacing="9">BUS</text>
+</svg>

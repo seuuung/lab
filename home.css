@@ -78,15 +78,19 @@ h1 em:after { content: ''; position: absolute; height: 4px; bottom: -7px; backgr
 .tab-btn.active { background: var(--ink); color: #f4f6e9; }
 .tab-btn:not(.active):hover { background: #d5d9cb; }
 #result-count { font-size: 11px; color: #6d7563; white-space: nowrap; }
+.project-group[hidden] { display: none; }
+.project-group + .project-group { margin-top: 64px; padding-top: 30px; border-top: 1px solid #c7cbbd; }
+.project-group[hidden] + .project-group { margin-top: 0; padding-top: 0; border-top: 0; }
+.project-group-title { margin: 0 0 24px; font-size: 16px; font-weight: 600; letter-spacing: -.04em; }
 .project-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 44px 24px; }
 .project-item { grid-column: span 4; min-width: 0; }
-.project-item:nth-child(1) { grid-column: span 7; }
-.project-item:nth-child(2) { grid-column: span 5; }
+.game-grid .project-item:nth-child(1) { grid-column: span 7; }
+.game-grid .project-item:nth-child(2) { grid-column: span 5; }
 .project-grid.is-filtered .project-item { grid-column: span 4; }
 .project-card { display: block; }
 .project-art { height: clamp(240px, 22vw, 365px); overflow: hidden; position: relative; isolation: isolate; transition: border-radius .7s var(--ease); }
-.project-item:nth-child(-n+2) .project-art { height: clamp(340px, 31vw, 505px); }
-.project-grid.is-filtered .project-art { height: clamp(240px, 22vw, 365px); }
+.game-grid:not(.is-filtered) .project-item:nth-child(-n+2) .project-art { height: clamp(340px, 31vw, 505px); }
+.project-grid.is-filtered .project-item .project-art { height: clamp(240px, 22vw, 365px); }
 .art-scene { width: 100%; height: 100%; position: relative; transition: transform 1.2s var(--ease); transform: translate3d(var(--card-x, 0px), var(--card-y, 0px), 0); }
 .project-card:hover .project-art { border-radius: 0; }
 .card-open { position: absolute; bottom: 18px; right: 18px; border-radius: 40px; background: #f4f2eae8; color: #252a21; display: flex; align-items: center; gap: 12px; padding: 11px 15px; font-size: 10px; z-index: 5; opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .4s var(--ease); }
@@ -124,8 +128,8 @@ h1 em:after { content: ''; position: absolute; height: 4px; bottom: -7px; backgr
 }
 @media (max-width: 800px) {
   .hero-content { grid-template-columns: 1fr 1fr; }.hero-copy { z-index: 3; }.sculpture-stage { margin-left: -50px; }
-  .projects { padding-top: 20px; }.project-item, .project-item:nth-child(1), .project-item:nth-child(2), .project-grid.is-filtered .project-item { grid-column: span 6; }
-  .project-item:nth-child(-n+2) .project-art { height: 320px; }.project-art, .project-grid.is-filtered .project-art { height: 260px; }.card-open { display: none; }
+  .projects { padding-top: 20px; }.project-item, .game-grid .project-item:nth-child(1), .game-grid .project-item:nth-child(2), .project-grid.is-filtered .project-item { grid-column: span 6; }
+  .game-grid:not(.is-filtered) .project-item:nth-child(-n+2) .project-art { height: 320px; }.project-art, .project-grid.is-filtered .project-item .project-art { height: 260px; }.card-open { display: none; }
 }
 @media (max-width: 600px) {
   html { scroll-padding-top: 24px; }
@@ -134,11 +138,12 @@ h1 em:after { content: ''; position: absolute; height: 4px; bottom: -7px; backgr
   .sculpture-stage { height: 180px; width: 100%; margin: 0; }.sculpture-note { top: 20%; right: 5%; }.sculpture-halo { width: 290px; top: -5%; }.motion-toggle { bottom: 8px; right: 0; font-size: 9px; }.sculpture-shadow { bottom: 65px; }
   .projects { padding-top: 20px; padding-bottom: 32px; }.section-heading { display: block; margin-bottom: 26px; }.section-heading h2 { font-size: 20px; }
   .filter-bar { flex-wrap: wrap; gap: 7px; padding: 9px 0; margin-bottom: 24px; }.filters { gap: 0; width: 100%; }.tab-btn { padding: 11px 12px; font-size: 11px; flex: 1; white-space: nowrap; }.tab-btn span { font-size: 8px; margin-left: 4px; }#result-count { margin: 4px 0 3px auto; font-size: 9px; }
-  .project-grid { gap: 33px 14px; }.project-item, .project-item:nth-child(1), .project-item:nth-child(2), .project-grid.is-filtered .project-item { grid-column: span 12; }.project-art, .project-item:nth-child(-n+2) .project-art, .project-grid.is-filtered .project-art { height: 300px; }.project-item:nth-child(-n+2) .project-art { height: 340px; }.project-title h3 { font-size: 21px; }.project-info { padding-top: 16px; }.project-info p { font-size: 13px; margin: 8px 0 9px; }.project-type { font-size: 10px; }.card-open { display: flex; opacity: 1; transform: none; font-size: 9px; padding: 9px 12px; }
+  .project-group + .project-group { margin-top: 44px; padding-top: 24px; }.project-group-title { margin-bottom: 18px; }
+  .project-grid { gap: 33px 14px; }.project-item, .game-grid .project-item:nth-child(1), .game-grid .project-item:nth-child(2), .project-grid.is-filtered .project-item { grid-column: span 12; }.project-art, .game-grid:not(.is-filtered) .project-item:nth-child(-n+2) .project-art, .project-grid.is-filtered .project-item .project-art { height: 300px; }.game-grid:not(.is-filtered) .project-item:nth-child(-n+2) .project-art { height: 340px; }.project-title h3 { font-size: 21px; }.project-info { padding-top: 16px; }.project-info p { font-size: 13px; margin: 8px 0 9px; }.project-type { font-size: 10px; }.card-open { display: flex; opacity: 1; transform: none; font-size: 9px; padding: 9px 12px; }
   .about-link { font-size: 11px; margin-top: 16px; }
   .back-top { font-size: 10px; gap: 12px; }
 }
-@media (max-width: 350px) { .site-header nav { gap: 10px; }.site-header nav a { font-size: 10px; }.site-header { gap: 10px; }.brand { font-size: 13px; }.brand-symbol svg { width: 18px; }.tab-btn { padding: 11px 8px; }.hero-copy h1 { font-size: 24px; }.project-art, .project-item:nth-child(-n+2) .project-art { height: 280px; }.section-heading h2 { font-size: 20px; } }
+@media (max-width: 350px) { .site-header nav { gap: 10px; }.site-header nav a { font-size: 10px; }.site-header { gap: 10px; }.brand { font-size: 13px; }.brand-symbol svg { width: 18px; }.tab-btn { padding: 11px 8px; }.hero-copy h1 { font-size: 24px; }.project-art, .game-grid:not(.is-filtered) .project-item:nth-child(-n+2) .project-art { height: 280px; }.section-heading h2 { font-size: 20px; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *:before, *:after { animation: none !important; transition: none !important; }

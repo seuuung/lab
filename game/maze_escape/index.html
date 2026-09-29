@@ -12,9 +12,11 @@
       gtag('config', 'G-T0XQB053HX');
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>3D 랜덤 미로 탈출</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#101c25">
+    <meta name="description" content="출구만 찾는 탐험 모드와 괴물을 피해 탈출하는 추격 모드를 즐기는 3D 미로 게임">
+    <title>Maze Runner — 미로 탐험</title>
+    <link rel="stylesheet" href="style.css?v=4">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 </head>
@@ -34,15 +36,16 @@
         <div class="ch-line vertical"></div>
     </div>
 
-    <div id="hud">
-        <span class="orbitron" style="font-size: 0.9rem; letter-spacing: 3px;">TIME ELAPSED</span>
-        <div id="timer-display" class="orbitron">00:00</div>
+    <div id="hud" aria-label="탐험 정보">
+        <div class="hud-title"><span class="hud-emblem" aria-hidden="true">◇</span><span>MAZE <strong>RUNNER</strong></span></div>
+        <div class="hud-objective"><span class="objective-dot" aria-hidden="true"></span><span id="objective-text">출구 문을 찾으세요</span></div>
+        <div class="hud-timer"><span>탐험 시간</span><strong id="timer-display" class="orbitron">00:00</strong></div>
     </div>
 
     <!-- 모바일 터치 UI 레이어 -->
     <div id="mobile-ui">
         <div id="look-zone" class="touch-zone">
-            <span class="look-hint">화면을 밀어 시점 회전</span>
+            <span class="look-hint">화면을 밀어 둘러보기</span>
         </div>
         <div id="joystick-zone" class="touch-zone" aria-label="이동 조이스틱">
             <div id="joystick-base">
@@ -61,42 +64,46 @@
 
     <div id="blocker">
         <div id="instructions">
+            <span class="panel-kicker">THE LOST LABYRINTH · 01</span>
+            <div class="panel-emblem" aria-hidden="true">◇</div>
             <h1 class="orbitron">MAZE RUNNER</h1>
+            <p class="panel-lede">길을 기억하고, 흔적을 남기며 출구를 찾으세요.</p>
+            <div class="mode-picker" role="group" aria-label="게임 모드 선택">
+                <button class="mode-option selected" type="button" data-mode="explore" aria-pressed="true"><strong>◇ 탐험</strong><span>넓은 미로 · 괴물 없음</span></button>
+                <button class="mode-option" type="button" data-mode="chase" aria-pressed="false"><strong>◆ 추격</strong><span>작은 미로 · 괴물 추격</span></button>
+            </div>
             <div id="desktop-desc">
-                <p>
-                    <span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span
-                        class="key">D</span> : 이동<br>
-                    <strong>마우스</strong> : 시야 조작<br>
-                    <strong>좌클릭</strong> : 마커 스프레이 <span style="color:#ff0055">(빈 벽: 칠하기, 마커: 지우기)</span><br>
-                    <br>빛나는 <strong style="color: #00f0ff;">파란색 포탈</strong>을 찾아 탈출하세요!
-                </p>
-                <p class="blink" style="font-size: 1.2rem; font-weight: bold; color: #00f0ff; margin-top: 30px;">[ 화면을
-                    클릭하여 접속 ]</p>
+                <div class="instruction-list">
+                    <div><span class="key-group"><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span></span><span>이동</span></div>
+                    <div><span class="key-group">마우스</span><span>시점 회전</span></div>
+                    <div><span class="key-group">좌클릭</span><span>벽에 마커 칠하기 · 지우기</span></div>
+                </div>
             </div>
-            <div id="mobile-desc" style="display: none;">
-                <p>
-                    <strong>왼쪽 하단</strong> : 이동 조이스틱<br>
-                    <strong>조이스틱 밖 화면</strong> : 밀어서 시야 조작<br>
-                    <strong>우측 하단 버튼</strong> : 마커 칠하기/지우기<br>
-                    <br>빛나는 <strong style="color: #00f0ff;">파란색 포탈</strong>을 찾아 탈출하세요!
-                </p>
-                <p class="blink" style="font-size: 1.2rem; font-weight: bold; color: #00f0ff; margin-top: 30px;">[ 화면을
-                    터치하여 접속 ]</p>
+            <div id="mobile-desc">
+                <div class="instruction-list">
+                    <div><span class="key-group">왼쪽 원</span><span>이동</span></div>
+                    <div><span class="key-group">화면 밀기</span><span>시점 회전</span></div>
+                    <div><span class="key-group">마커 버튼</span><span>벽에 흔적 남기기 · 지우기</span></div>
+                </div>
             </div>
+            <button id="start-button" type="button" class="primary-button">탐험 시작 <span aria-hidden="true">→</span></button>
+            <p class="panel-footnote">출구라고 적힌 문에 다가가면 탈출합니다</p>
         </div>
     </div>
 
     <div id="win-screen">
         <div class="win-panel">
-            <h1 class="orbitron glow-text">SYSTEM CLEAR</h1>
-            <p>탈출 소요 시간: <span id="final-time" class="orbitron"
-                    style="color: #00f0ff; font-size: 1.5rem; margin-left: 10px;">00:00</span></p>
-            <!-- location.reload() 대신 resetGame() 함수 호출로 변경 -->
-            <button class="orbitron" onclick="resetGame()">REBOOT SYSTEM</button>
+            <span id="result-kicker" class="panel-kicker">THE LOST LABYRINTH · COMPLETE</span>
+            <div class="panel-emblem win-emblem" aria-hidden="true">✦</div>
+            <h1 id="result-title" class="orbitron glow-text">탈출 성공!</h1>
+            <p id="result-description" class="panel-lede">길을 찾아 미로를 빠져나왔습니다.</p>
+            <div class="result-time"><span>탐험 시간</span><strong id="final-time" class="orbitron">00:00</strong></div>
+            <button class="primary-button" type="button" onclick="resetGame()">새 미로 · 모드 선택 <span aria-hidden="true">→</span></button>
         </div>
     </div>
 
-    <script src="game.js?v=2"></script>
+    <script src="chase_rules.js"></script>
+    <script src="game.js?v=6"></script>
 </body>
 
 </html>

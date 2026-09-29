@@ -46,14 +46,23 @@ function makeHome({ hash = '', reduced = false } = {}) {
     return card;
   });
   const buttons = [...html.matchAll(/class="tab-btn[^"]*" data-filter="([^"]+)"/g)].map(m => new Element({ filter: m[1] }));
-  const grid = new Element(), github = new Element();
-  document.querySelectorAll = selector => ({ '.tab-btn': buttons, '.project-item': items, '.project-card': cards, 'a[href*="github.com"]': [github] }[selector] || []);
-  document.querySelector = selector => ({ '.project-grid': grid }[selector]);
+  const grids = [...html.matchAll(/<div class="project-grid /g)].map(() => new Element());
+  const groups = [...html.matchAll(/<div class="project-group" data-group="([^"]+)"/g)].map(m => new Element({ group: m[1] }));
+  const github = new Element();
+  document.querySelectorAll = selector => ({ '.tab-btn': buttons, '.project-item': items, '.project-card': cards, '.project-grid': grids, '.project-group': groups, 'a[href*="github.com"]': [github] }[selector] || []);
   document.getElementById = id => ids[id];
   const context = { document, window, matchMedia: () => media, location: { hash }, history: { replaceState(a, b, value) { context.location.hash = value; } }, Event: class { constructor(type) { this.type = type; } }, innerHeight: 800, scrollY: 300, requestAnimationFrame: () => 1, Date };
   vm.runInNewContext(code, context);
-  return { context, items, cards, buttons, ids, grid, root, window, document, media, events, github };
+  return { context, items, cards, buttons, ids, grids, groups, root, window, document, media, events, github };
 }
+
+test('games and apps have separate groups, with every app after the games', () => {
+  const categories = [...html.matchAll(/<article class="project-item" data-category="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(categories, [...Array(10).fill('game'), ...Array(3).fill('app')]);
+  assert.match(html, /data-group="game" aria-labelledby="game-projects-title"[\s\S]*?id="game-projects-title">게임<\/h3>/);
+  assert.match(html, /data-group="app" aria-labelledby="app-projects-title"[\s\S]*?id="app-projects-title">앱<\/h3>/);
+  assert.ok(html.indexOf('class="project-grid app-grid"') > html.indexOf('data-category="game" data-number="11"'));
+});
 
 test('13 projects remain available without JavaScript, with valid destinations and safe external links', () => {
   const articles = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/g)];
@@ -85,7 +94,7 @@ test('project names retain their source language instead of forced Korean transl
   assert.equal(names['game/maze_escape/index.html'], 'Maze Runner');
   assert.equal(names['game/3D_%20minesweeper/index.html'], '3D 지뢰찾기');
   assert.equal(names['game/choi_circle/index.html'], '최원형');
-  assert.equal(names['game/signal_room/index.html'], 'Signal Room');
+  assert.equal(names['game/signal_room/index.html'], 'Little Loop Bus');
   assert.ok(Object.values(names).includes('Spatial Mine'));
 });
 
@@ -108,6 +117,8 @@ test('category filters show exactly the right projects and accessible pressed st
     assert.equal(button.attrs['aria-pressed'], 'true');
     assert.equal(env.context.location.hash, '#' + category);
     assert.equal(env.ids['result-count'].textContent, `총 ${visible.length}개`);
+    assert.deepEqual(env.groups.map(group => group.hidden), [category === 'app', category === 'game']);
+    assert.ok(env.grids.every(grid => grid.classList.contains('is-filtered') === (category !== 'all')));
   }
 });
 

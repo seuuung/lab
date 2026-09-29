@@ -2,10 +2,10 @@
 
 (() => {
     const colors = [
-        { id: 'coral', name: '코랄', symbol: '●', hex: '#ff7d78', exit: 'coral' },
-        { id: 'cyan', name: '시안', symbol: '◆', hex: '#54e4f2', exit: 'cyan' },
-        { id: 'amber', name: '앰버', symbol: '■', hex: '#ffd46a', exit: 'amber' },
-        { id: 'violet', name: '바이올렛', symbol: '▲', hex: '#ba9cff', exit: 'violet' }
+        { id: 'coral', name: '딸기 정류장', symbol: '●', hex: '#eb7467', exit: 'coral' },
+        { id: 'cyan', name: '바다 정류장', symbol: '◆', hex: '#59afc5', exit: 'cyan' },
+        { id: 'amber', name: '햇살 정류장', symbol: '■', hex: '#e4a846', exit: 'amber' },
+        { id: 'violet', name: '꽃길 정류장', symbol: '▲', hex: '#a889c7', exit: 'violet' }
     ];
     const exits = ['coral', 'cyan', 'amber', 'violet'];
     const routes = {

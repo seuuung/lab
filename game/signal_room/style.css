@@ -144,3 +144,129 @@ h1 { margin: 0; font-size: clamp(30px, 4vw, 50px); letter-spacing: -.07em; line-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* The same switchboard game is presented as a warm village bus route. */
+:root { color-scheme: light; background: #fff4db; color: #2b473b; }
+body { background: radial-gradient(circle at 75% -20%, #fffdf0 0, #fff4db 50%, #f4e3bd 100%); }
+:focus-visible { outline-color: #d46e4c; }
+.topbar { border-bottom-color: #c9b992; background: #fff9eacc; }
+.home-link, .top-button { border-color: #dac7a1; background: #fffdf3; color: #345747; }
+.home-link:hover, .top-button:not(:disabled):hover { border-color: #df855b; background: #fff0d8; }
+.shortcut { border-color: #ddc6a3; color: #8c795e; }
+.brand { color: #688370; }
+.brand strong { color: #285441; }
+.brand-mark { border-color: #e9b87e; color: #9d633f; box-shadow: 0 2px 8px #bb966755; font-size: 19px; }
+.eyebrow { color: #c36b46; }
+.subtitle { color: #6c806e; }
+.goal-note { border-left-color: #e68155; background: #fff8e9; }
+.goal-note span { color: #c7744e; }
+.game-panel { border-color: #dac9a8; background: #fffdf5; box-shadow: 0 22px 60px #9a77452e, inset 0 1px #fff; }
+.hud { border-bottom-color: #e7d9be; }
+.hud-cell { border-right-color: #e7d9be; }
+.hud-cell span { color: #8a917b; }
+.health-cell strong { color: #d36a54; }
+.queue-bar { border-bottom-color: #e7d9be; background: #fffaf0; }
+.wave-label { color: #528463; }
+.live-dot { background: #79b780; box-shadow: 0 0 8px #6fad79; }
+.queue-caption { color: #788e7b; }
+.queue-chip { border-color: color-mix(in srgb, var(--chip) 55%, #fff); background: color-mix(in srgb, var(--chip) 16%, #fff); color: #385a49; }
+.queue-chip b { color: var(--chip); }
+.queue-empty { color: #8d9c83; }
+.board-shell { background: #dceec5; }
+.overlay { background: #3656429e; }
+.overlay-card { border-color: #f1dab8; background: linear-gradient(145deg, #fffdf1, #fff1d9); box-shadow: 0 18px 55px #25482a66, inset 0 1px #fff; }
+.overlay-kicker { color: #cd704a; }
+.overlay-card p { color: #617867; }
+.overlay-detail { border-color: #d6e3bd; background: #edf5df; color: #4d7659; }
+.primary-button { background: #e47a53; color: #fffdf5; }
+.primary-button:hover { background: #c76040; }
+.controls-caption { color: #81927e; }
+.controls-caption span:first-child { color: #365746; }
+.switch-button { border-color: #dec9a5; background: #fff8e8; color: #365646; }
+.switch-button:not(:disabled):hover { border-color: #dc825c; background: #fff0d9; }
+.switch-key { border-color: #dfa77b; color: #c56a45; }
+.switch-button small { color: #678670; }
+.switch-arrow { color: #d47750; }
+.hint { color: #728771; }
+
+.next-queue, .queue-items { min-width: 0; }
+.queue-chip { min-width: 92px; min-height: 35px; padding: 3px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border-radius: 9px; }
+.queue-destination { color: #385a49; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.queue-bus { position: relative; width: 39px; height: 25px; flex: none; border: 2px solid #365346; border-radius: 7px; background: var(--chip); box-shadow: inset 0 1px #ffffffa8, 0 2px 2px #36534633; }
+.queue-bus::before, .queue-bus::after { content: ''; position: absolute; left: 7px; width: 8px; height: 4px; border-radius: 2px; background: #34483f; box-shadow: 18px 0 #34483f; }
+.queue-bus::before { top: -5px; }
+.queue-bus::after { bottom: -5px; }
+.queue-windshield { position: absolute; right: 2px; top: 3px; width: 6px; height: 15px; border-radius: 2px 4px 4px 2px; background: #bde7e8; border-left: 1px solid #578b8f; }
+.queue-roof { position: absolute; left: 5px; top: 3px; width: 20px; height: 15px; display: grid; place-items: center; border-radius: 4px; background: #fff8e4; color: #345346; font-size: 12px; font-weight: 900; line-height: 1; }
+
+@media (max-width: 700px) {
+    .queue-chip { min-width: 42px; min-height: 33px; padding: 2px 3px; }
+    .queue-destination { display: none; }
+    .queue-bus { width: 34px; height: 23px; }
+    .queue-bus::before, .queue-bus::after { left: 6px; width: 7px; box-shadow: 15px 0 #34483f; }
+    .queue-windshield { height: 13px; }
+    .queue-roof { width: 17px; height: 13px; font-size: 11px; }
+}
+@media (max-width: 380px) {
+    .queue-bar, .queue-items { gap: 4px; }
+    .wave-label { gap: 5px; font-size: 10px; }
+    .queue-chip { min-width: 37px; padding: 2px; }
+    .queue-bus { width: 31px; }
+    .queue-bus::before, .queue-bus::after { left: 5px; box-shadow: 13px 0 #34483f; }
+    .queue-roof { left: 4px; width: 15px; }
+}
+
+/* Compact dashboard and large touch controls keep the route readable on a phone. */
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.sound-button { min-width: 104px; justify-content: center; }
+.hud { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.hud-cell { min-width: 0; }
+.combo-cell strong { color: #bc7144; }
+.combo-cell.combo-active { background: #fff0cf; }
+.combo-cell.combo-active strong::after { content: ' ✦'; font-size: 14px; }
+.wave-toast { position: absolute; z-index: 1; top: 16px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 30px); padding: 9px 17px; border: 2px solid #fff9ea; border-radius: 99px; background: #387959; color: #fffdf4; box-shadow: 0 5px 16px #39604466; font-size: 13px; font-weight: 900; text-align: center; white-space: nowrap; pointer-events: none; }
+.wave-toast[hidden] { display: none; }
+.help-button { min-height: 32px; padding: 4px 10px; border: 1px solid #dbbf98; border-radius: 8px; background: #fff9e8; color: #7d6045; font-size: 11px; font-weight: 800; }
+.help-button:hover { background: #ffedcf; }
+.switch-button:active:not(:disabled) { transform: scale(.98); background: #ffebcf; }
+
+@media (max-width: 700px) {
+    .top-actions { gap: 5px; }
+    .sound-button { min-width: 44px; padding: 0 9px; font-size: 18px; }
+    .sound-label { display: none; }
+    .hud { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .hud-cell { min-height: 53px; padding: 8px 10px; border-bottom: 1px solid #e7d9be; }
+    .hud-cell:nth-child(3n) { border-right: 0; }
+    .hud-cell:nth-child(n + 4) { border-bottom: 0; }
+    .hud-cell:last-child { display: flex; }
+    .hud-cell span { font-size: 11px; letter-spacing: 0; }
+    .hud-cell strong { font-size: 18px; }
+    .health-cell strong { font-size: 13px; white-space: nowrap; }
+    .queue-bar { min-height: 45px; }
+    .board-shell, .app-shell.playing .board-shell { height: clamp(270px, calc(100svh - 435px), 420px); min-height: 270px; }
+    .controls-caption { align-items: center; padding-top: 10px; }
+    .controls-caption span:first-child { font-size: 13px; }
+    .switch-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+    .switch-button { min-height: 54px; padding: 8px 10px; gap: 9px; }
+    .switch-button:first-child { grid-column: 1 / -1; }
+    .switch-key { min-width: 28px; height: 28px; font-size: 11px; }
+    .switch-button strong { font-size: 13px; }
+    .switch-button small { font-size: 11px; }
+    .switch-arrow { display: block; font-size: 18px; }
+    .hint { font-size: 11px; }
+    .overlay-card p { font-size: 12px; }
+    .overlay-detail { font-size: 11px; }
+}
+
+@media (max-width: 380px) {
+    .brand { display: none; }
+    .topbar { justify-content: space-between; }
+    .hud-cell { padding-left: 7px; padding-right: 7px; }
+    .health-cell strong { font-size: 11px; }
+    .switch-key, .switch-arrow { display: none; }
+    .switch-button { gap: 0; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .board-shell, .app-shell.playing .board-shell { height: max(160px, calc(100svh - 205px)); min-height: 160px; }
+}

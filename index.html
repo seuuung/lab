@@ -73,7 +73,9 @@
         <button type="button" class="tab-btn" data-filter="game" aria-pressed="false">게임 <span id="count-game">10</span></button>
         <button type="button" class="tab-btn" data-filter="app" aria-pressed="false">앱 <span id="count-app">03</span></button>
       </div><span id="result-count" role="status" aria-live="polite">총 13개</span></div>
-      <div class="project-grid">
+      <div class="project-group" data-group="game" aria-labelledby="game-projects-title">
+        <h3 class="project-group-title" id="game-projects-title">게임</h3>
+        <div class="project-grid game-grid">
         <article class="project-item" data-category="game" data-number="07">
           <a class="project-card" data-name="그림자 퍼즐" href="game/shadow_puzzle/index.html">
             <div class="project-art art-shadow" aria-hidden="true">
@@ -99,12 +101,12 @@
           </a>
         </article>
         <article class="project-item" data-category="game" data-number="13">
-          <a class="project-card" data-name="신호 분기실" href="game/signal_room/index.html">
-            <div class="project-art art-signal" aria-hidden="true">
-              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/signal-room-art.svg" width="1200" height="750" alt="" loading="lazy" decoding="async"></div>
+          <a class="project-card" data-name="한 바퀴 버스" href="game/signal_room/index.html">
+            <div class="project-art art-bus" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail game-thumbnail" src="assets/thumbnails/little-loop-bus-art.svg" width="1200" height="750" alt="" loading="lazy" decoding="async"></div>
               <span class="card-open">직접 해보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
             </div>
-            <div class="project-info"><div class="project-title"><h3>Signal Room</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+            <div class="project-info"><div class="project-title"><h3>Little Loop Bus</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
               <span class="project-type">게임</span>
             </div>
           </a>
@@ -142,42 +144,6 @@
             </div>
             <div class="project-info"><div class="project-title"><h3>3D 지뢰찾기</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
               <span class="project-type">게임</span>
-            </div>
-          </a>
-        </article>
-        <article class="project-item" data-category="app" data-number="01">
-          <a class="project-card" data-name="온식 (OnSic)" href="https://play.google.com/store/apps/details?id=com.onsic.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
-            <div class="project-art art-food app-art" aria-hidden="true">
-              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=s0-br30" data-fallback="assets/thumbnails/onsic.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
-
-              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            </div>
-            <div class="project-info"><div class="project-title"><h3>온식</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <span class="project-type">Android</span>
-            </div>
-          </a>
-        </article>
-        <article class="project-item" data-category="app" data-number="02">
-          <a class="project-card" data-name="Spatial Mine" href="https://play.google.com/store/apps/details?id=spatialmine.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
-            <div class="project-art art-spatial app-art" aria-hidden="true">
-              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA=s0-br30" data-fallback="assets/thumbnails/spatial-mine.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
-
-              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            </div>
-            <div class="project-info"><div class="project-title"><h3>Spatial Mine</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <span class="project-type">Android</span>
-            </div>
-          </a>
-        </article>
-        <article class="project-item" data-category="app" data-number="12">
-          <a class="project-card" data-name="SelPick" href="https://play.google.com/store/apps/details?id=com.selpick.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
-            <div class="project-art art-selpick app-art" aria-hidden="true">
-              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/n1ihtZCBRJ1quEqMq8yJCUMM3rWBCrhnuTm1J7XdvGOokU5p8fb9DMlSisj2sJxyw2hVg0QG2ijtLkJVdxkN=s0-br30" data-fallback="assets/thumbnails/selpick.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
-
-              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            </div>
-            <div class="project-info"><div class="project-title"><h3>SelPick</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <span class="project-type">Android</span>
             </div>
           </a>
         </article>
@@ -229,6 +195,48 @@
             </div>
           </a>
         </article>
+        </div>
+      </div>
+      <div class="project-group" data-group="app" aria-labelledby="app-projects-title">
+        <h3 class="project-group-title" id="app-projects-title">앱</h3>
+        <div class="project-grid app-grid">
+        <article class="project-item" data-category="app" data-number="01">
+          <a class="project-card" data-name="온식 (OnSic)" href="https://play.google.com/store/apps/details?id=com.onsic.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <div class="project-art art-food app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/aoFVXWjaN94lLAI_YDBSsKmFSbiRVYn5sVtIR0iz1QiHtl0ndmBuCaK7dcmlpV6a2jpUFpYmJ9MQ1xT1B4xCPw=s0-br30" data-fallback="assets/thumbnails/onsic.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
+              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </div>
+            <div class="project-info"><div class="project-title"><h3>온식</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">Android</span>
+            </div>
+          </a>
+        </article>
+        <article class="project-item" data-category="app" data-number="02">
+          <a class="project-card" data-name="Spatial Mine" href="https://play.google.com/store/apps/details?id=spatialmine.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <div class="project-art art-spatial app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/NDMd9zUIMo1UIB-llPv68TL4A70FcR5AxStBSjIjG3Xb1GoxmAiB9Odf-Nve0WaRUwe0DtyBjT4Dk6GietDGnA=s0-br30" data-fallback="assets/thumbnails/spatial-mine.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
+              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </div>
+            <div class="project-info"><div class="project-title"><h3>Spatial Mine</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">Android</span>
+            </div>
+          </a>
+        </article>
+        <article class="project-item" data-category="app" data-number="12">
+          <a class="project-card" data-name="SelPick" href="https://play.google.com/store/apps/details?id=com.selpick.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
+            <div class="project-art art-selpick app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="https://play-lh.googleusercontent.com/n1ihtZCBRJ1quEqMq8yJCUMM3rWBCrhnuTm1J7XdvGOokU5p8fb9DMlSisj2sJxyw2hVg0QG2ijtLkJVdxkN=s0-br30" data-fallback="assets/thumbnails/selpick.png" width="512" height="512" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
+
+              <span class="card-open">앱 살펴보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </div>
+            <div class="project-info"><div class="project-title"><h3>SelPick</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">Android</span>
+            </div>
+          </a>
+        </article>
+        </div>
       </div>
       <p id="empty-state" hidden>등록된 프로젝트가 없습니다.</p>
     </section>

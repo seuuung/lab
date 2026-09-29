@@ -4,7 +4,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const buttons = [...document.querySelectorAll('.tab-btn')];
   const items = [...document.querySelectorAll('.project-item')];
-  const grid = document.querySelector('.project-grid');
+  const grids = [...document.querySelectorAll('.project-grid')];
+  const groups = [...document.querySelectorAll('.project-group')];
   const motionButton = document.getElementById('motion-toggle');
   const soundButton = document.getElementById('sfx-toggle-btn');
   const counts = items.reduce((result, item) => {
@@ -76,7 +77,10 @@
 
   function filterProjects(category, animate = false) {
     if (!Object.hasOwn(counts, category)) return;
-    grid.classList.toggle('is-filtered', category !== 'all');
+    grids.forEach(grid => grid.classList.toggle('is-filtered', category !== 'all'));
+    groups.forEach(group => {
+      group.hidden = category !== 'all' && group.dataset.group !== category;
+    });
     let visible = 0;
     items.forEach(item => {
       animations.get(item)?.cancel();

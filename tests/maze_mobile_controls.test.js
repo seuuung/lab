@@ -51,7 +51,7 @@ const context = vm.createContext({
     document, window, camera,
     joyDelta: { x: 0, y: 0 },
     resetMobileInput() {},
-    gameStarted: true, gameWon: false,
+    gameStarted: true, gameEnded: false,
     handleMarkerAction() { markerCount++; },
     THREE: {
         Euler: class {
@@ -99,7 +99,7 @@ elements['action-btn'].emit('click', { detail: 1 });
 assert.equal(markerCount, 1, 'touch action fires once');
 elements['action-btn'].emit('click', { detail: 0 });
 assert.equal(markerCount, 2, 'keyboard action also works');
-context.gameWon = true;
+context.gameEnded = true;
 elements['action-btn'].emit('pointerdown', { pointerId: 6 });
 assert.equal(markerCount, 2, 'action is disabled after win');
 
