@@ -172,59 +172,70 @@ test('analytics retains established project identities and destinations independ
   assert.equal(env.events.at(-1)[1], 'profile_click');
 });
 
-function makeSculpture(mode = 'loaded') {
-  const document = new Element();
-  const sculpture = new Element(), stage = new Element(), figure = new Element(), note = new Element();
-  const images = Array.from({ length: 5 }, () => ({ decode: () => mode === 'loaded' ? Promise.resolve() : Promise.reject(new Error('Image unavailable')) }));
-  sculpture.closest = () => stage;
-  sculpture.querySelector = () => figure;
-  stage.querySelector = () => note;
-  figure.querySelectorAll = () => images;
-  document.getElementById = () => sculpture;
-  vm.runInNewContext(sculptureCode, { document });
-  return { sculpture, stage, figure, note, images };
+function makeTree(reduced = true) {
+  class SvgElement extends Element {
+    constructor(tag = 'g') { super(); this.tag = tag; this.children = []; }
+    appendChild(child) { child.parent = this; this.children.push(child); return child; }
+    replaceChildren() { this.children.forEach(child => { child.parent = null; }); this.children = []; }
+    remove() { if (this.parent) this.parent.children = this.parent.children.filter(child => child !== this); this.parent = null; }
+    closest(selector) {
+      for (let current = this; current; current = current.parent) {
+        if (selector === '.tree-fruit' && current.attrs.class === 'tree-fruit') return current;
+      }
+      return null;
+    }
+  }
+  const ids = Object.fromEntries(['citrus-tree', 'tree-crown', 'fallen-fruit', 'fruit-count', 'reset-tree'].map(id => [id, new SvgElement()]));
+  const document = { getElementById: id => ids[id], createElementNS: (_, tag) => new SvgElement(tag), documentElement: { dataset: { motion: reduced ? 'paused' : 'running' } } };
+  const window = new SvgElement();
+  vm.runInNewContext(sculptureCode, { document, window, matchMedia: () => ({ matches: reduced }), cancelAnimationFrame() {}, requestAnimationFrame() { return 1; } });
+  const fruitLayer = () => ids['tree-crown'].children.at(-1);
+  return { ids, window, fruitLayer };
 }
 
-test('jewel butterfly has four separately moving wings and a stationary body layer', () => {
-  assert.equal((html.match(/class="butterfly-wing wing-/g) || []).length, 4);
-  assert.match(html, /class="butterfly-body"/);
-  assert.match(html, /class="sculpture-fallback"/);
-  assert.match(css, /@keyframes wing-upper-left-beat/);
-  assert.match(css, /@keyframes wing-lower-right-beat/);
-  assert.match(css, /\.motion-paused \*[^\n]*animation-play-state: paused/);
-  for (const name of ['poster', 'wings', 'body']) {
-    assert.ok(fs.existsSync(path.join(base, 'assets', 'hero', `robot-butterfly-${name}.webp`)));
-  }
+test('3D citrus tree keeps a vector fallback with reachable fruit', () => {
+  assert.match(html, /<script defer src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/three\.js\/r128\/three\.min\.js"><\/script>/);
+  assert.match(html, /<script defer src="tree3d\.js"><\/script>/);
+  assert.ok(fs.existsSync(path.join(base, 'tree3d.js')));
+  assert.match(html, /id="citrus-tree"[\s\S]*id="tree-crown"/);
+  assert.doesNotMatch(html, /robot-butterfly|butterfly-wing/);
+  assert.match(css, /@keyframes tree-breathe/);
+  assert.doesNotMatch(html, /id="shake-tree"/);
+  assert.match(html, /id="reset-tree"[^>]*aria-label="열매 다시 달기"/);
+  const tree = makeTree();
+  assert.ok(tree.ids['tree-crown'].children.length >= 4);
+  assert.ok(tree.fruitLayer().children.length >= 5);
+  assert.equal(tree.fruitLayer().children[0].attrs.role, 'button');
+  assert.equal(tree.fruitLayer().children[0].attrs.tabindex, '0');
 });
 
-test('loaded image layers replace the poster and remain keyboard inspectable', async () => {
-  const env = makeSculpture();
-  await new Promise(setImmediate);
-  assert.equal(env.stage.classList.contains('sculpture-ready'), true);
-  env.sculpture.fire('keydown', { key: 'ArrowRight', preventDefault() {} });
-  assert.equal(env.figure.properties['--butterfly-y'], '13deg');
-  env.sculpture.fire('keydown', { key: 'Home', preventDefault() {} });
-  assert.equal(env.figure.properties['--butterfly-y'], '8deg');
+test('clicking or keyboard activating a fruit harvests it once', () => {
+  const tree = makeTree();
+  const initial = tree.fruitLayer().children.length;
+  const first = tree.fruitLayer().children[0];
+  first.fire('click', { stopPropagation() {} });
+  first.fire('click', { stopPropagation() {} });
+  assert.equal(tree.ids['fruit-count'].textContent, '01');
+  assert.equal(tree.fruitLayer().children.length, initial - 1);
+  assert.equal(tree.ids['fallen-fruit'].children.length, 1);
+  tree.fruitLayer().children[0].fire('keydown', { key: 'Enter', preventDefault() {} });
+  assert.equal(tree.ids['fruit-count'].textContent, '02');
 });
 
-test('failed image decoding keeps the complete poster and removes the keyboard target', async () => {
-  const env = makeSculpture('failed');
-  await new Promise(setImmediate);
-  assert.equal(env.stage.classList.contains('sculpture-ready'), false);
-  assert.equal(env.note.hidden, true);
-  assert.equal(env.sculpture.attrs.tabindex, undefined);
-});
-
-test('drag changes the 3D viewing angle while the body remains anchored', async () => {
-  const env = makeSculpture();
-  await new Promise(setImmediate);
-  env.sculpture.fire('pointerdown', { button: 0, clientX: 10, clientY: 10, pointerId: 1 });
-  env.sculpture.fire('pointermove', { clientX: 60, clientY: 35 });
-  assert.equal(env.figure.properties['--butterfly-y'], '16deg');
-  assert.equal(env.figure.properties['--butterfly-x'], '-6deg');
-  env.sculpture.fire('pointerup');
-  env.sculpture.fire('pointermove', { clientX: 90, clientY: 90 });
-  assert.equal(env.figure.properties['--butterfly-y'], '16deg');
+test('dragging releases fruit; undo restores the complete tree', () => {
+  const tree = makeTree(false);
+  const initial = tree.fruitLayer().children.length;
+  tree.ids['citrus-tree'].fire('pointerdown', { target: tree.ids['citrus-tree'], clientX: 10, clientY: 10 });
+  tree.ids['citrus-tree'].fire('pointermove', { clientX: 40, clientY: 10 });
+  assert.equal(tree.ids['tree-crown'].classList.contains('tree-pulling'), true);
+  assert.notEqual(tree.ids['tree-crown'].properties['--pull-angle'], '0deg');
+  tree.ids['citrus-tree'].fire('pointerup', { clientX: 50, clientY: 10 });
+  assert.equal(tree.ids['tree-crown'].classList.contains('tree-releasing'), true);
+  assert.equal(tree.ids['fruit-count'].textContent, '03');
+  tree.ids['reset-tree'].fire('click');
+  assert.equal(tree.ids['fruit-count'].textContent, '00');
+  assert.equal(tree.fruitLayer().children.length, initial);
+  assert.equal(tree.ids['fallen-fruit'].children.length, 0);
 });
 
 

@@ -169,8 +169,9 @@ function runTier1Tests() {
     const hasHoverEffectCSS = homeCss.includes('.project-card:hover') && homeCss.includes(':focus-visible');
     assert(hasHoverEffectCSS, 'Tier1-F4-18: 카드 호버 시 시각적 인터랙션 스타일 적용');
 
-    const hasAmbientLight = /id="sculpture"/.test(indexHtml) && /class="sculpture-fallback"/.test(indexHtml);
-    assert(hasAmbientLight, 'Tier1-F4-19: 인터랙티브 조형과 WebGL 대체 그래픽 존재');
+    const hasInteractiveTree = /id="citrus-tree"/.test(indexHtml) && /id="tree-crown"/.test(indexHtml) &&
+        /id="fruit-count"/.test(indexHtml) && /id="reset-tree"/.test(indexHtml) && !/id="shake-tree"/.test(indexHtml);
+    assert(hasInteractiveTree, 'Tier1-F4-19: 인터랙티브 귤나무와 수확 표시 및 되돌리기 버튼 존재');
 
     const hasMainContainer = indexHtml.includes('<main') && homeCss.includes('@media (max-width: 600px)');
     assert(hasMainContainer, 'Tier1-F4-20: 메인 화면과 모바일 전용 레이아웃 존재');

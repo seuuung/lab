@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="home.css">
   <script defer src="home.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="tree3d.js"></script>
   <script defer src="sculpture.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T0XQB053HX">
 </script>
@@ -47,21 +49,33 @@
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-content">
-        <div class="hero-copy"><h1 id="hero-title">승민의 실험실</h1></div>
-        <div class="sculpture-stage">
-          <div class="sculpture-halo" aria-hidden="true"></div>
-          <img class="sculpture-fallback" src="assets/hero/robot-butterfly-poster.webp" width="1536" height="1024" alt="" fetchpriority="high" decoding="async">
-          <div id="sculpture" tabindex="0" role="img" aria-label="가지에 앉아 날개를 움직이는 보석 세공 로봇 나비. 드래그하거나 방향키로 각도를 바꿔볼 수 있습니다.">
-            <div class="butterfly-figure" aria-hidden="true">
-              <div class="butterfly-wing wing-upper-left"><img src="assets/hero/robot-butterfly-wings.webp" width="1536" height="1024" alt="" decoding="async"></div>
-              <div class="butterfly-wing wing-upper-right"><img src="assets/hero/robot-butterfly-wings.webp" width="1536" height="1024" alt="" decoding="async"></div>
-              <div class="butterfly-wing wing-lower-left"><img src="assets/hero/robot-butterfly-wings.webp" width="1536" height="1024" alt="" decoding="async"></div>
-              <div class="butterfly-wing wing-lower-right"><img src="assets/hero/robot-butterfly-wings.webp" width="1536" height="1024" alt="" decoding="async"></div>
-              <img class="butterfly-body" src="assets/hero/robot-butterfly-body.webp" width="1536" height="1024" alt="" decoding="async">
-            </div>
+        <div class="hero-copy">
+          <h1 id="hero-title">승민의 실험실<span class="hero-period">.</span></h1>
+          <p class="hero-instruction">나무를 당겨 흔들거나 열매를 눌러보세요.</p>
+          <div class="tree-count">
+            <span>수확한 열매</span>
+            <span class="tree-count-actions">
+              <strong id="fruit-count" role="status" aria-live="polite">00</strong>
+              <button id="reset-tree" type="button" aria-label="열매 다시 달기" title="열매 다시 달기"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8V3m0 5h5M4.6 8a8 8 0 1 1-1 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </span>
           </div>
-          <div class="sculpture-shadow" aria-hidden="true"></div>
-          <span class="sculpture-note"><i aria-hidden="true">↔</i> 드래그해서 돌려보세요</span>
+        </div>
+        <div class="sculpture-stage tree-stage">
+          <svg id="citrus-tree" viewBox="0 0 900 650" role="img" aria-label="초록 잎과 주황 열매가 달린 귤나무. 열매를 누르거나 나무를 드래그해 흔들 수 있습니다." xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bark" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#813c25"/><stop offset=".35" stop-color="#c8754c"/><stop offset=".72" stop-color="#e7a17a"/><stop offset="1" stop-color="#9b4c2e"/></linearGradient>
+              <linearGradient id="leaf-a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9eae6a"/><stop offset=".42" stop-color="#3c7550"/><stop offset="1" stop-color="#174d39"/></linearGradient>
+              <linearGradient id="leaf-b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b0bd75"/><stop offset=".35" stop-color="#53865a"/><stop offset="1" stop-color="#236044"/></linearGradient>
+              <radialGradient id="fruit-skin" cx=".28" cy=".23" r=".78"><stop stop-color="#ffe0a5"/><stop offset=".18" stop-color="#ffae59"/><stop offset=".52" stop-color="#f16b35"/><stop offset=".83" stop-color="#cd4824"/><stop offset="1" stop-color="#9f351e"/></radialGradient>
+              <radialGradient id="ground"><stop stop-color="#9d684c" stop-opacity=".25"/><stop offset="1" stop-color="#9d684c" stop-opacity="0"/></radialGradient>
+            </defs>
+            <ellipse cx="450" cy="586" rx="286" ry="45" fill="url(#ground)"/>
+            <ellipse cx="450" cy="582" rx="117" ry="16" fill="#9a6544" opacity=".14"/>
+            <g transform="translate(112 150) scale(.75)">
+              <g id="tree-crown"></g>
+              <g id="fallen-fruit"></g>
+            </g>
+          </svg>
           <button id="motion-toggle" class="motion-toggle" type="button" aria-label="모션 멈추기" aria-pressed="false">모션 멈추기 <span aria-hidden="true">Ⅱ</span></button>
         </div>
       </div>

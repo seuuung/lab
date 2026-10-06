@@ -8,7 +8,7 @@
 
 | 경로 | 내용 |
 | --- | --- |
-| `index.html`, `home.css`, `home.js`, `sculpture.js` | 메인 화면과 인터랙션 |
+| `index.html`, `home.css`, `home.js`, `tree3d.js`, `sculpture.js` | 메인 화면, 3D 귤나무와 WebGL 미지원 환경용 벡터 나무 |
 | `assets/` | 썸네일과 시각 자산 |
 | `game/` | 각 게임의 HTML, CSS, JavaScript |
 | `tests/` | 기능·반응형·내비게이션 회귀 검사 |
