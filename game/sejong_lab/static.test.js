@@ -1,0 +1,30 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = name => fs.readFileSync(path.join(__dirname, name), 'utf8');
+const template = read('index.template.html');
+const app = read('app.js');
+const built = read('index.html');
+const docs = read('docs.reference.html');
+const normalized = text => text.replace(/\r\n?/g, '\n');
+for (const name of ['engine.js', 'app.js', 'styles.css', 'docs.reference.html']) assert.ok(normalized(built).includes(normalized(read(name))), `${name} 빌드 누락`);
+assert.ok(!/\/\*INLINE_(?:STYLE|RUNTIME|APP|DOCS)\*\//.test(built));
+assert.equal(built, read('sejong-lab.html'));
+const ids = [...template.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(ids.length, new Set(ids).size, '중복 HTML ID');
+for (const match of app.matchAll(/\$\('#([^' ]+)'\)/g)) assert.ok(ids.includes(match[1]), `HTML 요소 누락: ${match[1]}`);
+for (const name of ['code', 'output', 'graphic']) assert.match(template, new RegExp(`data-view="${name}"`));
+assert.match(template, /id="docs-toggle"[^>]*aria-expanded="false"/);
+assert.match(template, /id="docs-drawer"[^>]*class="docs-drawer hidden"/);
+const sections = [...docs.matchAll(/<section class="reference-section" id="([^"]+)"/g)].map(match=>match[1]);
+assert.equal(sections.length, 11);
+for (const id of sections) assert.match(template, new RegExp(`href="#${id}"`));
+const { parseProgram } = require('./engine.js');
+for (const [, sample] of docs.matchAll(/<pre><code>([\s\S]*?)<\/code><\/pre>/g)) {
+  const source = sample.replaceAll('&gt;', '>').replaceAll('&lt;', '<').replaceAll('&amp;', '&');
+  assert.doesNotThrow(() => parseProgram(source), `문서 예제 구문 오류: ${source}`);
+}
+assert.match(template, /href="\.\.\/\.\.\/index\.html"/);
+assert.ok(fs.existsSync(path.resolve(__dirname, '../../index.html')));
+console.log('단일 HTML 빌드, 편집기 요소 및 모바일 탭 점검 통과');

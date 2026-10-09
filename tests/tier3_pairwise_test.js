@@ -32,7 +32,7 @@ function runTier3Tests() {
     // ----------------------------------------------------
     console.log('[Tier 3] Matrix 1: 탭 필터 × 카테고리 필터링 조합...');
 
-    // 13개 카드 정의
+    // 14개 카드 정의
     const sampleCards = [...indexHtml.matchAll(/<article class="project-item" data-category="([^"]+)"[\s\S]*?<h3>([^<]+)<\/h3>/g)]
         .map(match => ({ category: match[1], name: match[2] }));
 
@@ -44,16 +44,16 @@ function runTier3Tests() {
         });
     }
 
-    // 1-1. 'all' 탭: 13개 전체 카드 표시
+    // 1-1. 'all' 탭: 14개 전체 카드 표시
     const allResults = simulateFilter('all');
-    assertEqual(allResults.length, 13, 'Tier3-M1-01: "all" 탭 활성화 시 13개 전체 카드 노출');
+    assertEqual(allResults.length, 14, 'Tier3-M1-01: "all" 탭 활성화 시 14개 전체 카드 노출');
     assert(allResults.some(c => c.category === 'app'), 'Tier3-M1-02: "all" 탭에 app 카테고리 포함');
     assert(allResults.some(c => c.category === 'game'), 'Tier3-M1-03: "all" 탭에 game 카테고리 포함');
     assert(allResults.some(c => c.name === 'SelPick'), 'Tier3-M1-04: 전체 목록에 SelPick 포함');
 
-    // 1-2. 'app' 탭: 3개 앱 카드만 표시
+    // 1-2. 'app' 탭: 4개 앱 카드만 표시
     const appResults = simulateFilter('app');
-    assertEqual(appResults.length, 3, 'Tier3-M1-05: "app" 탭 활성화 시 3개 앱 카드만 노출');
+    assertEqual(appResults.length, 4, 'Tier3-M1-05: "app" 탭 활성화 시 4개 앱 카드만 노출');
     assert(appResults.every(c => c.category === 'app'), 'Tier3-M1-06: "app" 탭 결과의 모든 카드가 app 카테고리');
 
     // 1-3. 'game' 탭: 10개 게임 카드만 표시
@@ -68,9 +68,9 @@ function runTier3Tests() {
     // 1-5. 탭 연속 전이 시나리오 (all -> app -> game -> lab -> all)
     let currentCards = simulateFilter('all');
     currentCards = simulateFilter('app');
-    assertEqual(currentCards.length, 3, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
+    assertEqual(currentCards.length, 4, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
     currentCards = simulateFilter('all');
-    assertEqual(currentCards.length, 13, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
+    assertEqual(currentCards.length, 14, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
 
 
     // ----------------------------------------------------

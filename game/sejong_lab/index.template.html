@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101719">
+  <meta name="description" content="세종 개발실 — 브라우저에서 한글로 코드를 작성하고 실행하는 작은 프로그래밍 실험실. 제580돌 한글날 기념.">
+  <title>세종 개발실 — 코딩도 우리말로.</title>
+  <style>/*INLINE_STYLE*/</style>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#editor" aria-label="세종 개발실, 편집기로 이동">
+      <span class="brand-symbol"><span>ㅅ</span><span>ㅈ</span></span>
+      <span class="brand-label"><strong>세종 개발실</strong><small>SEJONG DEV LAB</small></span>
+    </a>
+    <div class="nav-links"><span class="nav-live"><i></i> 브라우저 안에서 실행 중</span><span class="nav-divider"></span><a class="header-link home-link" href="../../index.html" aria-label="승민의 실험실 메인 화면으로 돌아가기"><span class="home-link-label">실험실 홈</span><span aria-hidden="true">↖</span></a><button id="header-docs" class="header-link" type="button" aria-controls="docs-drawer" aria-expanded="false">개발 문서 <span>↗</span></button></div>
+  </header>
+
+  <div class="app-shell" id="editor">
+    <aside class="sidebar" aria-label="예제와 학습 메뉴">
+      <div class="sidebar-heading"><span>배움터</span><span class="heading-stroke"></span></div>
+      <div class="sidebar-section-title">차근차근 배워보기 <span>12</span></div>
+      <div id="example-list" class="example-list"></div>
+      <div class="sidebar-bottom">
+        <div class="special-card">
+          <div class="special-visual" aria-hidden="true"><span>ㅎ</span><span>ㄱ</span><span>ㄹ</span></div>
+          <span class="special-eyebrow">2026 · 한글날 특별 기획</span>
+          <strong>우리의 글자로<br>새로운 가능성을.</strong>
+          <span class="special-footer">훈민정음 반포 제580돌 <span>↗</span></span>
+        </div>
+        <p class="sidebar-note">회원가입도, 서버도 필요 없습니다.<br>코드는 이 브라우저에서만 실행됩니다.</p>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section class="intro">
+        <div class="intro-left">
+          <div class="kicker"><span class="kicker-dot">✳</span> 한글날 기념 · 우리말 프로그래밍 실험</div>
+          <h1>코딩도 <em>우리말로.</em></h1>
+          <p>영어가 아닌 한글로 생각하고, 만들고, 실행해 보세요.<br class="desktop-break"> 지금 이곳에서 첫 번째 프로그램이 시작됩니다.</p>
+        </div>
+        <div class="intro-mark" aria-hidden="true"><span class="mark-one">가</span><span class="mark-two">나</span><span class="mark-three">다</span></div>
+      </section>
+
+      <section class="working-topbar" aria-label="작업 공간 도구">
+        <div class="working-title"><span class="working-icon">{ }</span><span>나의 작업실</span><span class="working-crumb">/</span><span id="current-name" class="working-file">첫 인사.세종</span><span id="save-hint" class="save-hint">● 자동 저장됨</span></div>
+        <div class="toolbar">
+          <button id="reset-btn" class="btn btn-subtle" title="현재 예제 초기화"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>초기화</span></button>
+          <button id="share-btn" class="btn btn-subtle" title="코드 공유 링크 복사"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2M8.7 13.4l6.6 4.2"/></svg><span>공유</span></button>
+          <button id="download-btn" class="btn btn-subtle" title="코드를 .세종 파일로 저장"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>내려받기</span></button>
+          <button id="format-btn" class="btn btn-subtle" title="들여쓰기와 끝 공백 정리"><span>코드 정리</span></button>
+          <button id="python-btn" class="btn btn-subtle" aria-expanded="false" aria-controls="python-panel"><span>Python 비교</span></button>
+          <button id="run-btn" class="btn btn-primary" title="Ctrl + Enter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m7 4 14 8-14 8V4Z"/></svg><span>실행하기</span><kbd>⌃ ↵</kbd></button>
+          <button id="stop-btn" class="btn btn-stop hidden" title="실행 중단"><span class="square-icon"></span><span>중단</span></button>
+        </div>
+      </section>
+
+      <div class="mobile-view-tabs" role="tablist" aria-label="작업 화면"><button type="button" data-view="code" class="selected" aria-selected="true">코드</button><button type="button" data-view="output" aria-selected="false">결과</button><button type="button" data-view="graphic" aria-selected="false">그림</button></div>
+      <div class="ide-grid" data-mobile-view="code">
+        <section class="editor-panel panel" aria-label="한글 코드 편집기">
+          <div class="panel-heading">
+            <div class="filename-tab"><span class="tab-file-icon">ㅅ</span><span id="editor-tab-name">첫 인사.세종</span><span class="tab-circle"></span></div>
+            <div class="editor-controls"><span class="editor-language">세종어</span><span class="tag">UTF-8</span></div>
+          </div>
+          <div class="code-editor" id="code-editor">
+            <div class="line-gutter" id="line-numbers" aria-hidden="true">1</div>
+            <div class="editor-input-wrap">
+              <pre id="highlight" class="code-highlight" aria-hidden="true"></pre>
+              <textarea id="source" aria-label="세종어 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
+            </div>
+          </div>
+          <div id="completion" class="completion hidden" role="listbox" aria-label="키워드 자동완성"></div>
+          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">세종어 0.2</span></div>
+        </section>
+
+        <section id="python-panel" class="python-panel panel hidden" aria-label="Python 코드 비교"><div class="panel-heading"><strong>Python 비교</strong><div><button id="copy-python" class="btn btn-subtle" type="button">복사</button><button id="close-python" class="btn btn-subtle" type="button">닫기</button></div></div><p id="python-warning" class="python-warning"></p><pre id="python-code" class="python-code"></pre></section>
+
+        <section class="console-panel panel" aria-label="실행 결과와 그래픽">
+          <div class="panel-heading console-heading"><div class="console-tabs" role="tablist" aria-label="출력 창"><button class="console-tab selected" id="tab-output" role="tab" aria-selected="true" aria-controls="output-panel">실행 결과</button><button class="console-tab" id="tab-graphic" role="tab" aria-selected="false" aria-controls="graphic-panel">그림</button></div><span class="console-status" id="console-status"><span class="status-led"></span> 준비됨</span></div>
+          <div class="console-body" id="output-panel" role="tabpanel" aria-labelledby="tab-output">
+            <div id="console-output" class="console-output"><div class="console-empty"><span class="empty-icon">↳</span><strong>무엇을 만들어 볼까요?</strong><p>왼쪽에 한글 코드를 작성한 다음<br><b>실행하기</b>를 눌러보세요.</p></div></div>
+          </div>
+          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="세종어 그래픽 실행 결과"></canvas><p>세종어의 그리기 명령으로 만든 화면입니다.</p></div>
+          <form id="input-form" class="input-form hidden"><label id="input-label" for="input-value">입력 값</label><div><input id="input-value" type="text" maxlength="2000" autocomplete="off"><button type="submit">확인</button><button id="input-cancel" type="button">취소</button></div></form>
+          <div class="console-footer"><span id="run-info">실행할 준비가 되었습니다.</span><button id="clear-btn" title="실행 결과 지우기">지우기 <span>×</span></button></div>
+        </section>
+      </div>
+
+      <div class="bottom-strip"><div class="tip"><span class="tip-bulb">✦</span><span id="editor-tip">작은 도움말: <b>Ctrl + Enter</b>로 빠르게 실행할 수 있어요. <b>Tab</b>으로 들여쓰기합니다.</span></div><span class="offline-label"><span class="offline-dot"></span> 100% 브라우저 실행</span></div>
+      <footer class="footer"><span>세종 개발실 <span class="footer-sep">/</span> 모든 글자는 가능성의 시작입니다.</span><span>2026 한글날 기념 프로젝트 · v0.2</span></footer>
+    </main>
+  </div>
+  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>세종어 문서</span><span aria-hidden="true">↗</span></button>
+  <aside id="docs-drawer" class="docs-drawer hidden" aria-labelledby="docs-title" tabindex="-1">
+    <div class="docs-drawer-head"><div><span class="docs-eyebrow">SEJONG LANGUAGE · v0.2</span><h2 id="docs-title">세종어 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
+    <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="예: 범위, 함수, 원그리기" autocomplete="off"></div>
+    <div class="docs-layout">
+      <nav class="docs-toc" aria-label="문서 목차">
+        <a href="#ref-start">시작하기</a><a href="#ref-syntax">기본 문법</a><a href="#ref-control">제어 흐름</a><a href="#ref-functions">함수와 범위</a><a href="#ref-collections">목록과 사전</a><a href="#ref-builtins">기본 함수</a><a href="#ref-input">입출력과 오류</a><a href="#ref-graphics">그래픽 API</a><a href="#ref-animation">애니메이션</a><a href="#ref-python">Python 비교</a><a href="#ref-limits">실행 제한</a>
+      </nav>
+      <div id="docs-scroll" class="docs-scroll"><p id="docs-empty" class="docs-empty hidden">검색 결과가 없습니다. 다른 문법이나 함수 이름을 입력해 보세요.</p>/*INLINE_DOCS*/</div>
+    </div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script id="sejong-runtime" type="text/plain">/*INLINE_RUNTIME*/</script>
+  <script>/*INLINE_APP*/</script>
+</body>
+</html>

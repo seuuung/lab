@@ -4,7 +4,7 @@
  * F1: About Me 프로필 카드
  * F2: 4단계 카테고리 탭 필터
  * F3: 삼척 기상토토 쇼케이스 카드
- * F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 & 글래스모피즘
+ * F4: 14개 프로젝트 쇼케이스 카드 전수 존재성 & 글래스모피즘
  * F13: 10개 하위 프로젝트 표준 '실험실 홈' 내비게이션 전수 적용
  * F14: 10개 하위 프로젝트 파일 무결성 및 링크 정합성
  */
@@ -120,7 +120,7 @@ function runTier1Tests() {
     const hasTransitionOrAnimation = homeJs.includes('item.animate') && homeCss.includes('prefers-reduced-motion');
     assert(hasTransitionOrAnimation, 'Tier1-F2-13: 탭 필터 전환 시 애니메이션 / 트랜지션 클래스 적용');
 
-    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 13;
+    const hasCategoryBadgeOnCards = (indexHtml.match(/class="project-type"/g) || []).length === 14;
     assert(hasCategoryBadgeOnCards, 'Tier1-F2-14: 각 쇼케이스 카드에 카테고리 뱃지 스타일 적용');
 
     const hasTabContainer = /aria-label="프로젝트 카테고리"/.test(indexHtml);
@@ -128,9 +128,9 @@ function runTier1Tests() {
 
 
     // ----------------------------------------------------
-    // F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘
+    // F4: 14개 프로젝트 쇼케이스 카드 전수 존재성 & 모던 글래스모피즘
     // ----------------------------------------------------
-    console.log('[Tier 1] F4: 13개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
+    console.log('[Tier 1] F4: 14개 프로젝트 쇼케이스 카드 전수 존재성 검증...');
     const REQUIRED_PROJECTS = [
         { id: 'selpick', name: 'SelPick', check: (h) => h.includes('id=com.selpick.app&amp;pcampaignid=web_share') && h.includes('<h3>SelPick</h3>') },
         { id: 'onsic', name: '온식 (OnSic)', check: (h) => h.includes('com.onsic.app') || h.includes('온식') },
@@ -143,7 +143,8 @@ function runTier1Tests() {
         { id: 'minesweeper', name: '3D 지뢰찾기', check: (h) => decodeURIComponent(h).includes('game/3D_ minesweeper') || h.includes('3D%20minesweeper') || h.includes('3D_minesweeper') },
         { id: 'sign_up_hell', name: '지옥의 회원가입', check: (h) => h.includes('game/sign_up_for_hell') },
         { id: 'choi_circle', name: '최원형', check: (h) => h.includes('game/choi_circle') },
-        { id: 'robot', name: '로봇 인증', check: (h) => h.includes('game/robot') }
+        { id: 'robot', name: '로봇 인증', check: (h) => h.includes('game/robot') },
+        { id: 'sejong_lab', name: '세종 개발실', check: (h) => h.includes('game/sejong_lab/index.html') && h.includes('<h3>세종 개발실</h3>') }
     ];
 
     REQUIRED_PROJECTS.forEach((proj, idx) => {
@@ -152,10 +153,10 @@ function runTier1Tests() {
     });
 
     const glassCards = extractAllTags(indexHtml, 'a').filter(a => /project-card/.test(a.attributes.class || '') && !!a.attributes.href);
-    assertEqual(glassCards.length, 13, 'Tier1-F4-13: 13개 프로젝트 카드의 직접 실행 링크 존재');
+    assertEqual(glassCards.length, 14, 'Tier1-F4-13: 14개 프로젝트 카드의 직접 실행 링크 존재');
 
     const thumbContainers = indexHtml.match(/class="project-art art-[^"]+"/g) || [];
-    assertEqual(thumbContainers.length, 13, 'Tier1-F4-14: 13개 프로젝트의 전용 그래픽 존재');
+    assertEqual(thumbContainers.length, 14, 'Tier1-F4-14: 14개 프로젝트의 전용 그래픽 존재');
 
     const hasPlayButtons = indexHtml.includes('직접 해보기') && indexHtml.includes('앱 살펴보기');
     assert(hasPlayButtons, 'Tier1-F4-15: 쇼케이스 카드에 인터랙션 CTA 텍스트(플레이하기 등) 존재');

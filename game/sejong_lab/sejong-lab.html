@@ -1,0 +1,1273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101719">
+  <meta name="description" content="세종 개발실 — 브라우저에서 한글로 코드를 작성하고 실행하는 작은 프로그래밍 실험실. 제580돌 한글날 기념.">
+  <title>세종 개발실 — 코딩도 우리말로.</title>
+  <style>:root{color-scheme:dark;--bg:#0b1115;--surface:#121b21;--surface-2:#182329;--surface-3:#1e2b32;--line:#29383f;--line-soft:#1d2b31;--text:#ebf2f2;--sub:#9daeb3;--muted:#748790;--mint:#b4f2d2;--mint-deep:#7dcea8;--amber:#ebc887;--red:#ee8e91;--editor:#11191f;--mono:'Consolas','D2Coding','Malgun Gothic',monospace;--sans:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;-webkit-font-smoothing:antialiased}button,textarea{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid var(--mint);outline-offset:2px}button:disabled{opacity:.5;cursor:not-allowed}.hidden{display:none!important}a{color:inherit;text-decoration:none}.ambient{position:fixed;pointer-events:none;filter:blur(100px);z-index:-1;opacity:.37}.ambient-one{width:600px;height:440px;background:#1b4b3a;left:-320px;top:120px}.ambient-two{width:660px;height:420px;background:#21374f;right:-360px;top:250px}
+.topbar{height:76px;border-bottom:1px solid #223037;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,3.3vw,64px);background:#0c1317e8;backdrop-filter:blur(16px);position:relative;z-index:2}.brand{display:flex;align-items:center;gap:13px}.brand-symbol{height:42px;width:42px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;color:#173129;position:relative;font-weight:900;font-size:22px;box-shadow:0 0 24px #a6edd03a}.brand-symbol span:first-child{transform:translate(4px,-4px)}.brand-symbol span:last-child{transform:translate(-4px,5px)}.brand-label{display:flex;flex-direction:column;gap:2px}.brand-label strong{font-size:17px;letter-spacing:-.5px}.brand-label small{font-size:9px;font-weight:800;letter-spacing:2px;color:#778d91}.nav-links{display:flex;align-items:center;gap:25px}.nav-live{display:flex;align-items:center;gap:8px;color:#a8c1b9;font-size:12px}.nav-live i,.offline-dot{display:block;width:7px;height:7px;background:#90d9ad;border-radius:50%;box-shadow:0 0 0 4px #90d9ad19}.nav-divider{height:18px;width:1px;background:#344047}.header-link{background:transparent;border:0;color:#d4dfe0;font-size:13px;padding:10px 0}.header-link span{color:var(--mint);margin-left:4px}
+.app-shell{display:grid;grid-template-columns:247px minmax(0,1fr);max-width:1680px;margin:0 auto;min-height:calc(100vh - 76px)}.sidebar{padding:35px 16px 30px 24px;border-right:1px solid #223037;display:flex;flex-direction:column;gap:0}.sidebar-heading{text-transform:uppercase;color:#95a7af;font-weight:700;letter-spacing:1.6px;font-size:11px;display:flex;align-items:center;gap:12px;padding:0 13px 35px}.heading-stroke{flex:1;height:1px;background:#304047}.sidebar-section-title{display:flex;justify-content:space-between;font-size:12px;color:#dbe4e5;font-weight:650;padding:0 12px 13px}.sidebar-section-title span{color:#6f858c;font-size:10px}.example-list{display:flex;flex-direction:column;gap:5px}.example-button{width:100%;border:1px solid transparent;border-radius:11px;background:transparent;display:flex;text-align:left;align-items:center;gap:11px;color:#9cabaf;padding:11px 12px;transition:.15s}.example-button:hover{background:#1a272c;color:white}.example-button.active{background:#1d322e;border-color:#456c5a;color:#d7ffea}.example-index{font-family:var(--mono);font-size:11px;color:#7f9195;min-width:23px}.active .example-index{color:var(--mint)}.example-name{font-size:13px;font-weight:650}.example-description{display:block;font-size:10px;margin-top:3px;color:#7d9398;letter-spacing:-.2px}.active .example-description{color:#8dbfa7}.example-arrow{font-size:16px;margin-left:auto;color:#83bd9d;opacity:0}.active .example-arrow,.example-button:hover .example-arrow{opacity:1}.sidebar-bottom{margin-top:auto;padding:32px 8px 0}.special-card{background:linear-gradient(160deg,#283d35,#1a2726 90%);border:1px solid #375447;border-radius:14px;padding:18px 16px 14px;overflow:hidden;position:relative;min-height:180px}.special-visual{position:absolute;right:-9px;top:0;opacity:.2;font-weight:800;font-size:68px;transform:rotate(-16deg);line-height:1}.special-visual span{position:absolute}.special-visual span:nth-child(1){right:20px;top:6px}.special-visual span:nth-child(2){right:64px;top:44px}.special-visual span:nth-child(3){right:-10px;top:70px}.special-eyebrow{color:#c1dfc5;font-size:10px;display:block;margin-bottom:14px}.special-card strong{display:block;font-size:17px;line-height:1.55;letter-spacing:-.9px;position:relative}.special-footer{display:flex;justify-content:space-between;border-top:1px solid #4a6254;margin-top:25px;padding-top:10px;color:#b7d1c2;font-size:10px}.sidebar-note{color:#6e8388;font-size:10px;line-height:1.8;margin:17px 3px 0}
+.workspace{padding:clamp(28px,3vw,46px) clamp(24px,3.2vw,58px) 20px;min-width:0}.intro{display:flex;min-height:176px;align-items:center;justify-content:space-between;margin-bottom:25px;position:relative}.intro-left{position:relative;z-index:1}.kicker{color:var(--mint);font-size:11px;font-weight:700;letter-spacing:.7px;margin-bottom:12px}.kicker-dot{font-size:18px;margin-right:6px;vertical-align:-2px}.intro h1{font-size:clamp(34px,3.1vw,49px);margin:0 0 15px;line-height:1.1;letter-spacing:-2px;font-weight:800}.intro h1 em{font-style:normal;color:var(--mint)}.intro p{color:#91a6ac;line-height:1.8;font-size:13px;margin:0}.intro-mark{width:250px;height:155px;position:relative;flex-shrink:0;overflow:hidden;opacity:.83}.intro-mark span{position:absolute;font-size:100px;font-weight:900;letter-spacing:-10px;user-select:none}.mark-one{right:120px;top:2px;color:#3c7a61;transform:rotate(-20deg)}.mark-two{right:42px;top:-16px;color:#9ccdb8;transform:rotate(15deg)}.mark-three{right:12px;top:43px;color:#596e66;transform:rotate(28deg)}
+.working-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.working-title{display:flex;align-items:center;gap:11px;font-weight:750;font-size:14px;min-width:0}.working-icon{display:flex;align-items:center;justify-content:center;border-radius:8px;background:#22342e;color:var(--mint);height:31px;width:31px;font-size:13px;font-family:var(--mono)}.working-crumb{color:#4b5c62;font-size:18px;font-weight:400}.working-file{color:#a3b4b7;font-weight:500;font-size:12px}.save-hint{color:#749a84;font-size:10px;margin-left:4px;font-weight:500}.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.btn{display:inline-flex;justify-content:center;align-items:center;gap:7px;min-height:37px;border-radius:9px;padding:0 12px;font-size:12px;font-weight:700;transition:background .15s,transform .1s;white-space:nowrap}.btn:active{transform:translateY(1px)}.btn svg{width:15px;height:15px}.btn-subtle{border:1px solid #304047;color:#bdcacc;background:#172126}.btn-subtle:hover{background:#223039}.btn-primary{border:1px solid var(--mint);color:#102922;background:var(--mint);padding:0 15px}.btn-primary:hover{background:#d0f9e3}.btn-primary kbd{font-family:var(--mono);font-size:10px;color:#4d8068;border:1px solid #7bb99a;padding:2px 4px;border-radius:4px;margin-left:2px}.btn-stop{background:#582d31;border:1px solid #a2545c;color:#ffe6e6}.square-icon{width:9px;height:9px;background:currentColor;border-radius:2px}
+.ide-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(290px,.84fr);gap:14px;min-height:518px}.panel{border:1px solid var(--line);background:var(--editor);border-radius:13px;overflow:hidden;min-width:0;display:flex;flex-direction:column}.panel-heading{min-height:50px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #27343a;background:#172127;padding:0 16px}.filename-tab{height:50px;display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;color:#e0eeea;border-bottom:2px solid var(--mint);padding:0 5px}.tab-file-icon{font-size:12px;background:#2d5040;color:#c6eccc;width:19px;height:19px;border-radius:5px;text-align:center;line-height:19px}.tab-circle{height:6px;width:6px;background:#8ed0a9;border-radius:50%;margin-left:5px;opacity:.7}.editor-controls{display:flex;align-items:center;gap:10px;color:#85989f;font-size:11px}.tag{border:1px solid #34454a;padding:4px 7px;border-radius:5px;font-size:10px}.code-editor{flex:1;display:flex;min-height:430px;position:relative;overflow:hidden;background:#11191f}.line-gutter{margin:0;padding:19px 11px 28px 14px;min-width:50px;max-width:75px;text-align:right;background:#121b20;color:#546a74;font-family:var(--mono);font-size:13px;line-height:25px;white-space:pre;overflow:hidden;user-select:none;border-right:1px solid #25343b}.editor-input-wrap{position:relative;flex:1;min-width:0;overflow:hidden}.code-highlight,#source{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;padding:19px 21px 28px;white-space:pre;tab-size:4;line-height:25px;letter-spacing:0;font-family:var(--mono);font-size:13px;overflow:auto;border:0;outline:0}.code-highlight{pointer-events:none;color:#ccdbe0;z-index:1;scrollbar-width:none}.code-highlight::-webkit-scrollbar{display:none}#source{background:transparent;resize:none;color:transparent;-webkit-text-fill-color:transparent;caret-color:#b4f2d2;z-index:2;scrollbar-color:#3c5158 transparent;white-space:pre;outline:none}#source::selection{background:rgba(130,191,168,.29);-webkit-text-fill-color:transparent}#source:focus-visible{outline:0}.tok-comment{color:#64817c}.tok-keyword{color:#afdbc0;font-weight:700}.tok-string{color:#ebc98a}.tok-number{color:#b8b7eb}.tok-fn{color:#92c7e3}.tok-operator{color:#ccd5a5}.editor-status{display:flex;align-items:center;justify-content:space-between;padding:0 15px;height:34px;border-top:1px solid #29383d;color:#72878c;background:#162126;font:10px var(--sans)}.editor-status-left{display:flex;gap:8px}.status-separator{color:#42575c}.status-right{color:#8ba39b}
+.console-panel{background:#131d22}.console-heading{padding:0 16px;gap:8px}.console-tabs{display:flex;gap:20px;height:50px;align-items:stretch}.console-tab{border:0;border-bottom:2px solid transparent;background:transparent;color:#81949c;padding:0 1px;font-size:12px;font-weight:650;white-space:nowrap}.console-tab.selected{color:#dcece6;border-color:var(--mint)}.console-status{font-size:10px;color:#899da1;white-space:nowrap;display:flex;align-items:center;gap:7px}.status-led{height:6px;width:6px;border-radius:50%;background:#97d0a8}.console-status.error .status-led{background:#ef9292}.console-status.running .status-led{background:#eac785;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.25}}.console-body,.docs-body{flex:1;min-height:0;position:relative}.console-output{padding:20px 17px;overflow:auto;height:100%;min-height:430px;max-height:650px;font-family:var(--mono);font-size:12px;line-height:1.9;scrollbar-color:#42515a transparent;overflow-wrap:anywhere}.console-empty{display:flex;min-height:320px;align-items:center;justify-content:center;flex-direction:column;text-align:center;color:#81969b;font-family:var(--sans)}.empty-icon{height:48px;width:48px;border:1px solid #35514a;background:#1c302b;display:grid;place-items:center;font-size:23px;color:var(--mint);border-radius:14px;margin-bottom:19px}.console-empty strong{font-size:14px;color:#d4e2e2}.console-empty p{line-height:1.8;font-size:12px;color:#7f9296}.console-empty b{color:#aec8bc}.console-row{display:flex;gap:10px;margin-bottom:5px;white-space:pre-wrap}.console-prompt{color:#698b83;user-select:none}.console-text{color:#ddede3}.console-row.is-error .console-text{color:#f2a7a7}.console-row.is-system .console-text{color:#83a49b;font-size:11px}.console-row.is-error .console-prompt{color:#cf6c71}.console-success{color:#87bba3;border-top:1px dashed #375147;padding-top:12px;margin-top:14px;font-size:10px}.docs-body{overflow:auto;max-height:650px}.docs-content{padding:20px 20px 34px}.docs-intro{font-size:11px;color:#8eaaa9;line-height:1.8;margin:0 0 21px}.docs-section{margin-bottom:25px}.docs-section h3{font-size:12px;margin:0 0 10px;color:#d8eae3}.docs-section p{font-size:11px;color:#91a4a5;line-height:1.7}.docs-section pre{background:#0f171c;border:1px solid #2a3b41;border-radius:8px;padding:12px;overflow-x:auto;color:#cde2d9;font-size:11px;line-height:1.75;font-family:var(--mono)}.doc-table{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:#8aa49b}.doc-table>span{border-bottom:1px solid #293d40;padding:5px 0}.doc-table code{color:#c6e6d4}.console-footer{height:35px;border-top:1px solid #29383d;background:#182329;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 15px;color:#82969a;font-size:10px}.console-footer button{background:transparent;border:0;color:#90a6aa;font-size:10px;padding:5px}.console-footer button span{font-size:15px;vertical-align:-2px;margin-left:4px}.bottom-strip{margin-top:14px;border:1px solid #2d413e;background:#152622;border-radius:10px;min-height:50px;padding:12px 17px;display:flex;align-items:center;justify-content:space-between;gap:12px}.tip{display:flex;gap:10px;align-items:center;color:#a2bab1;font-size:11px}.tip b{color:#d2f6dc;font-weight:600}.tip-bulb{font-size:18px;color:#b8e2c1}.offline-label{color:#84ad9a;font-size:10px;white-space:nowrap;display:flex;align-items:center;gap:9px}.footer{display:flex;justify-content:space-between;gap:15px;color:#596f76;font-size:10px;margin:26px 0 12px}.footer-sep{color:#537d71;margin:0 5px}.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);border:1px solid #45675b;background:#243d33;color:#d6f8e4;padding:12px 20px;border-radius:10px;box-shadow:0 15px 50px #0008;opacity:0;pointer-events:none;transition:.25s;z-index:10;font-size:12px;text-align:center;max-width:min(90vw,450px)}.toast.show{transform:translate(-50%,0);opacity:1}
+@media(min-width:1400px){.ide-grid{min-height:575px}.code-editor{min-height:470px}.console-output{min-height:470px}.intro{min-height:193px}}@media(max-width:1170px){.app-shell{grid-template-columns:205px minmax(0,1fr)}.sidebar{padding:28px 10px 25px 13px}.workspace{padding:32px 25px 20px}.ide-grid{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)}.intro-mark{width:140px}.save-hint{display:none}.toolbar .btn-subtle{padding:0 10px}.btn-primary kbd{display:none}}@media(max-width:990px){.app-shell{display:block}.sidebar{border-right:0;border-bottom:1px solid #24343c;padding:15px 22px;display:block}.sidebar-heading,.sidebar-section-title,.sidebar-bottom{display:none}.example-list{display:flex;flex-direction:row;overflow-x:auto;gap:8px;scrollbar-width:thin}.example-button{width:max-content;min-width:148px;flex:0 0 auto;border:1px solid #293940;background:#131e23;padding:10px}.example-arrow{display:none}.workspace{padding:28px 22px 20px}.intro{min-height:145px}.intro-mark{width:180px}.ide-grid{min-height:490px}}@media(max-width:680px){.topbar{height:64px;padding:0 18px}.brand-symbol{height:37px;width:37px}.brand-label strong{font-size:15px}.brand-label small{font-size:8px}.nav-live,.nav-divider{display:none}.header-link{font-size:11px}.sidebar{padding:12px 15px}.example-button{min-width:143px}.workspace{padding:25px 14px 16px}.intro{margin-bottom:26px;min-height:120px}.intro h1{font-size:37px;letter-spacing:-1.5px}.intro p{font-size:12px}.intro-mark{display:none}.desktop-break{display:none}.kicker{font-size:10px}.working-topbar{align-items:flex-start}.working-title{width:100%}.toolbar{width:100%;display:flex;flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px}.toolbar .btn{flex-shrink:0}.toolbar .btn-subtle{padding:0 9px}.ide-grid{grid-template-columns:1fr}.code-editor{min-height:340px;height:340px;flex:none}.console-output{min-height:235px;max-height:370px}.console-empty{min-height:230px}.docs-body{max-height:370px}.bottom-strip{align-items:flex-start}.offline-label{display:none}.tip{font-size:10px;line-height:1.6}.footer{flex-direction:column;gap:6px}.working-title{font-size:13px}.editor-status{font-size:9px}.editor-status-left{gap:5px}.status-right{display:none}}@media(max-width:390px){.btn-subtle span{display:none}.working-file{font-size:10px}.toolbar{gap:5px}.editor-controls .tag{display:none}.panel-heading{padding:0 10px}.line-gutter{min-width:40px;padding-left:7px;padding-right:9px}.code-highlight,#source{font-size:12px;padding-left:11px}.console-status{font-size:9px}}
+.mobile-view-tabs{display:none}.completion{position:absolute;z-index:4;left:52px;bottom:38px;min-width:230px;max-width:min(90%,350px);padding:5px;border:1px solid #4b6a63;border-radius:8px;background:#1c2b30;box-shadow:0 12px 32px #0008}.editor-panel{position:relative}.completion button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 10px;text-align:left;color:#ddf0e5;background:transparent;border:0;border-radius:5px}.completion button:hover,.completion button:focus{background:#30493f}.completion span{font-size:10px;color:#9ab4aa}.graphic-body{min-height:300px;padding:18px;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#101a20}.graphic-body canvas{display:block;max-width:100%;height:auto;border:1px solid #365058;background:#15252b;box-shadow:0 16px 35px #0004}.graphic-body p{color:#84999d;font-size:11px}.input-form{padding:12px 16px;border-top:1px solid #37534b;background:#193027}.input-form label{display:block;margin-bottom:8px;color:#d5f1e1;font-size:11px}.input-form div{display:flex;gap:7px}.input-form input{flex:1;min-width:0;border:1px solid #4c7261;border-radius:6px;background:#0e1b19;color:#eefaf2;padding:8px}.input-form button{border:1px solid #577969;border-radius:6px;background:#294b3a;color:#e5f9eb;padding:8px 12px}.python-panel{margin-top:14px}.python-panel>.panel-heading{display:flex;align-items:center;justify-content:space-between;padding:9px 14px}.python-panel>.panel-heading>div{display:flex;gap:6px}.python-warning{margin:14px 16px 0;color:#e6c990;font-size:11px}.python-code{max-height:450px;min-height:100px;overflow:auto;margin:12px 16px 16px;padding:18px;background:#0f171c;border:1px solid #293b40;border-radius:7px;color:#d6efdf;font:12px/1.65 var(--mono);white-space:pre}
+.ide-grid.python-open{grid-template-columns:repeat(3,minmax(0,1fr))}.python-panel{margin-top:0;min-width:0}.python-code{white-space:pre-wrap;overflow-wrap:anywhere}
+.home-link{display:inline-flex;align-items:center;gap:3px}.home-link:hover,.header-link:hover{color:var(--mint)}@media(max-width:680px){.nav-links{gap:11px}.home-link-label{display:none}.home-link span:last-child{font-size:20px;margin:0}}
+.docs-drawer{height:min(790px,calc(100vh - 28px));height:min(790px,calc(100dvh - 28px))}@media(max-width:620px){.docs-drawer{height:calc(100vh - 14px);height:calc(100dvh - 14px)}}
+@media(max-width:1200px) and (min-width:681px){.ide-grid.python-open{grid-template-columns:repeat(2,minmax(0,1fr))}.ide-grid.python-open .console-panel{grid-column:1/-1}}
+@media(max-width:680px){.working-topbar{position:sticky;top:0;z-index:6;background:#10191de8;backdrop-filter:blur(12px);padding:7px 0}.toolbar{overflow:visible;flex-wrap:wrap}.toolbar .btn-primary,.toolbar .btn-stop{order:-1;min-width:110px}.mobile-view-tabs{display:grid;grid-template-columns:repeat(3,1fr);margin:7px 0 10px;border:1px solid #33463f;border-radius:8px;overflow:hidden}.mobile-view-tabs button{padding:10px;background:#15231f;color:#96b2a4;border:0}.mobile-view-tabs button.selected{background:#2d4c3b;color:#e4f9e9;font-weight:700}.ide-grid[data-mobile-view="code"] .console-panel{display:none}.ide-grid[data-mobile-view="output"] .editor-panel,.ide-grid[data-mobile-view="graphic"] .editor-panel{display:none}.ide-grid{min-height:0}.editor-panel,.console-panel{min-height:380px}.graphic-body{min-height:320px}.completion{left:14px;bottom:36px}}
+@media(max-width:680px){.ide-grid.python-open{grid-template-columns:1fr}.ide-grid[data-mobile-view="output"] .python-panel,.ide-grid[data-mobile-view="graphic"] .python-panel{display:none}}
+.docs-launcher{position:fixed;right:20px;bottom:max(20px,env(safe-area-inset-bottom));z-index:20;display:inline-flex;align-items:center;gap:9px;min-height:48px;padding:0 16px;border:1px solid #8bd2a9;border-radius:999px;background:#c9f3db;color:#173328;box-shadow:0 12px 36px #0009;font-weight:750;font-size:12px;transition:transform .2s,box-shadow .2s}.docs-launcher:hover{transform:translateY(-3px);box-shadow:0 18px 40px #000b}.docs-launcher-icon{font:700 15px var(--mono)}.docs-launcher>span:last-child{margin-left:5px;font-size:15px}.docs-drawer{position:fixed;right:14px;bottom:14px;z-index:25;width:min(660px,calc(100vw - 28px));height:min(790px,calc(100dvh - 28px));display:grid;grid-template-rows:auto auto minmax(0,1fr);background:#101b20;border:1px solid #426258;border-radius:16px;box-shadow:0 24px 80px #000b;overflow:hidden}.docs-drawer-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:19px 23px 16px;background:linear-gradient(120deg,#203b32,#14262a);border-bottom:1px solid #37534b}.docs-eyebrow{color:#91c8aa;font-size:10px;letter-spacing:1.1px;font-weight:800}.docs-drawer-head h2{margin:5px 0 0;font-size:20px;letter-spacing:-.5px}.docs-drawer-head button{flex:none;width:36px;height:36px;border:1px solid #567367;background:#1c342f;color:#e1f5e9;border-radius:9px;font-size:23px;line-height:1}.docs-search-wrap{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #2a403c;background:#15252a}.docs-search-wrap label{font-size:11px;color:#b9d4c7;white-space:nowrap}.docs-search-wrap input{width:100%;min-width:0;height:36px;border:1px solid #38554e;border-radius:8px;background:#0d191c;color:#e8f4ed;padding:0 12px;font-size:12px}.docs-search-wrap input::placeholder{color:#6e8e87}.docs-layout{display:grid;grid-template-columns:150px minmax(0,1fr);min-height:0}.docs-toc{display:flex;flex-direction:column;gap:3px;padding:19px 10px;overflow:auto;border-right:1px solid #293d3c;background:#132228;scrollbar-color:#36574c transparent}.docs-toc a{display:block;padding:9px 10px;border-radius:7px;color:#9fb5af;font-size:11px;line-height:1.3}.docs-toc a:hover,.docs-toc a:focus-visible{background:#294239;color:#e5f6e9}.docs-toc a[hidden],.reference-section[hidden]{display:none}.docs-scroll{min-width:0;overflow:auto;scrollbar-color:#446057 transparent;scroll-behavior:smooth}.docs-empty{padding:22px;color:#b8cfc4;font-size:12px}.reference-doc{padding:26px 28px 38px}.reference-section{padding:0 0 29px;margin:0 0 30px;border-bottom:1px solid #29413c;scroll-margin-top:20px}.reference-section:last-child{margin-bottom:0;border-bottom:0}.reference-kicker{display:block;color:#8fc9a7;font-size:9px;font-weight:800;letter-spacing:1.5px}.reference-section h3{margin:8px 0 14px;font-size:22px;letter-spacing:-.8px;color:#e2f4e9}.reference-section h4{margin:0 0 8px;color:#d4ecde;font-size:13px}.reference-section p{margin:0 0 12px;color:#afc4bf;font-size:12px;line-height:1.8}.reference-section strong{color:#e2f5e8}.reference-section code{font:11px/1.5 var(--mono);color:#c6e9d3}.reference-section p code,.reference-api>code,.reference-grid code{padding:2px 4px;border-radius:4px;background:#22392f}.reference-section pre{margin:14px 0;padding:15px;overflow:auto;background:#0b161a;border:1px solid #2f4942;border-radius:9px;line-height:1.6}.reference-section pre code{padding:0;background:none;white-space:pre;color:#d9ece0}.reference-section kbd{font:10px var(--mono);border:1px solid #4e675c;border-radius:4px;padding:2px 4px;color:#d3e9d8}.reference-note{padding:11px 13px;border-left:3px solid #a1d6b4;background:#1c312b;border-radius:0 7px 7px 0}.reference-subsection{margin-top:23px}.reference-grid{display:grid;grid-template-columns:minmax(120px,.8fr) minmax(0,1.2fr);gap:0 10px;margin:14px 0;border-top:1px solid #344b42}.reference-grid span{padding:8px 3px;border-bottom:1px solid #344b42;color:#b9cec1;font-size:11px;line-height:1.5}.reference-grid span:nth-child(odd){color:#d9efdf}.reference-api{padding:10px 0;border-bottom:1px solid #294039}.reference-api>code{display:inline-block;margin:0 4px 5px 0;word-break:break-word}.reference-api p{margin:0}.reference-section .reference-api:last-child{border-bottom:0}
+@media(max-width:620px){.docs-drawer{right:7px;bottom:7px;width:calc(100vw - 14px);height:calc(100dvh - 14px);border-radius:11px}.docs-drawer-head{padding:15px}.docs-drawer-head h2{font-size:17px}.docs-layout{display:flex;flex-direction:column}.docs-toc{flex:none;flex-direction:row;gap:5px;padding:9px 10px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;border-right:0;border-bottom:1px solid #293d3c}.docs-toc a{flex:none;font-size:10px;padding:8px 9px}.docs-scroll{flex:1}.reference-doc{padding:19px 18px 26px}.reference-section h3{font-size:20px}.docs-launcher{right:13px;bottom:max(13px,env(safe-area-inset-bottom))}}
+.docs-drawer-head button{width:44px;height:44px}.docs-toc a{display:flex;align-items:center;min-height:40px}
+.docs-scroll{min-height:0}
+</style>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#editor" aria-label="세종 개발실, 편집기로 이동">
+      <span class="brand-symbol"><span>ㅅ</span><span>ㅈ</span></span>
+      <span class="brand-label"><strong>세종 개발실</strong><small>SEJONG DEV LAB</small></span>
+    </a>
+    <div class="nav-links"><span class="nav-live"><i></i> 브라우저 안에서 실행 중</span><span class="nav-divider"></span><a class="header-link home-link" href="../../index.html" aria-label="승민의 실험실 메인 화면으로 돌아가기"><span class="home-link-label">실험실 홈</span><span aria-hidden="true">↖</span></a><button id="header-docs" class="header-link" type="button" aria-controls="docs-drawer" aria-expanded="false">개발 문서 <span>↗</span></button></div>
+  </header>
+
+  <div class="app-shell" id="editor">
+    <aside class="sidebar" aria-label="예제와 학습 메뉴">
+      <div class="sidebar-heading"><span>배움터</span><span class="heading-stroke"></span></div>
+      <div class="sidebar-section-title">차근차근 배워보기 <span>12</span></div>
+      <div id="example-list" class="example-list"></div>
+      <div class="sidebar-bottom">
+        <div class="special-card">
+          <div class="special-visual" aria-hidden="true"><span>ㅎ</span><span>ㄱ</span><span>ㄹ</span></div>
+          <span class="special-eyebrow">2026 · 한글날 특별 기획</span>
+          <strong>우리의 글자로<br>새로운 가능성을.</strong>
+          <span class="special-footer">훈민정음 반포 제580돌 <span>↗</span></span>
+        </div>
+        <p class="sidebar-note">회원가입도, 서버도 필요 없습니다.<br>코드는 이 브라우저에서만 실행됩니다.</p>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section class="intro">
+        <div class="intro-left">
+          <div class="kicker"><span class="kicker-dot">✳</span> 한글날 기념 · 우리말 프로그래밍 실험</div>
+          <h1>코딩도 <em>우리말로.</em></h1>
+          <p>영어가 아닌 한글로 생각하고, 만들고, 실행해 보세요.<br class="desktop-break"> 지금 이곳에서 첫 번째 프로그램이 시작됩니다.</p>
+        </div>
+        <div class="intro-mark" aria-hidden="true"><span class="mark-one">가</span><span class="mark-two">나</span><span class="mark-three">다</span></div>
+      </section>
+
+      <section class="working-topbar" aria-label="작업 공간 도구">
+        <div class="working-title"><span class="working-icon">{ }</span><span>나의 작업실</span><span class="working-crumb">/</span><span id="current-name" class="working-file">첫 인사.세종</span><span id="save-hint" class="save-hint">● 자동 저장됨</span></div>
+        <div class="toolbar">
+          <button id="reset-btn" class="btn btn-subtle" title="현재 예제 초기화"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>초기화</span></button>
+          <button id="share-btn" class="btn btn-subtle" title="코드 공유 링크 복사"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2M8.7 13.4l6.6 4.2"/></svg><span>공유</span></button>
+          <button id="download-btn" class="btn btn-subtle" title="코드를 .세종 파일로 저장"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>내려받기</span></button>
+          <button id="format-btn" class="btn btn-subtle" title="들여쓰기와 끝 공백 정리"><span>코드 정리</span></button>
+          <button id="python-btn" class="btn btn-subtle" aria-expanded="false" aria-controls="python-panel"><span>Python 비교</span></button>
+          <button id="run-btn" class="btn btn-primary" title="Ctrl + Enter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m7 4 14 8-14 8V4Z"/></svg><span>실행하기</span><kbd>⌃ ↵</kbd></button>
+          <button id="stop-btn" class="btn btn-stop hidden" title="실행 중단"><span class="square-icon"></span><span>중단</span></button>
+        </div>
+      </section>
+
+      <div class="mobile-view-tabs" role="tablist" aria-label="작업 화면"><button type="button" data-view="code" class="selected" aria-selected="true">코드</button><button type="button" data-view="output" aria-selected="false">결과</button><button type="button" data-view="graphic" aria-selected="false">그림</button></div>
+      <div class="ide-grid" data-mobile-view="code">
+        <section class="editor-panel panel" aria-label="한글 코드 편집기">
+          <div class="panel-heading">
+            <div class="filename-tab"><span class="tab-file-icon">ㅅ</span><span id="editor-tab-name">첫 인사.세종</span><span class="tab-circle"></span></div>
+            <div class="editor-controls"><span class="editor-language">세종어</span><span class="tag">UTF-8</span></div>
+          </div>
+          <div class="code-editor" id="code-editor">
+            <div class="line-gutter" id="line-numbers" aria-hidden="true">1</div>
+            <div class="editor-input-wrap">
+              <pre id="highlight" class="code-highlight" aria-hidden="true"></pre>
+              <textarea id="source" aria-label="세종어 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
+            </div>
+          </div>
+          <div id="completion" class="completion hidden" role="listbox" aria-label="키워드 자동완성"></div>
+          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">세종어 0.2</span></div>
+        </section>
+
+        <section id="python-panel" class="python-panel panel hidden" aria-label="Python 코드 비교"><div class="panel-heading"><strong>Python 비교</strong><div><button id="copy-python" class="btn btn-subtle" type="button">복사</button><button id="close-python" class="btn btn-subtle" type="button">닫기</button></div></div><p id="python-warning" class="python-warning"></p><pre id="python-code" class="python-code"></pre></section>
+
+        <section class="console-panel panel" aria-label="실행 결과와 그래픽">
+          <div class="panel-heading console-heading"><div class="console-tabs" role="tablist" aria-label="출력 창"><button class="console-tab selected" id="tab-output" role="tab" aria-selected="true" aria-controls="output-panel">실행 결과</button><button class="console-tab" id="tab-graphic" role="tab" aria-selected="false" aria-controls="graphic-panel">그림</button></div><span class="console-status" id="console-status"><span class="status-led"></span> 준비됨</span></div>
+          <div class="console-body" id="output-panel" role="tabpanel" aria-labelledby="tab-output">
+            <div id="console-output" class="console-output"><div class="console-empty"><span class="empty-icon">↳</span><strong>무엇을 만들어 볼까요?</strong><p>왼쪽에 한글 코드를 작성한 다음<br><b>실행하기</b>를 눌러보세요.</p></div></div>
+          </div>
+          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="세종어 그래픽 실행 결과"></canvas><p>세종어의 그리기 명령으로 만든 화면입니다.</p></div>
+          <form id="input-form" class="input-form hidden"><label id="input-label" for="input-value">입력 값</label><div><input id="input-value" type="text" maxlength="2000" autocomplete="off"><button type="submit">확인</button><button id="input-cancel" type="button">취소</button></div></form>
+          <div class="console-footer"><span id="run-info">실행할 준비가 되었습니다.</span><button id="clear-btn" title="실행 결과 지우기">지우기 <span>×</span></button></div>
+        </section>
+      </div>
+
+      <div class="bottom-strip"><div class="tip"><span class="tip-bulb">✦</span><span id="editor-tip">작은 도움말: <b>Ctrl + Enter</b>로 빠르게 실행할 수 있어요. <b>Tab</b>으로 들여쓰기합니다.</span></div><span class="offline-label"><span class="offline-dot"></span> 100% 브라우저 실행</span></div>
+      <footer class="footer"><span>세종 개발실 <span class="footer-sep">/</span> 모든 글자는 가능성의 시작입니다.</span><span>2026 한글날 기념 프로젝트 · v0.2</span></footer>
+    </main>
+  </div>
+  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>세종어 문서</span><span aria-hidden="true">↗</span></button>
+  <aside id="docs-drawer" class="docs-drawer hidden" aria-labelledby="docs-title" tabindex="-1">
+    <div class="docs-drawer-head"><div><span class="docs-eyebrow">SEJONG LANGUAGE · v0.2</span><h2 id="docs-title">세종어 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
+    <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="예: 범위, 함수, 원그리기" autocomplete="off"></div>
+    <div class="docs-layout">
+      <nav class="docs-toc" aria-label="문서 목차">
+        <a href="#ref-start">시작하기</a><a href="#ref-syntax">기본 문법</a><a href="#ref-control">제어 흐름</a><a href="#ref-functions">함수와 범위</a><a href="#ref-collections">목록과 사전</a><a href="#ref-builtins">기본 함수</a><a href="#ref-input">입출력과 오류</a><a href="#ref-graphics">그래픽 API</a><a href="#ref-animation">애니메이션</a><a href="#ref-python">Python 비교</a><a href="#ref-limits">실행 제한</a>
+      </nav>
+      <div id="docs-scroll" class="docs-scroll"><p id="docs-empty" class="docs-empty hidden">검색 결과가 없습니다. 다른 문법이나 함수 이름을 입력해 보세요.</p><article class="reference-doc">
+  <section class="reference-section" id="ref-start">
+    <span class="reference-kicker">GUIDE / 01</span>
+    <h3>시작하기</h3>
+    <p>세종어는 브라우저 안에서 실행되는 한글 프로그래밍 언어입니다. 코드를 작성하고 <strong>실행하기</strong>를 누르거나 <kbd>Ctrl</kbd> + <kbd>Enter</kbd>를 누르세요. Mac에서는 <kbd>⌘</kbd> + <kbd>Enter</kbd>를 사용합니다.</p>
+    <pre><code># 첫 번째 프로그램
+이름 = "세종"
+출력("안녕하세요, " + 이름 + "님!")</code></pre>
+    <p class="reference-note"><strong>실행 결과</strong> 안녕하세요, 세종님!</p>
+    <p>프로그램은 위에서 아래로 실행됩니다. 들여쓴 줄은 바로 위의 조건문, 반복문 또는 함수에 속합니다. 공백 4칸 들여쓰기를 권장합니다.</p>
+  </section>
+
+  <section class="reference-section" id="ref-syntax">
+    <span class="reference-kicker">LANGUAGE / 02</span>
+    <h3>기본 문법</h3>
+    <p>변수는 <code>이름 = 값</code>으로 만들며 재할당할 수 있습니다. <code>#</code> 뒤의 내용은 주석입니다. 한 줄에 하나의 명령을 작성합니다.</p>
+    <div class="reference-subsection"><h4>값과 자료형</h4><div class="reference-grid"><span><code>42</code>, <code>3.14</code></span><span>숫자</span><span><code>"글자"</code>, <code>'글자'</code></span><span>문자열</span><span><code>참</code>, <code>거짓</code></span><span>참거짓</span><span><code>없음</code></span><span>값 없음</span><span><code>[1, 2]</code>, <code>{"가": 1}</code></span><span>목록과 사전</span></div></div>
+    <div class="reference-subsection"><h4>연산자</h4><p>산술 <code>+ - * / // %</code>, 비교 <code>== != &lt; &gt; &lt;= &gt;=</code>, 논리 <code>아니다</code> · <code>그리고</code> · <code>또는</code>를 지원합니다. 곱셈·나눗셈이 덧셈·뺄셈보다 먼저 계산되며 괄호로 순서를 바꿀 수 있습니다.</p><pre><code>출력(1 + 2 * 3)      # 7
+출력((1 + 2) * 3)    # 9
+횟수 += 1              # +=, -=, *=, /=, %= 지원</code></pre><p>문자열이 포함된 <code>+</code>는 다른 값을 문자열로 바꾸어 이어 붙입니다. <code>0</code>으로 나누면 오류가 발생합니다.</p></div>
+  </section>
+
+  <section class="reference-section" id="ref-control">
+    <span class="reference-kicker">LANGUAGE / 03</span>
+    <h3>제어 흐름</h3>
+    <div class="reference-subsection"><h4>조건문</h4><pre><code>만약 점수 &gt;= 90:
+    출력("우수")
+아니고 만약 점수 &gt;= 70:
+    출력("통과")
+아니면:
+    출력("다시 도전")</code></pre></div>
+    <div class="reference-subsection"><h4>반복문</h4><pre><code>반복 3번:
+    출력("안녕")
+
+반복 숫자 각각 범위(1, 4):
+    출력(숫자)
+
+숫자 = 0
+동안 숫자 &lt; 3:
+    숫자 += 1</code></pre><p><code>반복 값 각각 목록에서:</code>의 <code>에서</code>는 생략할 수 있습니다. 반복문 안의 <code>그만</code>은 반복을 종료하고, <code>계속</code>은 다음 차례로 넘어갑니다. 기존 표기 <code>반복 조건인동안:</code>, <code>반복끝내기</code>, <code>다음반복</code>도 지원합니다.</p></div>
+  </section>
+
+  <section class="reference-section" id="ref-functions">
+    <span class="reference-kicker">LANGUAGE / 04</span>
+    <h3>함수와 변수 범위</h3>
+    <pre><code>함수 제곱(숫자):
+    돌려주기 숫자 * 숫자
+
+출력(제곱(5))  # 25</code></pre>
+    <p>함수는 <code>함수 이름(매개변수):</code>로 선언합니다. <code>돌려주기</code>는 값을 반환하고, 반환값을 쓰지 않으면 <code>없음</code>을 반환합니다. 재귀 호출을 지원하며 최대 깊이는 40입니다.</p>
+    <p>매개변수와 함수 안에서 처음 만든 변수는 지역 변수입니다. 함수 안에서 이미 바깥에 있는 변수에 대입하면 바깥 값이 갱신됩니다.</p>
+    <pre><code>위치 = 0
+함수 이동():
+    위치 += 2  # 바깥의 위치를 갱신
+    임시 = 위치  # 새 지역 변수</code></pre>
+  </section>
+
+  <section class="reference-section" id="ref-collections">
+    <span class="reference-kicker">LANGUAGE / 05</span>
+    <h3>목록과 사전</h3>
+    <p>목록과 문자열의 인덱스는 0부터 시작합니다. <code>[시작:끝]</code>은 끝 직전까지 잘라냅니다. 목록·사전의 요소를 수정할 수 있습니다.</p>
+    <pre><code>학생 = {
+    "이름": "세종",
+    "점수": [90, 85, 100]
+}
+학생["점수"][0] = 95
+출력(학생["이름"])
+출력(학생["점수"][0:2])  # [95, 85]</code></pre>
+    <p>사전 키는 문자열 또는 숫자입니다. 없는 키를 읽거나 목록 범위를 벗어난 인덱스를 사용하면 오류가 납니다. 직접 인덱싱에서 음수 인덱스는 지원하지 않습니다.</p>
+  </section>
+
+  <section class="reference-section" id="ref-builtins">
+    <span class="reference-kicker">REFERENCE / 06</span>
+    <h3>기본 함수</h3>
+    <p>함수 이름 뒤에 괄호를 붙여 호출합니다. 아래의 <code>목록</code>, <code>값</code>은 설명용 이름입니다.</p>
+    <div class="reference-api"><code>출력(값, ...)</code><p>값을 공백으로 구분해 결과 창에 한 줄 출력합니다.</p></div>
+    <div class="reference-api"><code>길이(문자열·목록·사전)</code><p>항목 수를 반환합니다.</p></div>
+    <div class="reference-api"><code>범위(끝)</code> <code>범위(시작, 끝, 간격)</code><p>끝을 포함하지 않는 정수 목록을 만듭니다. 간격은 0일 수 없으며 최대 5,000개를 생성할 수 있습니다.</p></div>
+    <div class="reference-api"><code>합계(목록)</code><p>숫자 목록을 더합니다. 빈 목록은 0입니다.</p></div>
+    <div class="reference-api"><code>최댓값(값, ...)</code> <code>최솟값(값, ...)</code><p>숫자 인자 또는 숫자 목록 하나에서 가장 큰 값·작은 값을 반환합니다.</p></div>
+    <div class="reference-api"><code>정렬(목록)</code><p>숫자 또는 문자열 목록을 오름차순으로 정렬한 <strong>새 목록</strong>을 반환합니다.</p></div>
+    <div class="reference-api"><code>추가(목록, 값)</code><p>목록 끝에 값을 추가합니다. 원본 목록이 바뀝니다.</p></div>
+    <div class="reference-api"><code>삭제(목록, 인덱스)</code> <code>삭제(사전, 키)</code><p>원본에서 항목을 제거하고 제거된 값을 반환합니다.</p></div>
+    <div class="reference-api"><code>문자열(값)</code> <code>글자열(값)</code><p>값을 문자열로 바꿉니다. 두 이름은 같은 기능입니다.</p></div>
+    <div class="reference-api"><code>정수(값)</code> <code>실수(값)</code> <code>숫자(값)</code><p>숫자로 변환합니다. <code>정수</code>는 소수 부분을 버립니다. 변환할 수 없는 값은 오류가 납니다.</p></div>
+    <div class="reference-api"><code>절댓값(숫자)</code><p>음수를 양수로 바꾼 절댓값을 반환합니다.</p></div>
+    <div class="reference-api"><code>무작위()</code> <code>무작위(최소, 최대)</code><p>인자가 없으면 0 이상 1 미만의 난수, 정수 두 개를 주면 양 끝을 포함한 난수를 반환합니다.</p></div>
+  </section>
+
+  <section class="reference-section" id="ref-input">
+    <span class="reference-kicker">RUNTIME / 07</span>
+    <h3>입출력과 오류</h3>
+    <pre><code>이름 = 입력("이름을 입력하세요")
+출력("안녕하세요, " + 이름)</code></pre>
+    <p><code>입력(안내 문구)</code>는 문자열 입력을 기다립니다. 숫자가 필요하면 <code>정수(입력(...))</code> 또는 <code>실수(입력(...))</code>로 변환하세요. 입력 창에서 취소하거나 실행을 중단하면 프로그램이 종료됩니다.</p>
+    <p>오류에는 줄 번호와 유형이 표시됩니다. 구문 오류, 이름·함수 오류, 자료형 오류, 인덱스·키 오류, 0 나누기 오류, 제한 오류를 구분합니다. 오류 줄이 편집기에서 선택되므로 해당 줄과 앞선 변수 선언을 확인하세요.</p>
+  </section>
+
+  <section class="reference-section" id="ref-graphics">
+    <span class="reference-kicker">CANVAS / 08</span>
+    <h3>그래픽 API</h3>
+    <p>그림 좌표의 원점은 왼쪽 위입니다. x는 오른쪽, y는 아래쪽으로 증가합니다. 그래픽 명령의 결과는 <strong>그림</strong> 탭에 표시됩니다.</p>
+    <div class="reference-api"><code>화면만들기(가로, 세로)</code><p>Canvas 크기를 설정하고 화면을 초기화합니다. 가로 1–1600, 세로 1–1200.</p></div>
+    <div class="reference-api"><code>배경색(색상)</code><p>화면 전체를 지정한 색으로 채웁니다.</p></div>
+    <div class="reference-api"><code>색상설정(색상)</code><p>이후 도형과 글자의 색을 설정합니다.</p></div>
+    <div class="reference-api"><code>원그리기(x, y, 반지름)</code><p>중심 좌표와 반지름으로 채운 원을 그립니다.</p></div>
+    <div class="reference-api"><code>사각형그리기(x, y, 가로, 세로)</code><p>왼쪽 위 좌표에서 채운 사각형을 그립니다.</p></div>
+    <div class="reference-api"><code>선그리기(x1, y1, x2, y2)</code><p>두 좌표를 잇는 선을 그립니다.</p></div>
+    <div class="reference-api"><code>글자그리기(내용, x, y)</code><p>현재 색으로 20px 글자를 그립니다.</p></div>
+    <div class="reference-api"><code>화면지우기()</code><p>Canvas를 투명하게 지웁니다.</p></div>
+    <p class="reference-note">색상에는 <code>검정</code>, <code>흰색</code>, <code>빨강</code>, <code>파랑</code>, <code>초록</code>, <code>노랑</code>, <code>하늘색</code>, <code>보라</code> 또는 <code>"#12354b"</code> 같은 CSS 색상을 사용할 수 있습니다.</p>
+  </section>
+
+  <section class="reference-section" id="ref-animation">
+    <span class="reference-kicker">CANVAS / 09</span>
+    <h3>애니메이션</h3>
+    <p><code>매프레임(함수)</code>에 매개변수 없는 함수를 전달하면 화면 갱신마다 호출됩니다. 매 프레임 배경을 다시 칠하거나 화면을 지우고 도형을 그립니다. <strong>중단</strong> 버튼으로 종료합니다.</p>
+    <pre><code>화면만들기(600, 320)
+위치 = 0
+
+함수 그리기():
+    배경색("검정")
+    색상설정("하늘색")
+    원그리기(위치, 160, 28)
+    위치 += 2
+    만약 위치 &gt; 600:
+        위치 = 0
+
+매프레임(그리기)</code></pre>
+  </section>
+
+  <section class="reference-section" id="ref-python">
+    <span class="reference-kicker">TOOLS / 10</span>
+    <h3>Python 비교</h3>
+    <p><strong>Python 비교</strong> 버튼은 세종어 구문 트리에서 대응 코드를 생성합니다. 결과를 복사할 수 있으며 Python 실행 환경을 제공하지는 않습니다. <code>반복 … 각각 범위()</code>는 <code>for … in range()</code>로 변환됩니다.</p>
+    <p>Canvas·애니메이션 명령은 Python에서 실행되지 않아 주석으로 표시됩니다. 세종어의 문자열 <code>+</code> 자동 변환 등 Python과 다른 동작에는 경고가 표시됩니다.</p>
+  </section>
+
+  <section class="reference-section" id="ref-limits">
+    <span class="reference-kicker">RUNTIME / 11</span>
+    <h3>실행 제한과 보안</h3>
+    <div class="reference-grid"><span>소스 길이</span><span>최대 100,000자</span><span>일반 실행</span><span>최대 3초, 60,000단계</span><span>함수 호출</span><span>재귀 깊이 40</span><span>콘솔</span><span>최대 250줄, 한 줄 2,000자</span><span>목록·사전</span><span>최대 5,000개 항목</span><span>그래픽</span><span>프레임당 최대 500명령</span></div>
+    <p>프로그램은 별도의 Web Worker에서 해석되며 사용자 코드를 JavaScript <code>eval</code>로 실행하지 않습니다. 세종어 코드에서 DOM, 파일, 네트워크, 브라우저 저장소에 직접 접근할 수 없습니다. 입력을 기다리거나 애니메이션이 실행되는 동안에는 3초 제한을 멈추며 중단 버튼으로 종료합니다.</p>
+  </section>
+</article>
+</div>
+    </div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script id="sejong-runtime" type="text/plain">/* 세종어 실행기: 어휘 분석 -> AST -> 격리된 Worker 해석 */
+(() => {
+  'use strict';
+  class SejongError extends Error {
+    constructor(line, kind, message) { super(message); this.name = 'SejongError'; this.line = line || 0; this.kind = kind; }
+  }
+  const fail = (line, kind, message) => { throw new SejongError(line, kind, message); };
+  const ID = '[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_][가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_0-9]*';
+  const IDENT = new RegExp('^' + ID + '$', 'u');
+  const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+  const MAX_COLLECTION = 5000;
+  const MAX_STEPS = 60000;
+
+  function stripComment(text) {
+    let quote = '', escaped = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) { if (c === '\\') escaped = true; else if (c === quote) quote = ''; continue; }
+      if (c === '"' || c === "'") quote = c;
+      else if (c === '#') return text.slice(0, i);
+    }
+    return text;
+  }
+
+  function tokenize(source, line) {
+    const out = [];
+    let i = 0;
+    while (i < source.length) {
+      const c = source[i];
+      if (/\s/u.test(c)) { i++; continue; }
+      if (c === '"' || c === "'") {
+        const quote = c; i++;
+        let value = '', closed = false;
+        while (i < source.length) {
+          const ch = source[i++];
+          if (ch === quote) { closed = true; break; }
+          if (ch === '\\') {
+            if (i >= source.length) fail(line, '구문 오류', '문자열 끝의 역슬래시가 올바르지 않습니다.');
+            const next = source[i++];
+            value += ({ n: '\n', t: '\t', r: '\r' })[next] ?? next;
+          } else value += ch;
+        }
+        if (!closed) fail(line, '구문 오류', '문자열을 닫는 따옴표가 없습니다.');
+        out.push({ type: 'literal', value }); continue;
+      }
+      if (/[0-9]/.test(c)) {
+        let raw = '';
+        while (/[0-9]/.test(source[i] || '')) raw += source[i++];
+        if (source[i] === '.' && /[0-9]/.test(source[i + 1] || '')) {
+          raw += source[i++]; while (/[0-9]/.test(source[i] || '')) raw += source[i++];
+        }
+        out.push({ type: 'literal', value: Number(raw) }); continue;
+      }
+      if (/[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_]/u.test(c)) {
+        let word = '';
+        while (/[가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_0-9]/u.test(source[i] || '')) word += source[i++];
+        out.push({ type: 'word', value: word }); continue;
+      }
+      const two = source.slice(i, i + 2);
+      if (['==', '!=', '<=', '>=', '//'].includes(two)) { out.push({ type: 'op', value: two }); i += 2; continue; }
+      if ('+-*/%()[]{},:<>'.includes(c)) { out.push({ type: 'op', value: c }); i++; continue; }
+      fail(line, '구문 오류', `알 수 없는 기호 '${c}'가 있습니다.`);
+    }
+    out.push({ type: 'end', value: '<끝>' });
+    return out;
+  }
+
+  function parseExpr(source, line) {
+    const tokens = tokenize(source, line);
+    let at = 0;
+    const peek = () => tokens[at];
+    const has = value => peek().value === value;
+    const next = () => tokens[at++];
+    const expect = value => { if (!has(value)) fail(line, '구문 오류', `'${value}'가 필요합니다. 현재: '${peek().value}'`); at++; };
+    const binary = (lower, ops) => () => {
+      let node = lower();
+      while (ops.includes(peek().value)) { const op = next().value; node = { type: 'binary', op, left: node, right: lower() }; }
+      return node;
+    };
+    function primary() {
+      const token = next();
+      if (token.type === 'literal') return { type: 'literal', value: token.value };
+      if (token.type === 'word') {
+        if (token.value === '참') return { type: 'literal', value: true };
+        if (token.value === '거짓') return { type: 'literal', value: false };
+        if (token.value === '없음') return { type: 'literal', value: null };
+        if (['그리고', '또는', '아니다'].includes(token.value)) fail(line, '구문 오류', `'${token.value}'의 위치가 올바르지 않습니다.`);
+        return { type: 'identifier', name: token.value };
+      }
+      if (token.value === '(') { const expr = or(); expect(')'); return expr; }
+      if (token.value === '[') {
+        const items = [];
+        while (!has(']')) { items.push(or()); if (!has(',')) break; next(); if (has(']')) break; }
+        expect(']'); return { type: 'list', items };
+      }
+      if (token.value === '{') {
+        const entries = [];
+        while (!has('}')) { const key = or(); expect(':'); entries.push([key, or()]); if (!has(',')) break; next(); if (has('}')) break; }
+        expect('}'); return { type: 'dict', entries };
+      }
+      fail(line, '구문 오류', `'${token.value}' 근처에 값이 필요합니다.`);
+    }
+    function postfix() {
+      let node = primary();
+      while (true) {
+        if (has('(')) {
+          next(); const args = [];
+          while (!has(')')) { args.push(or()); if (!has(',')) break; next(); if (has(')')) break; }
+          expect(')'); node = { type: 'call', callee: node, args };
+        } else if (has('[')) {
+          next();
+          let start = null, end = null;
+          if (!has(':') && !has(']')) start = or();
+          if (has(':')) { next(); if (!has(']')) end = or(); node = { type: 'slice', target: node, start, end }; }
+          else { if (!start) fail(line, '구문 오류', '인덱스 값이 필요합니다.'); node = { type: 'index', target: node, index: start }; }
+          expect(']');
+        } else break;
+      }
+      return node;
+    }
+    function unary() {
+      if (['-', '+', '아니다'].includes(peek().value)) { const op = next().value; return { type: 'unary', op, expr: unary() }; }
+      return postfix();
+    }
+    const mul = binary(unary, ['*', '/', '//', '%']);
+    const add = binary(mul, ['+', '-']);
+    const cmp = binary(add, ['==', '!=', '<', '>', '<=', '>=']);
+    const and = binary(cmp, ['그리고']);
+    const or = binary(and, ['또는']);
+    const expr = or();
+    if (peek().type !== 'end') fail(line, '구문 오류', `'${peek().value}' 앞뒤의 표현식을 확인해 주세요.`);
+    return expr;
+  }
+
+  function logicalLines(source) {
+    const physical = source.replace(/\r\n?/g, '\n').split('\n');
+    const result = [];
+    let pending = '', begin = 0, indent = 0, depth = 0, quote = '', escaped = false;
+    for (let index = 0; index < physical.length; index++) {
+      const raw = physical[index];
+      if (!pending && !raw.trim()) continue;
+      if (!pending) { begin = index + 1; indent = [...(raw.match(/^[ \t]*/) || [''])[0]].reduce((n, c) => n + (c === '\t' ? 4 : 1), 0); }
+      const clean = stripComment(raw).trim();
+      if (!clean && !pending) continue;
+      pending += (pending ? ' ' : '') + clean;
+      for (const c of clean) {
+        if (escaped) { escaped = false; continue; }
+        if (quote) { if (c === '\\') escaped = true; else if (c === quote) quote = ''; continue; }
+        if (c === '"' || c === "'") quote = c;
+        else if ('([{'.includes(c)) depth++;
+        else if (')]}'.includes(c)) depth--;
+        if (depth < 0) fail(index + 1, '구문 오류', '닫는 괄호가 너무 많습니다.');
+      }
+      if (depth === 0) { if (pending) result.push({ text: pending, indent, line: begin }); pending = ''; }
+    }
+    if (pending || quote || depth) fail(begin, '구문 오류', '괄호나 따옴표를 닫아 주세요.');
+    return result;
+  }
+
+  function assignment(text) {
+    let depth = 0, quote = '', escaped = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (escaped) { escaped = false; continue; }
+      if (quote) { if (c === '\\') escaped = true; else if (c === quote) quote = ''; continue; }
+      if (c === '"' || c === "'") { quote = c; continue; }
+      if ('([{'.includes(c)) depth++;
+      if (')]}'.includes(c)) depth--;
+      if (depth || c !== '=' || text[i - 1] === '=' || text[i - 1] === '!' || text[i - 1] === '<' || text[i - 1] === '>' || text[i + 1] === '=') continue;
+      const op = '+-*/%'.includes(text[i - 1]) ? text.slice(i - 1, i + 1) : '=';
+      const left = text.slice(0, op === '=' ? i : i - 1).trim(), right = text.slice(i + 1).trim();
+      return { left, right, op };
+    }
+    return null;
+  }
+
+  function parseProgram(source) {
+    if (source.length > 100000) fail(0, '제한 오류', '코드는 100,000자 이하로 작성해 주세요.');
+    const lines = logicalLines(source);
+    let pos = 0;
+    const look = () => lines[pos];
+    function body(parent) {
+      if (!look() || look().indent <= parent.indent) fail(parent.line, '구문 오류', '다음 줄에 들여쓴 명령이 필요합니다.');
+      return block(look().indent);
+    }
+    function block(indent) {
+      const nodes = [];
+      while (look() && look().indent >= indent) {
+        const row = look(), text = row.text; pos++;
+        if (row.indent !== indent) fail(row.line, '구문 오류', '들여쓰기 깊이가 올바르지 않습니다.');
+        let match;
+        if ((match = /^만약\s+(.+):$/u.exec(text))) {
+          const node = { type: 'if', branches: [{ test: parseExpr(match[1], row.line), body: body(row) }], other: null, line: row.line };
+          while (look() && look().indent === indent && /^아니고\s+만약\s+(.+):$/u.test(look().text)) {
+            const current = look(); pos++; node.branches.push({ test: parseExpr(/^아니고\s+만약\s+(.+):$/u.exec(current.text)[1], current.line), body: body(current) });
+          }
+          if (look() && look().indent === indent && look().text === '아니면:') { const current = look(); pos++; node.other = body(current); }
+          nodes.push(node); continue;
+        }
+        if (/^(아니고\s+만약|아니면)/u.test(text)) fail(row.line, '구문 오류', '앞에 연결되는 만약 조건문이 없습니다.');
+        if ((match = /^반복\s+(.+?)번:$/u.exec(text))) { nodes.push({ type: 'repeat', count: parseExpr(match[1], row.line), body: body(row), line: row.line }); continue; }
+        if ((match = new RegExp('^반복\\s+(' + ID + ')\\s+각각\\s+(.+?)(?:에서)?:$', 'u').exec(text))) {
+          nodes.push({ type: 'foreach', name: match[1], iterable: parseExpr(match[2], row.line), body: body(row), line: row.line }); continue;
+        }
+        if ((match = /^(?:반복\s+(.+?)인동안|반복\s+(.+?)\s+동안|동안\s+(.+)):\s*$/u.exec(text))) {
+          nodes.push({ type: 'while', test: parseExpr(match[1] || match[2] || match[3], row.line), body: body(row), line: row.line }); continue;
+        }
+        if ((match = new RegExp('^함수\\s+(' + ID + ')\\s*\\((.*?)\\):$', 'u').exec(text))) {
+          const params = match[2].trim() ? match[2].split(',').map(s => s.trim()) : [];
+          if (params.some(name => !IDENT.test(name)) || new Set(params).size !== params.length) fail(row.line, '구문 오류', '함수 매개변수가 잘못되었거나 중복되었습니다.');
+          nodes.push({ type: 'function', name: match[1], params, body: body(row), line: row.line }); continue;
+        }
+        if ((match = /^돌려주기(?:\s+(.+))?$/u.exec(text))) { nodes.push({ type: 'return', expr: match[1] ? parseExpr(match[1], row.line) : null, line: row.line }); continue; }
+        if (['반복끝내기', '그만', '다음반복', '계속'].includes(text)) { nodes.push({ type: ['그만', '반복끝내기'].includes(text) ? 'break' : 'continue', line: row.line }); continue; }
+        const set = assignment(text);
+        if (set) {
+          if (!set.left || !set.right) fail(row.line, '구문 오류', '대입문 양쪽에 값이 필요합니다.');
+          const target = parseExpr(set.left, row.line);
+          if (!['identifier', 'index'].includes(target.type)) fail(row.line, '구문 오류', '변수 또는 목록·사전 요소에만 값을 대입할 수 있습니다.');
+          nodes.push({ type: 'assign', target, op: set.op, expr: parseExpr(set.right, row.line), line: row.line }); continue;
+        }
+        if (text.endsWith(':')) fail(row.line, '구문 오류', '명령문의 형식을 확인해 주세요.');
+        const expr = parseExpr(text, row.line);
+        if (expr.type !== 'call') fail(row.line, '구문 오류', '단독 표현식은 실행할 수 없습니다. 출력() 또는 변수 대입을 사용하세요.');
+        nodes.push({ type: 'expr', expr, line: row.line });
+      }
+      return nodes;
+    }
+    if (lines.length && lines[0].indent) fail(lines[0].line, '구문 오류', '첫 명령은 들여쓰기 없이 시작해야 합니다.');
+    return lines.length ? block(0) : [];
+  }
+
+  class Env {
+    constructor(parent = null) { this.parent = parent; this.values = Object.create(null); }
+    get(name, line) {
+      if (hasOwn(this.values, name)) return this.values[name];
+      if (this.parent) return this.parent.get(name, line);
+      fail(line, '이름 오류', `'${name}'이라는 변수나 함수를 찾지 못했습니다. 먼저 선언했는지 확인하세요.`);
+    }
+    define(name, value) { this.values[name] = value; }
+    assign(name, value) {
+      if (hasOwn(this.values, name)) this.values[name] = value;
+      else if (this.parent && this.parent.contains(name)) this.parent.assign(name, value);
+      else this.values[name] = value;
+    }
+    contains(name) { return hasOwn(this.values, name) || !!this.parent?.contains(name); }
+  }
+
+  function repr(value, seen = new Set()) {
+    if (value === null) return '없음';
+    if (value === true) return '참';
+    if (value === false) return '거짓';
+    if (value?.type === 'sejongFn') return `<함수 ${value.name}>`;
+    if (typeof value !== 'object') return String(value);
+    if (seen.has(value)) return '<순환 참조>';
+    seen.add(value);
+    const result = Array.isArray(value) ? `[${value.map(v => repr(v, seen)).join(', ')}]` : `{${Object.keys(value).map(k => `"${k}": ${repr(value[k], seen)}`).join(', ')}}`;
+    seen.delete(value);
+    return result;
+  }
+  const truthy = value => !!value && (!Array.isArray(value) || !!value.length) && (typeof value !== 'object' || value === null || Array.isArray(value) || !!Object.keys(value).length);
+  const numeric = (value, line) => { if (typeof value !== 'number' || !Number.isFinite(value)) fail(line, '자료형 오류', '숫자가 필요한 곳에 다른 값이 들어왔습니다.'); return value; };
+  const keyOf = (value, line) => { if (typeof value !== 'string' && typeof value !== 'number') fail(line, '자료형 오류', '사전 키는 문자열 또는 숫자여야 합니다.'); return String(value); };
+  function indexed(target, key, line) {
+    if (Array.isArray(target) || typeof target === 'string') {
+      if (!Number.isInteger(key) || key < 0 || key >= target.length) fail(line, '인덱스 오류', `인덱스 ${repr(key)}가 범위를 벗어났습니다.`);
+      return target[key];
+    }
+    if (target && typeof target === 'object' && target.type !== 'sejongFn') {
+      const name = keyOf(key, line);
+      if (!hasOwn(target, name)) fail(line, '키 오류', `사전에 '${name}' 키가 없습니다.`);
+      return target[name];
+    }
+    fail(line, '자료형 오류', '목록, 문자열 또는 사전에서만 요소를 읽을 수 있습니다.');
+  }
+  function checkSize(value, line) {
+    if ((Array.isArray(value) && value.length > MAX_COLLECTION) || (value && typeof value === 'object' && value.type !== 'sejongFn' && Object.keys(value).length > MAX_COLLECTION)) fail(line, '제한 오류', '목록 또는 사전은 5,000개 요소까지만 사용할 수 있습니다.');
+    return value;
+  }
+
+  function createExecution(source, emit) {
+    const ast = parseProgram(source), global = new Env();
+    let steps = 0, outputs = 0, depth = 0, graphics = 0, frameFunction = null;
+    const guard = line => { if (++steps > MAX_STEPS) fail(line, '제한 오류', '실행 단계 제한(60,000회)을 넘었습니다. 반복문을 확인하세요.'); };
+    const requireCount = (args, count, name, line) => { if (args.length !== count) fail(line, '인자 오류', `${name}()에는 값 ${count}개가 필요합니다.`); };
+    const graphic = (name, args, line) => {
+      if (++graphics > 500) fail(line, '제한 오류', '한 프레임의 그래픽 명령은 500개까지 가능합니다.');
+      emit({ type: 'graphic', command: name, args }); return null;
+    };
+    const boundedNumber = (value, line, min, max) => {
+      const n = numeric(value, line);
+      if (n < min || n > max) fail(line, '범위 오류', `${min}부터 ${max} 사이 숫자가 필요합니다.`);
+      return n;
+    };
+    const builtins = {
+      출력(args, line) {
+        if (++outputs > 250) fail(line, '제한 오류', '콘솔 출력은 250줄까지 가능합니다.');
+        const text = args.map(x => repr(x)).join(' ');
+        if (text.length > 2000) fail(line, '제한 오류', '한 줄 출력은 2,000자까지 가능합니다.');
+        emit({ type: 'output', text }); return null;
+      },
+      길이(args, line) { requireCount(args, 1, '길이', line); const v = args[0]; if (typeof v !== 'string' && !Array.isArray(v) && (!v || typeof v !== 'object' || v.type === 'sejongFn')) fail(line, '자료형 오류', '길이()에는 문자열, 목록 또는 사전이 필요합니다.'); return Array.isArray(v) || typeof v === 'string' ? v.length : Object.keys(v).length; },
+      글자열(args, line) { requireCount(args, 1, '글자열', line); return repr(args[0]); },
+      문자열(args, line) { return builtins.글자열(args, line); },
+      숫자(args, line) { requireCount(args, 1, '숫자', line); const n = Number(args[0]); if (!Number.isFinite(n)) fail(line, '자료형 오류', '숫자로 바꿀 수 없는 값입니다.'); return n; },
+      실수(args, line) { return builtins.숫자(args, line); },
+      정수(args, line) { return Math.trunc(builtins.숫자(args, line)); },
+      절댓값(args, line) { requireCount(args, 1, '절댓값', line); return Math.abs(numeric(args[0], line)); },
+      범위(args, line) {
+        if (args.length < 1 || args.length > 3) fail(line, '인자 오류', '범위()에는 시작, 끝, 간격을 최대 3개까지 넣습니다.');
+        const start = args.length === 1 ? 0 : numeric(args[0], line), end = numeric(args.length === 1 ? args[0] : args[1], line), step = args.length === 3 ? numeric(args[2], line) : 1;
+        if (![start, end, step].every(Number.isInteger)) fail(line, '자료형 오류', '범위()에는 정수를 넣어 주세요.');
+        if (step === 0) fail(line, '범위 오류', '범위()의 간격은 0일 수 없습니다.');
+        const result = [];
+        for (let n = start; step > 0 ? n < end : n > end; n += step) { result.push(n); if (result.length > MAX_COLLECTION) fail(line, '제한 오류', '범위()는 5,000개 이하의 값만 만들 수 있습니다.'); }
+        return result;
+      },
+      합계(args, line) { requireCount(args, 1, '합계', line); if (!Array.isArray(args[0])) fail(line, '자료형 오류', '합계()에는 목록이 필요합니다.'); return args[0].reduce((sum, v) => sum + numeric(v, line), 0); },
+      최댓값(args, line) { const items = args.length === 1 && Array.isArray(args[0]) ? args[0] : args; if (!items.length) fail(line, '인자 오류', '최댓값()에는 값이 필요합니다.'); return Math.max(...items.map(v => numeric(v, line))); },
+      최솟값(args, line) { const items = args.length === 1 && Array.isArray(args[0]) ? args[0] : args; if (!items.length) fail(line, '인자 오류', '최솟값()에는 값이 필요합니다.'); return Math.min(...items.map(v => numeric(v, line))); },
+      정렬(args, line) { requireCount(args, 1, '정렬', line); if (!Array.isArray(args[0])) fail(line, '자료형 오류', '정렬()에는 목록이 필요합니다.'); const copy = [...args[0]]; if (!copy.every(v => typeof v === typeof copy[0] && ['string', 'number'].includes(typeof v))) fail(line, '자료형 오류', '정렬()은 같은 자료형의 숫자 또는 문자열 목록만 지원합니다.'); return copy.sort((a, b) => typeof a === 'number' ? a - b : a.localeCompare(b, 'ko')); },
+      추가(args, line) { requireCount(args, 2, '추가', line); if (!Array.isArray(args[0])) fail(line, '자료형 오류', '추가()의 첫 값은 목록이어야 합니다.'); if (args[0].length >= MAX_COLLECTION) fail(line, '제한 오류', '목록은 5,000개까지만 저장할 수 있습니다.'); args[0].push(args[1]); return null; },
+      삭제(args, line) { requireCount(args, 2, '삭제', line); const [target, key] = args; if (Array.isArray(target)) { if (!Number.isInteger(key) || key < 0 || key >= target.length) fail(line, '인덱스 오류', '삭제할 인덱스가 범위를 벗어났습니다.'); return target.splice(key, 1)[0]; } if (target && typeof target === 'object' && target.type !== 'sejongFn') { const name = keyOf(key, line); const value = indexed(target, name, line); delete target[name]; return value; } fail(line, '자료형 오류', '삭제()에는 목록 또는 사전이 필요합니다.'); },
+      무작위(args, line) { if (!args.length) return Math.random(); if (args.length !== 2) fail(line, '인자 오류', '무작위()에는 인자를 생략하거나 최소·최대 정수 2개를 넣습니다.'); const [a, b] = args.map(v => numeric(v, line)); if (!Number.isInteger(a) || !Number.isInteger(b) || a > b) fail(line, '범위 오류', '무작위()의 최소·최대 정수를 확인하세요.'); return a + Math.floor(Math.random() * (b - a + 1)); },
+      입력(args, line) { if (args.length > 1) fail(line, '인자 오류', '입력()에는 안내 문구를 하나만 넣을 수 있습니다.'); return { __requestInput: repr(args[0] ?? '') }; },
+      화면만들기(args, line) { requireCount(args, 2, '화면만들기', line); return graphic('화면만들기', [boundedNumber(args[0], line, 1, 1600), boundedNumber(args[1], line, 1, 1200)], line); },
+      배경색(args, line) { requireCount(args, 1, '배경색', line); return graphic('배경색', [String(args[0])], line); },
+      색상설정(args, line) { requireCount(args, 1, '색상설정', line); return graphic('색상설정', [String(args[0])], line); },
+      화면지우기(args, line) { requireCount(args, 0, '화면지우기', line); return graphic('화면지우기', [], line); },
+      원그리기(args, line) { requireCount(args, 3, '원그리기', line); return graphic('원그리기', args.map(v => boundedNumber(v, line, -5000, 5000)), line); },
+      사각형그리기(args, line) { requireCount(args, 4, '사각형그리기', line); return graphic('사각형그리기', args.map(v => boundedNumber(v, line, -5000, 5000)), line); },
+      선그리기(args, line) { requireCount(args, 4, '선그리기', line); return graphic('선그리기', args.map(v => boundedNumber(v, line, -5000, 5000)), line); },
+      글자그리기(args, line) { requireCount(args, 3, '글자그리기', line); return graphic('글자그리기', [repr(args[0]), boundedNumber(args[1], line, -5000, 5000), boundedNumber(args[2], line, -5000, 5000)], line); },
+      매프레임(args, line) { requireCount(args, 1, '매프레임', line); if (!args[0] || args[0].type !== 'sejongFn' || args[0].params.length) fail(line, '자료형 오류', '매프레임()에는 매개변수가 없는 함수를 넣어 주세요.'); frameFunction = args[0]; return null; }
+    };
+    function binary(op, a, b, line) {
+      switch (op) {
+        case '+': return typeof a === 'string' || typeof b === 'string' ? repr(a) + repr(b) : numeric(a, line) + numeric(b, line);
+        case '-': return numeric(a, line) - numeric(b, line);
+        case '*': return numeric(a, line) * numeric(b, line);
+        case '/': case '//': case '%': {
+          const x = numeric(a, line), y = numeric(b, line);
+          if (y === 0) fail(line, '0 나누기 오류', '0으로 나눌 수 없습니다.');
+          return op === '/' ? x / y : op === '//' ? Math.floor(x / y) : x % y;
+        }
+        case '==': return JSON.stringify(a) === JSON.stringify(b);
+        case '!=': return JSON.stringify(a) !== JSON.stringify(b);
+        case '<': case '>': case '<=': case '>=': {
+          if (typeof a !== typeof b || !['number', 'string'].includes(typeof a)) fail(line, '자료형 오류', '비교하는 두 값은 같은 숫자 또는 문자열이어야 합니다.');
+          return op === '<' ? a < b : op === '>' ? a > b : op === '<=' ? a <= b : a >= b;
+        }
+      }
+      fail(line, '구문 오류', `지원하지 않는 연산자 '${op}'입니다.`);
+    }
+    function* evalNode(node, env, line) {
+      guard(line);
+      switch (node.type) {
+        case 'literal': return node.value;
+        case 'identifier': return env.get(node.name, line);
+        case 'list': {
+          if (node.items.length > MAX_COLLECTION) fail(line, '제한 오류', '목록은 5,000개까지만 만들 수 있습니다.');
+          const list = []; for (const item of node.items) list.push(yield* evalNode(item, env, line)); return list;
+        }
+        case 'dict': {
+          if (node.entries.length > MAX_COLLECTION) fail(line, '제한 오류', '사전은 5,000개까지만 만들 수 있습니다.');
+          const dict = Object.create(null);
+          for (const [key, value] of node.entries) dict[keyOf(yield* evalNode(key, env, line), line)] = yield* evalNode(value, env, line);
+          return dict;
+        }
+        case 'index': return indexed(yield* evalNode(node.target, env, line), yield* evalNode(node.index, env, line), line);
+        case 'slice': {
+          const target = yield* evalNode(node.target, env, line);
+          if (!Array.isArray(target) && typeof target !== 'string') fail(line, '자료형 오류', '슬라이싱에는 목록이나 문자열이 필요합니다.');
+          const start = node.start ? yield* evalNode(node.start, env, line) : 0;
+          const end = node.end ? yield* evalNode(node.end, env, line) : target.length;
+          if (!Number.isInteger(start) || !Number.isInteger(end)) fail(line, '인덱스 오류', '슬라이스 범위는 정수여야 합니다.');
+          return target.slice(start, end);
+        }
+        case 'unary': { const v = yield* evalNode(node.expr, env, line); return node.op === '아니다' ? !truthy(v) : node.op === '-' ? -numeric(v, line) : numeric(v, line); }
+        case 'binary': {
+          const left = yield* evalNode(node.left, env, line);
+          if (node.op === '그리고') return truthy(left) && truthy(yield* evalNode(node.right, env, line));
+          if (node.op === '또는') return truthy(left) || truthy(yield* evalNode(node.right, env, line));
+          return binary(node.op, left, yield* evalNode(node.right, env, line), line);
+        }
+        case 'call': {
+          if (node.callee.type !== 'identifier') fail(line, '구문 오류', '함수 이름 뒤에 괄호를 사용해 주세요.');
+          const name = node.callee.name, args = [];
+          for (const arg of node.args) args.push(yield* evalNode(arg, env, line));
+          if (hasOwn(builtins, name)) {
+            const result = builtins[name](args, line);
+            return result?.__requestInput !== undefined ? yield { type: 'input', prompt: result.__requestInput } : result;
+          }
+          if (!env.contains(name)) fail(line, '함수 오류', `'${name}' 함수를 찾을 수 없습니다. 이름과 선언 위치를 확인하세요.`);
+          const fn = env.get(name, line);
+          if (!fn || fn.type !== 'sejongFn') fail(line, '함수 오류', `'${name}'은 실행 가능한 함수가 아닙니다.`);
+          return yield* callFunction(fn, args, line);
+        }
+      }
+      fail(line, '구문 오류', '해석할 수 없는 표현식입니다.');
+    }
+    function* callFunction(fn, args, line) {
+      if (args.length !== fn.params.length) fail(line, '인자 오류', `'${fn.name}' 함수에는 값 ${fn.params.length}개가 필요합니다.`);
+      if (++depth > 40) fail(line, '제한 오류', '함수를 너무 깊게 호출했습니다(최대 40단계).');
+      try {
+        const local = new Env(fn.env);
+        fn.params.forEach((name, i) => local.define(name, args[i]));
+        const result = yield* runBlock(fn.body, local, { inFunction: true, loops: 0 });
+        return result?.kind === 'return' ? result.value : null;
+      } finally { depth--; }
+    }
+    function* runBlock(nodes, env, context) {
+      for (const node of nodes) {
+        guard(node.line);
+        switch (node.type) {
+          case 'assign': {
+            const value = yield* evalNode(node.expr, env, node.line);
+            if (node.target.type === 'identifier') {
+              const next = node.op === '=' ? value : binary(node.op.slice(0, -1), env.get(node.target.name, node.line), value, node.line);
+              env.assign(node.target.name, checkSize(next, node.line));
+            } else {
+              const target = yield* evalNode(node.target.target, env, node.line);
+              const key = yield* evalNode(node.target.index, env, node.line);
+              if (Array.isArray(target)) { indexed(target, key, node.line); target[key] = node.op === '=' ? value : binary(node.op.slice(0, -1), target[key], value, node.line); }
+              else if (target && typeof target === 'object' && target.type !== 'sejongFn') {
+                const name = keyOf(key, node.line);
+                if (name === '__proto__' || name === 'constructor') fail(node.line, '키 오류', '이 키는 사용할 수 없습니다.');
+                if (!hasOwn(target, name) && Object.keys(target).length >= MAX_COLLECTION) fail(node.line, '제한 오류', '사전은 5,000개까지만 저장할 수 있습니다.');
+                target[name] = node.op === '=' ? value : binary(node.op.slice(0, -1), indexed(target, name, node.line), value, node.line);
+              } else fail(node.line, '자료형 오류', '요소 수정에는 목록 또는 사전이 필요합니다.');
+            }
+            break;
+          }
+          case 'expr': yield* evalNode(node.expr, env, node.line); break;
+          case 'function': env.define(node.name, { type: 'sejongFn', name: node.name, params: node.params, body: node.body, env }); break;
+          case 'if': {
+            let taken = false;
+            for (const branch of node.branches) if (truthy(yield* evalNode(branch.test, env, node.line))) { const flow = yield* runBlock(branch.body, env, context); if (flow) return flow; taken = true; break; }
+            if (!taken && node.other) { const flow = yield* runBlock(node.other, env, context); if (flow) return flow; }
+            break;
+          }
+          case 'repeat': {
+            const count = yield* evalNode(node.count, env, node.line);
+            if (!Number.isInteger(count) || count < 0 || count > MAX_STEPS) fail(node.line, '범위 오류', '반복 횟수는 0부터 60,000 사이의 정수여야 합니다.');
+            for (let i = 0; i < count; i++) { guard(node.line); const flow = yield* runBlock(node.body, env, { ...context, loops: context.loops + 1 }); if (flow?.kind === 'break') break; if (flow?.kind === 'return') return flow; }
+            break;
+          }
+          case 'foreach': {
+            const iterable = yield* evalNode(node.iterable, env, node.line);
+            if (!Array.isArray(iterable) && typeof iterable !== 'string') fail(node.line, '자료형 오류', '각각 반복에는 목록 또는 문자열이 필요합니다.');
+            for (const value of iterable) { guard(node.line); env.assign(node.name, value); const flow = yield* runBlock(node.body, env, { ...context, loops: context.loops + 1 }); if (flow?.kind === 'break') break; if (flow?.kind === 'return') return flow; }
+            break;
+          }
+          case 'while': {
+            while (truthy(yield* evalNode(node.test, env, node.line))) { guard(node.line); const flow = yield* runBlock(node.body, env, { ...context, loops: context.loops + 1 }); if (flow?.kind === 'break') break; if (flow?.kind === 'return') return flow; }
+            break;
+          }
+          case 'return': if (!context.inFunction) fail(node.line, '구문 오류', '돌려주기는 함수 안에서만 사용할 수 있습니다.'); return { kind: 'return', value: node.expr ? yield* evalNode(node.expr, env, node.line) : null };
+          case 'break': case 'continue': if (!context.loops) fail(node.line, '구문 오류', '그만과 계속은 반복문 안에서만 사용합니다.'); return { kind: node.type };
+        }
+      }
+      return null;
+    }
+    return {
+      program: runBlock(ast, global, { inFunction: false, loops: 0 }),
+      get stats() { return { steps, outputs }; },
+      get frameFunction() { return frameFunction; },
+      frame() { steps = 0; graphics = 0; return callFunction(frameFunction, [], 0); }
+    };
+  }
+
+  function toPython(source) {
+    const ast = parseProgram(source);
+    const unsupported = new Set(['화면만들기', '배경색', '색상설정', '원그리기', '사각형그리기', '선그리기', '글자그리기', '화면지우기', '매프레임']);
+    const names = { 출력: 'print', 입력: 'input', 길이: 'len', 글자열: 'str', 문자열: 'str', 숫자: 'float', 실수: 'float', 정수: 'int', 절댓값: 'abs', 범위: 'range', 합계: 'sum', 최댓값: 'max', 최솟값: 'min', 정렬: 'sorted' };
+    const operators = { 그리고: 'and', 또는: 'or', 아니다: 'not' };
+    const priority = { 또는: 1, 그리고: 2, '==': 3, '!=': 3, '<': 3, '>': 3, '<=': 3, '>=': 3, '+': 4, '-': 4, '*': 5, '/': 5, '//': 5, '%': 5 };
+    const warnings = new Set(); let usesRandom = false;
+    function expr(node, parent = 0) {
+      let text, rank = 9;
+      switch (node.type) {
+        case 'literal': text = node.value === null ? 'None' : node.value === true ? 'True' : node.value === false ? 'False' : typeof node.value === 'string' ? JSON.stringify(node.value) : String(node.value); break;
+        case 'identifier': text = node.name; break;
+        case 'list': text = `[${node.items.map(item => expr(item)).join(', ')}]`; break;
+        case 'dict': text = `{${node.entries.map(([key, value]) => `${expr(key)}: ${expr(value)}`).join(', ')}}`; break;
+        case 'index': text = `${expr(node.target, 8)}[${expr(node.index)}]`; break;
+        case 'slice': text = `${expr(node.target, 8)}[${node.start ? expr(node.start) : ''}:${node.end ? expr(node.end) : ''}]`; break;
+        case 'call': {
+          if (node.callee.type !== 'identifier') throw new SejongError(0, '변환 오류', '이 형태의 함수 호출은 Python으로 변환할 수 없습니다.');
+          const name = node.callee.name;
+          if (unsupported.has(name)) warnings.add(`${name}()은 브라우저 전용 기능이라 Python 비교 코드에서 실행되지 않습니다.`);
+          if (name === '무작위') { usesRandom = true; text = node.args.length ? `random.randint(${node.args.map(arg => expr(arg)).join(', ')})` : 'random.random()'; break; }
+          if (name === '추가' || name === '삭제') { text = `${expr(node.args[0], 8)}.${name === '추가' ? 'append' : 'pop'}(${node.args.slice(1).map(arg => expr(arg)).join(', ')})`; break; }
+          if (unsupported.has(name)) { text = 'None'; break; }
+          text = `${names[name] || name}(${node.args.map(arg => expr(arg)).join(', ')})`; break;
+        }
+        case 'unary': rank = 6; text = `${operators[node.op] || node.op}${node.op === '아니다' ? ' ' : ''}${expr(node.expr, rank)}`; break;
+        case 'binary': rank = priority[node.op]; text = `${expr(node.left, rank)} ${operators[node.op] || node.op} ${expr(node.right, rank + 1)}`; if (node.op === '그리고' || node.op === '또는') { text = `bool(${text})`; rank = 9; } if (node.op === '+' && (node.left.type === 'literal' && typeof node.left.value === 'string' || node.right.type === 'literal' && typeof node.right.value === 'string')) warnings.add('세종어의 문자열 + 자동 변환은 Python에서 str()이 필요할 수 있습니다.'); break;
+        default: throw Error('알 수 없는 AST');
+      }
+      return rank < parent ? `(${text})` : text;
+    }
+    function block(nodes, level, locals = new Set()) {
+      if (!nodes.length) return ['    '.repeat(level) + 'pass'];
+      const result = [];
+      const pad = '    '.repeat(level);
+      for (const node of nodes) {
+        switch (node.type) {
+          case 'assign': {
+            const target = expr(node.target), value = expr(node.expr);
+            result.push(pad + `${target} ${node.op} ${value}`); break;
+          }
+          case 'expr': {
+            const name = node.expr.callee.type === 'identifier' ? node.expr.callee.name : '';
+            const converted = expr(node.expr);
+            result.push(pad + (unsupported.has(name) ? `# 세종어 전용: ${name}()` : converted)); break;
+          }
+          case 'function': {
+            const assigned = new Set();
+            function scan(statements) { for (const item of statements) { if (item.type === 'assign' && item.target.type === 'identifier') assigned.add(item.target.name); if (item.type === 'if') { item.branches.forEach(branch => scan(branch.body)); if (item.other) scan(item.other); } if (['repeat', 'while', 'foreach'].includes(item.type)) scan(item.body); } }
+            scan(node.body);
+            const globalNames = [...assigned].filter(name => !node.params.includes(name) && locals.has(name));
+            result.push(pad + `def ${node.name}(${node.params.join(', ')}):`);
+            if (globalNames.length) result.push(pad + '    global ' + globalNames.join(', '));
+            result.push(...block(node.body, level + 1, new Set([...locals, ...node.params, ...assigned]))); break;
+          }
+          case 'if': node.branches.forEach((branch, index) => { result.push(pad + `${index ? 'elif' : 'if'} ${expr(branch.test)}:`); result.push(...block(branch.body, level + 1, locals)); }); if (node.other) { result.push(pad + 'else:'); result.push(...block(node.other, level + 1, locals)); } break;
+          case 'repeat': result.push(pad + `for _반복_${node.line} in range(${expr(node.count)}):`); result.push(...block(node.body, level + 1, locals)); break;
+          case 'foreach': result.push(pad + `for ${node.name} in ${expr(node.iterable)}:`); result.push(...block(node.body, level + 1, locals)); break;
+          case 'while': result.push(pad + `while ${expr(node.test)}:`); result.push(...block(node.body, level + 1, locals)); break;
+          case 'return': result.push(pad + `return${node.expr ? ' ' + expr(node.expr) : ''}`); break;
+          case 'break': result.push(pad + 'break'); break;
+          case 'continue': result.push(pad + 'continue'); break;
+        }
+      }
+      if (level > 0 && result.every(line => line.trim().startsWith('#'))) result.push(pad + 'pass');
+      return result;
+    }
+    const globals = new Set(ast.filter(node => node.type === 'assign' && node.target.type === 'identifier').map(node => node.target.name));
+    const lines = block(ast, 0, globals);
+    const python = (usesRandom ? ['import random', '', ...lines] : lines).join('\n');
+    return { code: python, warnings: [...warnings] };
+  }
+
+  let running = false, inputResolve = null, frameResolve = null;
+  const emit = message => self.postMessage(message);
+  const input = prompt => new Promise(resolve => { inputResolve = resolve; emit({ type: 'input-request', prompt: String(prompt).slice(0, 200) }); });
+  const frame = () => new Promise(resolve => { frameResolve = resolve; emit({ type: 'frame-ready' }); });
+  async function drive(iterator) {
+    let response;
+    while (true) {
+      const result = iterator.next(response);
+      if (result.done) return result.value;
+      if (result.value?.type === 'input') response = await input(result.value.prompt);
+      else fail(0, '실행 오류', '알 수 없는 대기 요청이 발생했습니다.');
+    }
+  }
+  const onMessage = async event => {
+    const data = event.data || {};
+    if (data.type === 'input-response' && inputResolve) { const resume = inputResolve; inputResolve = null; resume(String(data.value ?? '').slice(0, 2000)); return; }
+    if (data.type === 'frame' && frameResolve) { const resume = frameResolve; frameResolve = null; resume(); return; }
+    if (data.type === 'python') {
+      try { emit({ type: 'python', ...toPython(String(data.source || '')) }); }
+      catch (error) { emit({ type: 'python-error', line: error.line || 0, message: error.message }); }
+      return;
+    }
+    if (data.type !== 'run' || typeof data.source !== 'string') return;
+    if (running) return;
+    running = true;
+    const started = Date.now();
+    try {
+      const execution = createExecution(data.source, emit);
+      await drive(execution.program);
+      if (execution.frameFunction) {
+        emit({ type: 'animation-start' });
+        while (true) { await frame(); await drive(execution.frame()); }
+      }
+      emit({ type: 'done', duration: Date.now() - started, ...execution.stats });
+    } catch (error) {
+      emit({ type: 'error', line: error.line || 0, kind: error.kind || '실행 오류', message: error instanceof SejongError ? error.message : '예기치 않은 실행 오류가 발생했습니다.' });
+    } finally { running = false; }
+  };
+  if (typeof self !== 'undefined') self.onmessage = onMessage;
+  if (typeof module !== 'undefined' && module.exports) module.exports = { parseExpr, parseProgram, toPython, createExecution, SejongError };
+})();
+</script>
+  <script>/* 세종 개발실 - 정적 웹 앱: 예제, 편집기, 한글 해석기, 로컬 저장 */
+(() => {
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const examples = [
+    {id:'hello', title:'첫 인사', subtitle:'출력과 변수', level:'첫걸음', code:`# 세종 개발실에 오신 것을 환영합니다!\n# 아래 코드를 직접 바꿔 보세요.\n\n이름 = "세종"\n\n함수 인사하기(누구):\n    출력("안녕하세요, " + 누구 + "님!")\n\n반복 3번:\n    인사하기(이름)\n\n출력("오늘도 즐거운 코딩!")`},
+    {id:'condition', title:'조건의 갈림길', subtitle:'만약 · 아니면', level:'기초', code:`# 점수를 바꾸면 결과도 달라집니다.\n점수 = 85\n\n만약 점수 >= 90:\n    출력("참 잘했어요! 🌟")\n아니고 만약 점수 >= 80:\n    출력("훌륭합니다! 👏")\n아니면:\n    출력("조금만 더 연습해 봐요.")\n\n출력("입력한 점수: " + 글자열(점수))`},
+    {id:'loop', title:'차곡차곡 반복', subtitle:'반복문과 계산', level:'기초', code:`# 1부터 10까지의 합을 구해 봅시다.\n합계 = 0\n숫자 = 1\n\n반복 10번:\n    합계 += 숫자\n    숫자 += 1\n\n출력("1부터 10까지 더하면?")\n출력("정답은 " + 합계 + "입니다!")`},
+    {id:'function', title:'함수 만들기', subtitle:'매개변수 · 돌려주기', level:'도전', code:`# 함수를 만들어 재사용해 보세요.\n함수 제곱(숫자):\n    돌려주기 숫자 * 숫자\n\n함수 큰수(하나, 둘):\n    만약 하나 > 둘:\n        돌려주기 하나\n    아니면:\n        돌려주기 둘\n\n출력("7의 제곱: " + 제곱(7))\n출력("더 큰 수: " + 큰수(32, 58))`},
+    {id:'list', title:'아름다운 우리말', subtitle:'목록 · 각각 반복', level:'도전', code:`# 자랑스러운 우리말을 소개합니다.\n낱말들 = ["윤슬", "미리내", "여우비", "가람"]\n\n출력("아름다운 우리말 목록")\n출력("모두 " + 길이(낱말들) + "개의 낱말")\n출력("─────────────────")\n\n반복 낱말 각각 낱말들에서:\n    출력("✦ " + 낱말)\n\n출력("─────────────────")`},
+    {id:'challenge', title:'세종 수수께끼', subtitle:'배수 찾기 · 도전', level:'심화', code:`# 1부터 20까지 숫자를 살펴보세요.\n# 3의 배수는 '가', 5의 배수는 '나'\n# 둘 다 해당한다면 '가나다'를 출력합니다.\n숫자 = 1\n\n반복 20번:\n    만약 숫자 % 15 == 0:\n        출력("가나다")\n    아니고 만약 숫자 % 3 == 0:\n        출력("가")\n    아니고 만약 숫자 % 5 == 0:\n        출력("나")\n    아니면:\n        출력(숫자)\n    숫자 += 1`},
+    {id:'recursion', title:'함수와 재귀', subtitle:'함수 자신을 다시 호출', level:'심화', expected:'120', code:`# 5의 계승을 계산합니다.\n함수 계승(수):\n    만약 수 <= 1:\n        돌려주기 1\n    돌려주기 수 * 계승(수 - 1)\n\n출력(계승(5))`},
+    {id:'dictionary', title:'목록과 사전', subtitle:'복합 자료구조 수정', level:'심화', expected:'세종 · 280', code:`학생 = {\n    "이름": "세종",\n    "점수": [90, 85, 100]\n}\n학생["점수"][0] = 95\n출력(학생["이름"])\n출력(합계(학생["점수"]))`},
+    {id:'guess', title:'숫자 맞히기', subtitle:'입력과 조건', level:'도전', expected:'7을 입력하면 정답 메시지', code:`정답 = 7\n입력값 = 정수(입력("1부터 10까지 숫자를 입력하세요"))\n만약 입력값 == 정답:\n    출력("정답입니다!")\n아니면:\n    출력("다시 도전해 보세요.")`},
+    {id:'multiplication', title:'구구단 만들기', subtitle:'범위와 반복', level:'기초', expected:'2단의 아홉 줄', code:`반복 수 각각 범위(1, 10):\n    출력("2 × " + 수 + " = " + (2 * 수))`},
+    {id:'drawing', title:'도형 그리기', subtitle:'Canvas 그림', level:'창작', expected:'파란 바탕에 노란 원과 흰 글씨', code:`화면만들기(600, 400)\n배경색("#12354b")\n색상설정("#ffd166")\n원그리기(300, 190, 80)\n색상설정("흰색")\n글자그리기("우리말로 그리기", 220, 330)`},
+    {id:'animation', title:'움직이는 공', subtitle:'매프레임 애니메이션', level:'창작', expected:'움직이는 하늘색 공', code:`화면만들기(600, 320)\n위치 = 0\n함수 그리기():\n    배경색("#122d3d")\n    색상설정("하늘색")\n    원그리기(위치, 160, 28)\n    위치 = 위치 + 2\n    만약 위치 > 600:\n        위치 = 0\n매프레임(그리기)`}
+  ];
+  const expectedResults={
+    hello:'인사 3번과 마무리 문장',condition:'훌륭합니다! 👏',loop:'정답은 55입니다!',
+    function:'7의 제곱: 49 · 더 큰 수: 58',list:'우리말 4개를 차례로 출력',challenge:'1부터 20까지 가/나/가나다 표시'
+  };
+  examples.forEach(item=>{item.expected ||= expectedResults[item.id];});
+
+  let selectedId='hello', worker=null, pythonWorker=null, runTimeout=null, isRunning=false, toastTimeout=null, loadedSource='', animationFrame=null, runId=0, waitingInput=false;
+  const source=$('#source'), highlight=$('#highlight'), gutter=$('#line-numbers'), consoleOutput=$('#console-output');
+  const runtimeText=$('#sejong-runtime').textContent;
+
+  function htmlEscape(s) {return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+  const keywords=new Set(['함수','만약','아니고','아니면','반복','각각','번','에서','인동안','동안','돌려주기','참','거짓','없음','그리고','또는','아니다','반복끝내기','다음반복','그만','계속']);
+  const builtins=new Set(['출력','길이','글자열','문자열','숫자','실수','정수','절댓값','최댓값','최솟값','범위','합계','정렬','추가','삭제','무작위','입력','화면만들기','배경색','색상설정','원그리기','사각형그리기','선그리기','글자그리기','화면지우기','매프레임']);
+  function renderCodeLine(line) {
+    const split=line.split(/("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|#.*$)/gu);
+    return split.map(part=>{
+      if(!part)return '';
+      if(part.startsWith('#'))return '<span class="tok-comment">'+htmlEscape(part)+'</span>';
+      if(part.startsWith('"')||part.startsWith("'"))return '<span class="tok-string">'+htmlEscape(part)+'</span>';
+      let output='',last=0;
+      const re=/([가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_][가-힣ㄱ-ㅎㅏ-ㅣA-Za-z_0-9]*|\d+(?:\.\d+)?|==|!=|<=|>=|\/\/|[+\-*\/%=<>])/gu;
+      for(const match of part.matchAll(re)){
+        const word=match[0],i=match.index;
+        output+=htmlEscape(part.slice(last,i));
+        const cls=keywords.has(word)?'tok-keyword':builtins.has(word)?'tok-fn':/^\d/.test(word)?'tok-number':/[+\-*\/%=<>]/.test(word)?'tok-operator':null;
+        output+=cls?`<span class="${cls}">${htmlEscape(word)}</span>`:htmlEscape(word);
+        last=i+word.length;
+      }
+      return output+htmlEscape(part.slice(last));
+    }).join('');
+  }
+  function renderEditor() {
+    const text=source.value;
+    const lines=text.split('\n');
+    highlight.innerHTML=lines.map(renderCodeLine).join('\n')+'\n';
+    gutter.textContent=lines.map((_,i)=>i+1).join('\n');
+    $('#editor-lines').textContent=lines.length+'줄';
+    updateCursor();
+    syncScroll();
+  }
+  function syncScroll() {highlight.scrollTop=source.scrollTop;highlight.scrollLeft=source.scrollLeft;gutter.scrollTop=source.scrollTop;}
+  function updateCursor() {
+    const before=source.value.slice(0,source.selectionStart).split('\n');
+    $('#cursor-pos').textContent=before.length+'행, '+(before[before.length-1].length+1)+'열';
+  }
+  function save() {
+    try {localStorage.setItem('sejong_code',source.value);localStorage.setItem('sejong_example',selectedId);} catch(_error) {}
+    $('#save-hint').textContent='● 자동 저장됨';
+  }
+  function setSource(value,persist=true) {
+    source.value=value;renderEditor();if(persist)save();
+  }
+  function setActiveExample(id) {
+    const item=examples.find(e=>e.id===id)||examples[0];
+    selectedId=item.id;
+    $('#current-name').textContent=item.title+'.세종';
+    $('#editor-tab-name').textContent=item.title+'.세종';
+    document.querySelectorAll('.example-button').forEach(el=>{const active=el.dataset.example===id;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'true':'false');});
+    $('#editor-tip').innerHTML='이 예제는 <b>'+htmlEscape(item.subtitle)+'</b>을 배웁니다.'+(item.expected?' 예상 결과: '+htmlEscape(item.expected):' 내용을 자유롭게 수정해 보세요.');
+  }
+  function chooseExample(id) {
+    const item=examples.find(e=>e.id===id);if(!item)return;
+    const current=examples.find(e=>e.id===selectedId);
+    if(source.value && source.value!==current?.code && !window.confirm('작성 중인 코드가 바뀝니다. 예제를 불러올까요?'))return;
+    stopRun(false);setActiveExample(id);setSource(item.code);emptyConsole();setTab('output');
+    toast(`‘${item.title}’ 예제를 불러왔습니다.`);
+  }
+  function showExamples() {
+    const container=$('#example-list');
+    container.innerHTML=examples.map((item,i)=>`<button type="button" class="example-button" data-example="${item.id}" aria-current="false"><span class="example-index">${String(i+1).padStart(2,'0')}</span><span><span class="example-name">${htmlEscape(item.title)}</span><span class="example-description">${htmlEscape(item.subtitle)}</span></span><span class="example-arrow">›</span></button>`).join('');
+    container.addEventListener('click',event=>{const button=event.target.closest('button[data-example]');if(button)chooseExample(button.dataset.example);});
+  }
+  function toast(message) {
+    const item=$('#toast');item.textContent=message;item.classList.add('show');
+    clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>item.classList.remove('show'),2700);
+  }
+  function setTab(name) {
+    for(const tab of ['output','graphic']){
+      const selected=tab===name;
+      $('#tab-'+tab).classList.toggle('selected',selected);
+      $('#tab-'+tab).setAttribute('aria-selected',String(selected));
+      $('#'+tab+'-panel').classList.toggle('hidden',!selected);
+    }
+    document.querySelector('.console-panel').dataset.mobileView=name;
+    setMobileView(name);
+  }
+  function setMobileView(name) {
+    document.querySelector('.ide-grid').dataset.mobileView=name;
+    document.querySelectorAll('.mobile-view-tabs button').forEach(button=>{
+      const active=button.dataset.view===name;
+      button.classList.toggle('selected',active);
+      button.setAttribute('aria-selected',String(active));
+    });
+  }
+  function setStatus(status,label) {
+    const el=$('#console-status');el.className='console-status '+(status||'');el.innerHTML='<span class="status-led"></span> '+htmlEscape(label);
+  }
+  function emptyConsole() {
+    consoleOutput.innerHTML='<div class="console-empty"><span class="empty-icon">↳</span><strong>무엇을 만들어 볼까요?</strong><p>왼쪽에 한글 코드를 작성한 다음<br><b>실행하기</b>를 눌러보세요.</p></div>';
+    $('#run-info').textContent='실행할 준비가 되었습니다.';setStatus('','준비됨');
+  }
+  function appendOutput(text,klass='') {
+    const row=document.createElement('div');row.className='console-row '+klass;
+    const prompt=document.createElement('span');prompt.className='console-prompt';prompt.textContent=klass==='is-error'?'!':klass==='is-system'?'·':'›';
+    const value=document.createElement('span');value.className='console-text';value.textContent=text;
+    row.append(prompt,value);consoleOutput.appendChild(row);consoleOutput.scrollTop=consoleOutput.scrollHeight;
+  }
+  function showRunning(yes) {
+    isRunning=yes;$('#run-btn').classList.toggle('hidden',yes);$('#stop-btn').classList.toggle('hidden',!yes);
+  }
+  function stopRun(notify=true) {
+    runId++;
+    if(runTimeout){clearTimeout(runTimeout);runTimeout=null;}
+    if(animationFrame!==null){cancelAnimationFrame(animationFrame);animationFrame=null;}
+    $('#input-form').classList.add('hidden');waitingInput=false;
+    if(worker){worker.terminate();worker=null;}
+    if(isRunning){showRunning(false);if(notify){appendOutput('사용자가 실행을 중단했습니다.','is-system');$('#run-info').textContent='실행 중단';setStatus('','중단됨');}}
+  }
+  function newWorker() {
+    const url=URL.createObjectURL(new Blob([runtimeText],{type:'text/javascript'}));
+    try { return new Worker(url); }
+    finally { setTimeout(()=>URL.revokeObjectURL(url),1000); }
+  }
+  function armTimeout(id) {
+    clearTimeout(runTimeout);
+    runTimeout=setTimeout(()=>{
+      if(!isRunning||id!==runId)return;
+      stopRun(false);appendOutput('실행 시간이 3초를 넘었습니다. 무한 반복이 없는지 확인해 주세요.','is-error');
+      $('#run-info').textContent='시간 제한 초과';setStatus('error','실행 중단');
+    },3000);
+  }
+  const graphicColors={검정:'#000000',흰색:'#ffffff',빨강:'#ef4444',파랑:'#3b82f6',초록:'#22c55e',노랑:'#facc15',하늘색:'#7dd3fc',보라:'#a78bfa'};
+  let paintColor='#d8f5e9', graphicStarted=false;
+  function graphicCommand(command,args) {
+    const canvas=$('#graphic-canvas'),context=canvas.getContext('2d');
+    if(command==='화면만들기') {
+      canvas.width=args[0];canvas.height=args[1];paintColor='#d8f5e9';graphicStarted=true;setTab('graphic');return;
+    }
+    if(!graphicStarted){graphicStarted=true;setTab('graphic');}
+    if(command==='배경색'){context.fillStyle=graphicColors[args[0]]||args[0];context.fillRect(0,0,canvas.width,canvas.height);return;}
+    if(command==='화면지우기'){context.clearRect(0,0,canvas.width,canvas.height);return;}
+    if(command==='색상설정'){paintColor=graphicColors[args[0]]||args[0];return;}
+    context.fillStyle=paintColor;context.strokeStyle=paintColor;context.lineWidth=2;
+    if(command==='원그리기'){context.beginPath();context.arc(args[0],args[1],Math.max(0,args[2]),0,Math.PI*2);context.fill();}
+    if(command==='사각형그리기')context.fillRect(...args);
+    if(command==='선그리기'){context.beginPath();context.moveTo(args[0],args[1]);context.lineTo(args[2],args[3]);context.stroke();}
+    if(command==='글자그리기'){context.font='20px sans-serif';context.fillText(...args);}
+  }
+  function run() {
+    stopRun(false);const id=runId;setTab('output');consoleOutput.textContent='';showRunning(true);
+    graphicStarted=false;$('#graphic-canvas').getContext('2d').clearRect(0,0,$('#graphic-canvas').width,$('#graphic-canvas').height);
+    setStatus('running','실행 중');$('#run-info').textContent='한글 명령어를 해석하고 있습니다...';
+    try {worker=newWorker();}
+    catch(e){showRunning(false);setStatus('error','시작 실패');appendOutput('이 브라우저에서는 실행기를 시작할 수 없습니다.','is-error');return;}
+    worker.onmessage=event=>{
+      if(id!==runId)return;
+      const data=event.data;
+      if(data.type==='output'){appendOutput(data.text);return;}
+      if(data.type==='graphic'){try{graphicCommand(data.command,data.args);}catch(_error){appendOutput('그래픽 명령을 그릴 수 없습니다. 좌표와 색상을 확인하세요.','is-error');}return;}
+      if(data.type==='input-request'){
+        clearTimeout(runTimeout);runTimeout=null;waitingInput=true;setTab('output');
+        $('#input-label').textContent=data.prompt||'값을 입력하세요';
+        $('#input-value').value='';$('#input-form').classList.remove('hidden');$('#input-value').focus();
+        $('#run-info').textContent='입력을 기다리는 중';setStatus('running','입력 대기');return;
+      }
+      if(data.type==='animation-start'){
+        clearTimeout(runTimeout);runTimeout=null;
+        $('#run-info').textContent='애니메이션 실행 중 · 중단 버튼으로 종료';setStatus('running','그리는 중');setTab('graphic');return;
+      }
+      if(data.type==='frame-ready'){
+        animationFrame=requestAnimationFrame(()=>{
+          animationFrame=null;if(id===runId&&worker)worker.postMessage({type:'frame'});
+        });return;
+      }
+      if(data.type==='error'){
+        const position=data.line?`${data.line}번째 줄 · `:'';
+        setTab('output');appendOutput(position+(data.kind||'실행 오류')+': '+data.message,'is-error');
+        $('#run-info').textContent=data.line?`${data.line}번째 줄에서 오류 발생`:'실행 중 오류 발생';
+        setStatus('error','오류 발생');stopRun(false);
+        if(data.line)highlightErrorLine(data.line);
+        return;
+      }
+      if(data.type==='done'){
+        const meta=document.createElement('div');meta.className='console-success';
+        meta.textContent=`✓ 정상 종료 · ${data.duration}ms · ${data.outputs}개 출력 · ${data.steps.toLocaleString()}단계`;
+        consoleOutput.appendChild(meta);
+        $('#run-info').textContent=`실행 완료 · ${data.duration}ms`;
+        setStatus('','실행 완료');stopRun(false);
+      }
+    };
+    worker.onerror=()=>{if(id!==runId)return;appendOutput('실행기 오류가 발생했습니다. 페이지를 새로고침해 주세요.','is-error');setStatus('error','실행 오류');stopRun(false);};
+    armTimeout(id);
+    worker.postMessage({type:'run',source:source.value});
+  }
+  function highlightErrorLine(line) {
+    const lines=source.value.split('\n');if(line>lines.length)return;
+    const start=lines.slice(0,line-1).reduce((a,s)=>a+s.length+1,0);
+    source.focus();source.setSelectionRange(start,start+lines[line-1].length);updateCursor();
+    setMobileView('code');
+  }
+  function formatCode() {
+    const before=source.value;
+    const after=before.split('\n').map(line=>line.replace(/\t/g,'    ').replace(/[ \t]+$/,'')).join('\n');
+    if(after===before){toast('정리할 공백이 없습니다.');return;}
+    setSource(after);toast('탭과 줄 끝 공백을 정리했습니다.');
+  }
+  const completions={출력:'값을 결과 창에 표시',입력:'실행 중 값을 받기',범위:'반복할 숫자 목록 만들기',길이:'문자열·목록·사전의 길이',합계:'숫자 목록 합하기',정렬:'목록 정렬',추가:'목록에 값 추가',삭제:'목록·사전에서 값 삭제',화면만들기:'그림판 크기 설정',배경색:'그림판 배경 채우기',원그리기:'원을 채워 그리기',사각형그리기:'사각형을 채워 그리기',선그리기:'선 그리기',글자그리기:'글자 그리기',매프레임:'함수를 프레임마다 호출',함수:'함수 선언',만약:'조건 분기',동안:'조건 반복',반복:'횟수·목록 반복',돌려주기:'함수의 값 반환'};
+  let completionWord='';
+  function hideCompletion(){completionWord='';$('#completion').classList.add('hidden');}
+  function updateCompletion(){
+    const before=source.value.slice(0,source.selectionStart);
+    const match=before.match(/[가-힣]{1,}$/u);
+    if(!match||source.selectionStart!==source.selectionEnd){hideCompletion();return;}
+    const word=match[0],choices=Object.entries(completions).filter(([name])=>name.startsWith(word)&&name!==word).slice(0,5);
+    if(!choices.length){hideCompletion();return;}
+    completionWord=word;
+    $('#completion').innerHTML=choices.map(([name,description])=>`<button type="button" role="option" data-completion="${name}"><b>${name}</b><span>${description}</span></button>`).join('');
+    $('#completion').classList.remove('hidden');
+  }
+  function acceptCompletion(name) {
+    if(!completionWord)return;
+    const end=source.selectionStart,start=end-completionWord.length;
+    source.setRangeText(name,start,end,'end');hideCompletion();renderEditor();save();source.focus();
+  }
+  function togglePython(show) {
+    $('#python-panel').classList.toggle('hidden',!show);
+    document.querySelector('.ide-grid').classList.toggle('python-open',show);
+    $('#python-btn').setAttribute('aria-expanded',String(show));
+    if(!show){if(pythonWorker){pythonWorker.terminate();pythonWorker=null;}return;}
+    setMobileView('code');
+    $('#python-code').textContent='변환 중...';$('#python-warning').textContent='';
+    if(pythonWorker)pythonWorker.terminate();
+    try{pythonWorker=newWorker();}
+    catch(_error){$('#python-code').textContent='Python 변환기를 시작할 수 없습니다.';return;}
+    pythonWorker.onmessage=event=>{
+      const data=event.data;if(data.type==='python'){
+        $('#python-code').textContent=data.code;
+        $('#python-warning').textContent=data.warnings.length?'주의: '+data.warnings.join(' · '):'세종어 AST를 Python으로 변환했습니다.';
+      }else if(data.type==='python-error'){
+        $('#python-code').textContent='';$('#python-warning').textContent=`${data.line||'?'}번째 줄: ${data.message}`;
+      }
+      if(pythonWorker){pythonWorker.terminate();pythonWorker=null;}
+    };
+    pythonWorker.onerror=()=>{$('#python-code').textContent='변환 중 오류가 발생했습니다.';};
+    pythonWorker.postMessage({type:'python',source:source.value});
+    $('#python-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function insertTab(evt) {
+    if(evt.key!=='Tab')return;
+    evt.preventDefault();
+    const start=source.selectionStart,end=source.selectionEnd;
+    if(evt.shiftKey){
+      const rowStart=source.value.lastIndexOf('\n',start-1)+1;
+      const prefix=source.value.slice(rowStart,start);
+      const spaces=(prefix.match(/^ {1,4}/)||[''])[0].length;
+      if(spaces){source.setRangeText('',rowStart,rowStart+spaces,'start');source.setSelectionRange(start-spaces,Math.max(start-spaces,end-spaces));}
+    }else if(start!==end && source.value.slice(start,end).includes('\n')){
+      const value=source.value,begin=value.lastIndexOf('\n',start-1)+1;
+      const slice=value.slice(begin,end),replacement='    '+slice.replace(/\n/g,'\n    ');
+      source.setRangeText(replacement,begin,end,'select');
+    }else source.setRangeText('    ',start,end,'end');
+    renderEditor();save();
+  }
+  function downloadCode() {
+    const filename=(examples.find(e=>e.id===selectedId)?.title||'내 코드')+'.세종';
+    const blob=new Blob([source.value],{type:'text/plain;charset=utf-8'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    toast(`${filename} 파일을 저장했습니다.`);
+  }
+  function base64Encode(str) {
+    const bytes=new TextEncoder().encode(str);
+    let result='';for(let i=0;i<bytes.length;i++) result+=String.fromCharCode(bytes[i]);
+    return btoa(result).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/g,'');
+  }
+  function base64Decode(str) {
+    const binary=atob(str.replace(/-/g,'+').replace(/_/g,'/'));
+    return new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0)));
+  }
+  async function copyText(text) {
+    if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);return true;}catch(_e){}}
+    const field=document.createElement('textarea');field.value=text;field.style.position='fixed';field.style.opacity='0';document.body.append(field);field.select();
+    let result=false;try{result=document.execCommand('copy');}catch(_e){}
+    field.remove();return result;
+  }
+  async function shareCode() {
+    if(location.protocol==='file:'){
+      const copied=await copyText(source.value);
+      toast(copied?'로컬 파일에서는 코드 내용을 복사했습니다. 배포하면 링크 공유가 가능합니다.':'사이트를 배포하면 링크로 코드를 공유할 수 있습니다.');return;
+    }
+    if(source.value.length>4000){toast('공유 링크는 코드 4,000자까지 지원합니다. 파일로 내려받아 주세요.');return;}
+    const url=location.origin+location.pathname+'#code='+base64Encode(source.value);
+    const copied=await copyText(url);toast(copied?'현재 코드를 담은 공유 링크를 복사했습니다.':'주소창의 공유 링크를 복사해 주세요.');
+    if(!copied)location.hash='code='+base64Encode(source.value);
+  }
+  let docsReturnFocus=null;
+  function toggleDocs(open, trigger=document.activeElement) {
+    const drawer=$('#docs-drawer');
+    if(open)docsReturnFocus=trigger;
+    drawer.classList.toggle('hidden',!open);
+    $('#docs-toggle').classList.toggle('hidden',open);
+    $('#docs-toggle').setAttribute('aria-expanded',String(open));
+    $('#header-docs').setAttribute('aria-expanded',String(open));
+    if(open)drawer.focus();
+    else if(docsReturnFocus?.isConnected)docsReturnFocus.focus();
+  }
+  function searchDocs() {
+    const query=$('#docs-search').value.trim().toLocaleLowerCase('ko');
+    let found=0;
+    document.querySelectorAll('.reference-section').forEach(section=>{
+      const match=!query||section.textContent.toLocaleLowerCase('ko').includes(query);
+      section.hidden=!match;
+      const link=document.querySelector(`.docs-toc a[href="#${section.id}"]`);
+      if(link)link.hidden=!match;
+      if(match)found++;
+    });
+    $('#docs-empty').classList.toggle('hidden',found>0);
+    $('#docs-scroll').scrollTop=0;
+  }
+  function init() {
+    showExamples();
+    let original=null;
+    try {original=localStorage.getItem('sejong_code');const id=localStorage.getItem('sejong_example');if(examples.some(e=>e.id===id))selectedId=id;}catch(_e){}
+    if(location.hash.startsWith('#code=')) {
+      try {const shared=base64Decode(location.hash.slice(6));if(shared.length<=10000)original=shared;}catch(_e){toast('공유 코드를 읽지 못했습니다. 기본 예제를 표시합니다.');}
+    }
+    setActiveExample(selectedId);
+    loadedSource=original!==null?original:examples.find(e=>e.id===selectedId).code;
+    setSource(loadedSource,false);
+    source.addEventListener('input',()=>{renderEditor();save();updateCompletion();});
+    source.addEventListener('scroll',syncScroll);
+    source.addEventListener('click',updateCursor);
+    source.addEventListener('keyup',updateCursor);
+    source.addEventListener('keydown',e=>{
+      if(e.key==='Escape')hideCompletion();
+      if(e.key==='Tab'&&!e.shiftKey&&!$('#completion').classList.contains('hidden')){
+        e.preventDefault();acceptCompletion($('#completion button').dataset.completion);return;
+      }
+      if(e.key==='Tab')insertTab(e);
+      if(!e.isComposing && source.selectionStart===source.selectionEnd && ['(', '[', '{', '"', "'"].includes(e.key)){
+        const close={'(':')','[':']','{':'}','"':'"',"'":"'"}[e.key];
+        const next=source.value[source.selectionStart]||'';
+        if((e.key==='"'||e.key==="'") && /[가-힣\w]/u.test(next))return;
+        if(next===close && (e.key==='"'||e.key==="'")){e.preventDefault();source.setSelectionRange(source.selectionStart+1,source.selectionStart+1);return;}
+        e.preventDefault();const pos=source.selectionStart;source.setRangeText(e.key+close,pos,pos,'end');source.setSelectionRange(pos+1,pos+1);renderEditor();save();hideCompletion();return;
+      }
+      if(e.key==='Enter'&&!e.ctrlKey&&!e.metaKey&&source.selectionStart===source.selectionEnd) {
+        const currentStart=source.value.lastIndexOf('\n',source.selectionStart-1)+1;
+        const prefix=source.value.slice(currentStart,source.selectionStart);
+        const indentation=(prefix.match(/^\s*/)||[''])[0];
+        e.preventDefault();source.setRangeText('\n'+indentation+(prefix.trimEnd().endsWith(':')?'    ':''),source.selectionStart,source.selectionEnd,'end');renderEditor();save();hideCompletion();
+      }
+    });
+    document.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run();}
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();downloadCode();}
+      if(e.key==='Escape'&&!$('#docs-drawer').classList.contains('hidden')){e.preventDefault();toggleDocs(false);}
+    });
+    $('#run-btn').addEventListener('click',run);$('#stop-btn').addEventListener('click',()=>stopRun());
+    $('#reset-btn').addEventListener('click',()=>{const item=examples.find(e=>e.id===selectedId);setSource(item.code);emptyConsole();toast('현재 예제를 처음 상태로 되돌렸습니다.');});
+    $('#download-btn').addEventListener('click',downloadCode);$('#share-btn').addEventListener('click',shareCode);
+    $('#format-btn').addEventListener('click',formatCode);
+    $('#python-btn').addEventListener('click',()=>togglePython($('#python-panel').classList.contains('hidden')));
+    $('#close-python').addEventListener('click',()=>togglePython(false));
+    $('#copy-python').addEventListener('click',async()=>toast(await copyText($('#python-code').textContent)?'Python 코드를 복사했습니다.':'복사하지 못했습니다.'));
+    $('#completion').addEventListener('mousedown',event=>event.preventDefault());
+    $('#completion').addEventListener('click',event=>{const button=event.target.closest('button[data-completion]');if(button)acceptCompletion(button.dataset.completion);});
+    $('#input-form').addEventListener('submit',event=>{
+      event.preventDefault();if(!waitingInput||!worker)return;
+      const value=$('#input-value').value;$('#input-form').classList.add('hidden');waitingInput=false;
+      appendOutput('입력: '+value,'is-system');setStatus('running','실행 중');$('#run-info').textContent='입력 후 실행 중';
+      armTimeout(runId);worker.postMessage({type:'input-response',value});
+    });
+    $('#input-cancel').addEventListener('click',()=>stopRun());
+    document.querySelectorAll('.mobile-view-tabs button').forEach(button=>button.addEventListener('click',()=>{
+      if(button.dataset.view==='code')setMobileView('code');
+      else setTab(button.dataset.view);
+    }));
+    $('#clear-btn').addEventListener('click',emptyConsole);
+    $('#tab-output').addEventListener('click',()=>setTab('output'));
+    $('#tab-graphic').addEventListener('click',()=>setTab('graphic'));
+    $('#header-docs').addEventListener('click',event=>toggleDocs($('#docs-drawer').classList.contains('hidden'),event.currentTarget));
+    $('#docs-toggle').addEventListener('click',event=>toggleDocs(true,event.currentTarget));
+    $('#docs-close').addEventListener('click',()=>toggleDocs(false));
+    $('#docs-search').addEventListener('input',searchDocs);
+    $('.docs-toc').addEventListener('click',event=>{
+      const link=event.target.closest('a[href^="#ref-"]');if(!link)return;
+      event.preventDefault();document.querySelector(link.getAttribute('href'))?.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    emptyConsole();
+  }
+  init();
+})();
+</script>
+</body>
+</html>

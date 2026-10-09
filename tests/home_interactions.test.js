@@ -58,15 +58,15 @@ function makeHome({ hash = '', reduced = false } = {}) {
 
 test('games and apps have separate groups, with every app after the games', () => {
   const categories = [...html.matchAll(/<article class="project-item" data-category="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(categories, [...Array(10).fill('game'), ...Array(3).fill('app')]);
+  assert.deepEqual(categories, [...Array(10).fill('game'), ...Array(4).fill('app')]);
   assert.match(html, /data-group="game" aria-labelledby="game-projects-title"[\s\S]*?id="game-projects-title">게임<\/h3>/);
   assert.match(html, /data-group="app" aria-labelledby="app-projects-title"[\s\S]*?id="app-projects-title">앱<\/h3>/);
   assert.ok(html.indexOf('class="project-grid app-grid"') > html.indexOf('data-category="game" data-number="11"'));
 });
 
-test('13 projects remain available without JavaScript, with valid destinations and safe external links', () => {
+test('14 projects remain available without JavaScript, with valid destinations and safe external links', () => {
   const articles = [...html.matchAll(/<article\b([^>]*)>([\s\S]*?)<\/article>/g)];
-  assert.equal(articles.length, 13);
+  assert.equal(articles.length, 14);
   for (const [, attributes, content] of articles) {
     assert.doesNotMatch(attributes, /\bhidden\b/);
     const link = content.match(/<a\b([^>]+)>/)[1];
@@ -83,6 +83,8 @@ test('game cards use generated artwork while app cards keep store artwork with l
   assert.ok(gameImages.every(src => /-art\.(png|svg)$/.test(src) && fs.existsSync(path.join(base, src))));
   assert.equal(appImages.length, 3);
   assert.ok(appImages.every(([, src, fallback]) => src.startsWith('https://play-lh.googleusercontent.com/') && /^assets\/thumbnails\/.+\.(png|jpg)$/.test(fallback)));
+  assert.match(html, /href="game\/sejong_lab\/index\.html"[\s\S]*?src="assets\/thumbnails\/sejong-lab-art\.svg"/);
+  assert.ok(fs.existsSync(path.join(base, 'assets/thumbnails/sejong-lab-art.svg')));
 });
 
 test('project names retain their source language instead of forced Korean translations', () => {
@@ -95,6 +97,7 @@ test('project names retain their source language instead of forced Korean transl
   assert.equal(names['game/3D_%20minesweeper/index.html'], '3D 지뢰찾기');
   assert.equal(names['game/choi_circle/index.html'], '최원형');
   assert.equal(names['game/signal_room/index.html'], 'Little Loop Bus');
+  assert.equal(names['game/sejong_lab/index.html'], '세종 개발실');
   assert.ok(Object.values(names).includes('Spatial Mine'));
 });
 
@@ -111,7 +114,7 @@ test('category filters show exactly the right projects and accessible pressed st
     button.fire('click');
     const category = button.dataset.filter;
     const visible = env.items.filter(item => !item.hidden);
-    assert.equal(visible.length, { all: 13, game: 10, app: 3 }[category]);
+    assert.equal(visible.length, { all: 14, game: 10, app: 4 }[category]);
     assert.ok(visible.every(item => category === 'all' || item.dataset.category === category));
     assert.equal(env.buttons.filter(b => b.attrs['aria-pressed'] === 'true').length, 1);
     assert.equal(button.attrs['aria-pressed'], 'true');
@@ -124,19 +127,19 @@ test('category filters show exactly the right projects and accessible pressed st
 
 test('deep links and hash navigation restore filters; section anchors do not clear selection', () => {
   const env = makeHome({ hash: '#app' });
-  assert.equal(env.items.filter(item => !item.hidden).length, 3);
+  assert.equal(env.items.filter(item => !item.hidden).length, 4);
   env.context.location.hash = '#lab'; env.window.fire('hashchange');
   assert.equal(env.items.filter(item => !item.hidden).length, 10);
   env.context.location.hash = '#about'; env.window.fire('hashchange');
   assert.equal(env.items.filter(item => !item.hidden).length, 10);
   env.context.location.hash = ''; env.window.fire('hashchange');
-  assert.equal(env.items.filter(item => !item.hidden).length, 13);
+  assert.equal(env.items.filter(item => !item.hidden).length, 14);
 });
 
 test('unknown or inherited category hashes leave the full list usable', () => {
   for (const hash of ['#not-a-category', '#constructor', '#__proto__']) {
     const env = makeHome({ hash });
-    assert.equal(env.items.filter(item => !item.hidden).length, 13);
+    assert.equal(env.items.filter(item => !item.hidden).length, 14);
   }
 });
 
@@ -163,7 +166,7 @@ test('analytics retains established project identities and destinations independ
   const env = makeHome();
   env.cards.forEach(card => card.fire('click'));
   const clicks = env.events.filter(event => event[1] === 'game_enter');
-  assert.equal(clicks.length, 13);
+  assert.equal(clicks.length, 14);
   clicks.forEach((event, index) => {
     assert.equal(event[2].game_name, env.cards[index].dataset.name);
     assert.equal(event[2].target_url, env.cards[index].attrs.href);
@@ -251,4 +254,16 @@ test('SelPick appears only in all and app filters, with the supplied Play Store 
   }
   card.fire('click');
   assert.equal(env.events.at(-1)[2].category, 'app');
+});
+
+test('세종 개발실 opens the local IDE from the app filter', () => {
+  const env = makeHome();
+  const index = env.cards.findIndex(card => card.dataset.name === '세종 개발실');
+  assert.ok(index >= 0);
+  assert.equal(env.cards[index].attrs.href, 'game/sejong_lab/index.html');
+  assert.ok(fs.existsSync(path.join(base, env.cards[index].attrs.href)));
+  env.buttons.find(button => button.dataset.filter === 'app').fire('click');
+  assert.equal(env.items[index].hidden, false);
+  env.buttons.find(button => button.dataset.filter === 'game').fire('click');
+  assert.equal(env.items[index].hidden, true);
 });

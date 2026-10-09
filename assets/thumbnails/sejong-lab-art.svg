@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">세종 개발실 코드 편집기 아이콘</title>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1c3736"/>
+      <stop offset="1" stop-color="#0c1b24"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="496" height="496" rx="108" fill="url(#surface)"/>
+  <rect x="45" y="62" width="422" height="388" rx="32" fill="#12232a" stroke="#42665c" stroke-width="4"/>
+  <path d="M46 131h420" stroke="#42665c" stroke-width="4"/>
+  <circle cx="83" cy="96" r="10" fill="#ed9f93"/>
+  <circle cx="116" cy="96" r="10" fill="#e7c788"/>
+  <circle cx="149" cy="96" r="10" fill="#a8dfbb"/>
+  <text x="256" y="276" fill="#c7f4d9" font-family="Malgun Gothic,Apple SD Gothic Neo,sans-serif" font-size="110" font-weight="800" text-anchor="middle">세종</text>
+  <path d="M116 332h110M256 332h82M116 370h56M198 370h198" fill="none" stroke="#76bba1" stroke-width="14" stroke-linecap="round"/>
+  <path d="M396 342v42" stroke="#e3c788" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -51,6 +51,12 @@
     "source": "Google Play og:image"
   },
   {
+    "name": "세종 개발실",
+    "page": "game/sejong_lab/index.html",
+    "image": "assets/thumbnails/sejong-lab-art.svg",
+    "source": "Project-authored SVG icon"
+  },
+  {
     "name": "Linux Hacker CTF",
     "page": "game/hacking/index.html",
     "image": "assets/thumbnails/hacker-ctf-art.png",
