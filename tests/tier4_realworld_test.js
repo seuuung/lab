@@ -35,11 +35,11 @@ function runTier4Tests() {
     assertIncludes(indexHtml, 'https://github.com/seuuung', 'Tier4-S01-02: 사용자 프로필 내 GitHub 아웃링크 연결 정합성 확인');
 
     // ----------------------------------------------------
-    // Scenario 2: 카테고리 탭 순차 탐색 여정 (전체 -> 앱 -> 게임 -> 밈&실험실 -> 전체)
+    // Scenario 2: 카테고리 탭 순차 탐색 여정 (전체 -> 게임 -> 웹 -> 모바일 앱 -> 전체)
     // ----------------------------------------------------
     console.log('[Tier 4] Scenario 2: 카테고리 탭 순차 탐색 여정 시뮬레이션...');
-    const hasTabs = ['all', 'app', 'game'].every(category => indexHtml.includes('data-filter="' + category + '"')) && !indexHtml.includes('data-filter="lab"');
-    assert(hasTabs, 'Tier4-S02-01: 3개 카테고리 탭 식별자가 모두 정의되어 원활한 필터링 탐색 가능');
+    const hasTabs = ['all', 'game', 'web', 'app'].every(category => indexHtml.includes('data-filter="' + category + '"')) && !indexHtml.includes('data-filter="lab"');
+    assert(hasTabs, 'Tier4-S02-01: 4개 카테고리 탭 식별자가 모두 정의되어 원활한 필터링 탐색 가능');
 
     // ----------------------------------------------------
     // Scenario 3: 슬라임 점프 플레이 여정 (포털 -> 게임 진입 -> 캔버스 -> 홈 복귀)

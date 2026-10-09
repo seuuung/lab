@@ -85,7 +85,8 @@
       <div class="filter-bar"><div class="filters" aria-label="프로젝트 카테고리">
         <button type="button" class="tab-btn active" data-filter="all" aria-pressed="true">전체 <span id="count-all">14</span></button>
         <button type="button" class="tab-btn" data-filter="game" aria-pressed="false">게임 <span id="count-game">10</span></button>
-        <button type="button" class="tab-btn" data-filter="app" aria-pressed="false">앱 <span id="count-app">04</span></button>
+        <button type="button" class="tab-btn" data-filter="web" aria-pressed="false">웹 <span id="count-web">01</span></button>
+        <button type="button" class="tab-btn" data-filter="app" aria-pressed="false">모바일 앱 <span id="count-app">03</span></button>
       </div><span id="result-count" role="status" aria-live="polite">총 14개</span></div>
       <div class="project-group" data-group="game" aria-labelledby="game-projects-title">
         <h3 class="project-group-title" id="game-projects-title">게임</h3>
@@ -211,8 +212,24 @@
         </article>
         </div>
       </div>
+      <div class="project-group" data-group="web" aria-labelledby="web-projects-title">
+        <h3 class="project-group-title" id="web-projects-title">웹</h3>
+        <div class="project-grid web-grid">
+        <article class="project-item" data-category="web" data-number="14">
+          <a class="project-card" data-name="세종 개발실" href="game/sejong_lab/index.html">
+            <div class="project-art art-sejong app-art" aria-hidden="true">
+              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="assets/thumbnails/sejong-lab-art.svg" width="512" height="512" alt="" loading="lazy" decoding="async"></div>
+              <span class="card-open">코드 써보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </div>
+            <div class="project-info"><div class="project-title"><h3>세종 개발실</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
+              <span class="project-type">웹 앱</span>
+            </div>
+          </a>
+        </article>
+        </div>
+      </div>
       <div class="project-group" data-group="app" aria-labelledby="app-projects-title">
-        <h3 class="project-group-title" id="app-projects-title">앱</h3>
+        <h3 class="project-group-title" id="app-projects-title">모바일 앱</h3>
         <div class="project-grid app-grid">
         <article class="project-item" data-category="app" data-number="01">
           <a class="project-card" data-name="온식 (OnSic)" href="https://play.google.com/store/apps/details?id=com.onsic.app&amp;pcampaignid=web_share" target="_blank" rel="noopener noreferrer">
@@ -247,17 +264,6 @@
             </div>
             <div class="project-info"><div class="project-title"><h3>SelPick</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
               <span class="project-type">Android</span>
-            </div>
-          </a>
-        </article>
-        <article class="project-item" data-category="app" data-number="14">
-          <a class="project-card" data-name="세종 개발실" href="game/sejong_lab/index.html">
-            <div class="project-art art-sejong app-art" aria-hidden="true">
-              <div class="art-scene"><img class="project-thumbnail app-thumbnail" src="assets/thumbnails/sejong-lab-art.svg" width="512" height="512" alt="" loading="lazy" decoding="async"></div>
-              <span class="card-open">코드 써보기 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></span>
-            </div>
-            <div class="project-info"><div class="project-title"><h3>세종 개발실</h3><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></div>
-              <span class="project-type">웹 앱</span>
             </div>
           </a>
         </article>

@@ -12,7 +12,7 @@
     result.all++;
     result[item.dataset.category]++;
     return result;
-  }, { all: 0, game: 0, app: 0 });
+  }, { all: 0, game: 0, web: 0, app: 0 });
   let motionPaused = reduced.matches;
   let soundEnabled = false;
   let audioContext;

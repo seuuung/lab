@@ -80,7 +80,7 @@ function runTier1Tests() {
     const allButtons = extractAllTags(indexHtml, 'button');
     const allTabs = allButtons.filter(b => b.attributes['data-filter']);
 
-    assertEqual(allTabs.length, 3, 'Tier1-F2-01: 전체, 게임, 앱의 3개 탭만 배치');
+    assertEqual(allTabs.length, 4, 'Tier1-F2-01: 전체, 게임, 웹, 모바일 앱의 4개 탭 배치');
 
     const hasTabAll = allTabs.some(t => /전체|all/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'all') || (t.attributes['data-category'] === 'all'));
     assert(hasTabAll, 'Tier1-F2-02: "전체(all)" 탭 버튼 존재');
@@ -91,6 +91,9 @@ function runTier1Tests() {
     const hasTabGame = allTabs.some(t => /게임|game/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'game') || (t.attributes['data-category'] === 'game'));
     assert(hasTabGame, 'Tier1-F2-04: "웹 게임(game)" 탭 버튼 존재');
 
+    const hasTabWeb = allTabs.some(t => t.attributes['data-filter'] === 'web' && /웹/.test(t.innerHTML));
+    assert(hasTabWeb, 'Tier1-F2-04a: "웹(web)" 탭 버튼 존재');
+
     const hasTabLab = allTabs.some(t => /실험|밈|lab|meme/i.test(t.innerHTML) || (t.attributes['data-filter'] === 'lab') || (t.attributes['data-category'] === 'lab'));
     assert(!hasTabLab, 'Tier1-F2-05: 별도 실험 탭 제거');
 
@@ -100,6 +103,9 @@ function runTier1Tests() {
 
     const hasDataCategoryGame = indexHtml.includes('data-category="game"');
     assert(hasDataCategoryGame, 'Tier1-F2-07: data-category="game" 속성을 가진 카드 존재');
+
+    const hasDataCategoryWeb = indexHtml.includes('data-category="web"');
+    assert(hasDataCategoryWeb, 'Tier1-F2-07a: data-category="web" 속성을 가진 카드 존재');
 
     const hasDataCategoryLab = indexHtml.includes('data-category="lab"');
     assert(!hasDataCategoryLab, 'Tier1-F2-08: 이전 실험 카드가 게임 분류로 통합');

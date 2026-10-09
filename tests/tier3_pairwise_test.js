@@ -1,7 +1,7 @@
 /**
  * Tier 3: Pairwise Combinatorial Tests (결합 시나리오 매트릭스 검증)
  * 
- * Matrix 1: 탭 필터(4종: all, app, game, lab) × 카드 카테고리 필터링 정합성 조합
+ * Matrix 1: 탭 필터(4종: all, game, web, app) × 카드 카테고리 필터링 정합성 조합
  * Matrix 2: 뷰포트 크기(320px Mobile, 768px Tablet, 1440px Desktop) × DPR 스케일링(1.0, 2.0, 3.0) 캔버스 버퍼 조합
  * Matrix 3: 10개 하위 게임 각각 진입 -> 홈 버튼 복귀 경로 결합
  */
@@ -49,28 +49,35 @@ function runTier3Tests() {
     assertEqual(allResults.length, 14, 'Tier3-M1-01: "all" 탭 활성화 시 14개 전체 카드 노출');
     assert(allResults.some(c => c.category === 'app'), 'Tier3-M1-02: "all" 탭에 app 카테고리 포함');
     assert(allResults.some(c => c.category === 'game'), 'Tier3-M1-03: "all" 탭에 game 카테고리 포함');
+    assert(allResults.some(c => c.category === 'web'), 'Tier3-M1-03a: "all" 탭에 web 카테고리 포함');
     assert(allResults.some(c => c.name === 'SelPick'), 'Tier3-M1-04: 전체 목록에 SelPick 포함');
 
-    // 1-2. 'app' 탭: 4개 앱 카드만 표시
+    // 1-2. 'app' 탭: 3개 모바일 앱 카드만 표시
     const appResults = simulateFilter('app');
-    assertEqual(appResults.length, 4, 'Tier3-M1-05: "app" 탭 활성화 시 4개 앱 카드만 노출');
+    assertEqual(appResults.length, 3, 'Tier3-M1-05: "app" 탭 활성화 시 3개 모바일 앱 카드만 노출');
     assert(appResults.every(c => c.category === 'app'), 'Tier3-M1-06: "app" 탭 결과의 모든 카드가 app 카테고리');
+
+    const webResults = simulateFilter('web');
+    assertEqual(webResults.length, 1, 'Tier3-M1-06a: "web" 탭 활성화 시 웹 앱 카드만 노출');
+    assert(webResults[0].name === '세종 개발실', 'Tier3-M1-06b: 웹 앱 목록에 세종 개발실 포함');
 
     // 1-3. 'game' 탭: 10개 게임 카드만 표시
     const gameResults = simulateFilter('game');
     assertEqual(gameResults.length, 10, 'Tier3-M1-07: "game" 탭 활성화 시 10개 게임 카드만 노출');
     assert(gameResults.every(c => c.category === 'game'), 'Tier3-M1-08: "game" 탭 결과의 모든 카드가 game 카테고리');
 
-    // 1-4. 'lab' 탭: 4개 밈&실험실 카드만 표시
+    // 1-4. 이전 실험 카테고리 통합 유지
     assert(!sampleCards.some(c => c.category === 'lab'), 'Tier3-M1-09: 독립 실험 분류 제거');
     assert(['지옥의 회원가입', '최원형', '로봇 인증'].every(name => gameResults.some(c => c.name === name)), 'Tier3-M1-10: 기존 실험 3개가 게임 목록에 유지');
 
-    // 1-5. 탭 연속 전이 시나리오 (all -> app -> game -> lab -> all)
+    // 1-5. 탭 연속 전이 시나리오 (all -> app -> web -> all)
     let currentCards = simulateFilter('all');
     currentCards = simulateFilter('app');
-    assertEqual(currentCards.length, 4, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
+    assertEqual(currentCards.length, 3, 'Tier3-M1-11: 탭 전이 all -> app 결과 일치');
+    currentCards = simulateFilter('web');
+    assertEqual(currentCards.length, 1, 'Tier3-M1-11a: 탭 전이 app -> web 결과 일치');
     currentCards = simulateFilter('all');
-    assertEqual(currentCards.length, 14, 'Tier3-M1-12: 탭 전이 app -> all 복귀 결과 일치');
+    assertEqual(currentCards.length, 14, 'Tier3-M1-12: 탭 전이 web -> all 복귀 결과 일치');
 
 
     // ----------------------------------------------------

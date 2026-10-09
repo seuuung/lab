@@ -56,12 +56,13 @@ function makeHome({ hash = '', reduced = false } = {}) {
   return { context, items, cards, buttons, ids, grids, groups, root, window, document, media, events, github };
 }
 
-test('games and apps have separate groups, with every app after the games', () => {
+test('games, web, and mobile apps have separate groups in that order', () => {
   const categories = [...html.matchAll(/<article class="project-item" data-category="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(categories, [...Array(10).fill('game'), ...Array(4).fill('app')]);
+  assert.deepEqual(categories, [...Array(10).fill('game'), 'web', ...Array(3).fill('app')]);
   assert.match(html, /data-group="game" aria-labelledby="game-projects-title"[\s\S]*?id="game-projects-title">게임<\/h3>/);
-  assert.match(html, /data-group="app" aria-labelledby="app-projects-title"[\s\S]*?id="app-projects-title">앱<\/h3>/);
-  assert.ok(html.indexOf('class="project-grid app-grid"') > html.indexOf('data-category="game" data-number="11"'));
+  assert.match(html, /data-group="web" aria-labelledby="web-projects-title"[\s\S]*?id="web-projects-title">웹<\/h3>/);
+  assert.match(html, /data-group="app" aria-labelledby="app-projects-title"[\s\S]*?id="app-projects-title">모바일 앱<\/h3>/);
+  assert.ok(html.indexOf('class="project-grid app-grid"') > html.indexOf('class="project-grid web-grid"'));
 });
 
 test('14 projects remain available without JavaScript, with valid destinations and safe external links', () => {
@@ -109,25 +110,27 @@ test('decorative slogans and redundant project instructions are removed', () => 
 
 test('category filters show exactly the right projects and accessible pressed state', () => {
   const env = makeHome();
-  assert.deepEqual(env.buttons.map(button => button.dataset.filter), ['all', 'game', 'app']);
+  assert.deepEqual(env.buttons.map(button => button.dataset.filter), ['all', 'game', 'web', 'app']);
   for (const button of env.buttons) {
     button.fire('click');
     const category = button.dataset.filter;
     const visible = env.items.filter(item => !item.hidden);
-    assert.equal(visible.length, { all: 14, game: 10, app: 4 }[category]);
+    assert.equal(visible.length, { all: 14, game: 10, web: 1, app: 3 }[category]);
     assert.ok(visible.every(item => category === 'all' || item.dataset.category === category));
     assert.equal(env.buttons.filter(b => b.attrs['aria-pressed'] === 'true').length, 1);
     assert.equal(button.attrs['aria-pressed'], 'true');
     assert.equal(env.context.location.hash, '#' + category);
     assert.equal(env.ids['result-count'].textContent, `총 ${visible.length}개`);
-    assert.deepEqual(env.groups.map(group => group.hidden), [category === 'app', category === 'game']);
+    assert.deepEqual(env.groups.map(group => group.hidden), ['game', 'web', 'app'].map(group => category !== 'all' && category !== group));
     assert.ok(env.grids.every(grid => grid.classList.contains('is-filtered') === (category !== 'all')));
   }
 });
 
 test('deep links and hash navigation restore filters; section anchors do not clear selection', () => {
   const env = makeHome({ hash: '#app' });
-  assert.equal(env.items.filter(item => !item.hidden).length, 4);
+  assert.equal(env.items.filter(item => !item.hidden).length, 3);
+  env.context.location.hash = '#web'; env.window.fire('hashchange');
+  assert.equal(env.items.filter(item => !item.hidden).length, 1);
   env.context.location.hash = '#lab'; env.window.fire('hashchange');
   assert.equal(env.items.filter(item => !item.hidden).length, 10);
   env.context.location.hash = '#about'; env.window.fire('hashchange');
@@ -248,22 +251,24 @@ test('SelPick appears only in all and app filters, with the supplied Play Store 
   assert.ok(index >= 0);
   const card = env.cards[index];
   assert.equal(card.attrs.href, 'https://play.google.com/store/apps/details?id=com.selpick.app&pcampaignid=web_share');
-  for (const category of ['app', 'game', 'all']) {
+  for (const category of ['app', 'web', 'game', 'all']) {
     env.buttons.find(button => button.dataset.filter === category).fire('click');
-    assert.equal(env.items[index].hidden, category === 'game');
+    assert.equal(env.items[index].hidden, category === 'web' || category === 'game');
   }
   card.fire('click');
   assert.equal(env.events.at(-1)[2].category, 'app');
 });
 
-test('세종 개발실 opens the local IDE from the app filter', () => {
+test('세종 개발실 opens the local IDE from the web filter', () => {
   const env = makeHome();
   const index = env.cards.findIndex(card => card.dataset.name === '세종 개발실');
   assert.ok(index >= 0);
   assert.equal(env.cards[index].attrs.href, 'game/sejong_lab/index.html');
   assert.ok(fs.existsSync(path.join(base, env.cards[index].attrs.href)));
-  env.buttons.find(button => button.dataset.filter === 'app').fire('click');
+  env.buttons.find(button => button.dataset.filter === 'web').fire('click');
   assert.equal(env.items[index].hidden, false);
-  env.buttons.find(button => button.dataset.filter === 'game').fire('click');
+  env.buttons.find(button => button.dataset.filter === 'app').fire('click');
   assert.equal(env.items[index].hidden, true);
+  env.cards[index].fire('click');
+  assert.equal(env.events.at(-1)[2].category, 'web');
 });
