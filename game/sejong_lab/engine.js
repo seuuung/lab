@@ -1,4 +1,4 @@
-/* 세종어 실행기: 어휘 분석 -> AST -> 격리된 Worker 해석 */
+/* 한글 실행기: 어휘 분석 -> AST -> 격리된 Worker 해석 */
 (() => {
   'use strict';
   class SejongError extends Error {
@@ -496,7 +496,7 @@
           text = `${names[name] || name}(${node.args.map(arg => expr(arg)).join(', ')})`; break;
         }
         case 'unary': rank = 6; text = `${operators[node.op] || node.op}${node.op === '아니다' ? ' ' : ''}${expr(node.expr, rank)}`; break;
-        case 'binary': rank = priority[node.op]; text = `${expr(node.left, rank)} ${operators[node.op] || node.op} ${expr(node.right, rank + 1)}`; if (node.op === '그리고' || node.op === '또는') { text = `bool(${text})`; rank = 9; } if (node.op === '+' && (node.left.type === 'literal' && typeof node.left.value === 'string' || node.right.type === 'literal' && typeof node.right.value === 'string')) warnings.add('세종어의 문자열 + 자동 변환은 Python에서 str()이 필요할 수 있습니다.'); break;
+        case 'binary': rank = priority[node.op]; text = `${expr(node.left, rank)} ${operators[node.op] || node.op} ${expr(node.right, rank + 1)}`; if (node.op === '그리고' || node.op === '또는') { text = `bool(${text})`; rank = 9; } if (node.op === '+' && (node.left.type === 'literal' && typeof node.left.value === 'string' || node.right.type === 'literal' && typeof node.right.value === 'string')) warnings.add('한글 코드의 문자열 + 자동 변환은 Python에서 str()이 필요할 수 있습니다.'); break;
         default: throw Error('알 수 없는 AST');
       }
       return rank < parent ? `(${text})` : text;
@@ -514,7 +514,7 @@
           case 'expr': {
             const name = node.expr.callee.type === 'identifier' ? node.expr.callee.name : '';
             const converted = expr(node.expr);
-            result.push(pad + (unsupported.has(name) ? `# 세종어 전용: ${name}()` : converted)); break;
+            result.push(pad + (unsupported.has(name) ? `# 한글 전용: ${name}()` : converted)); break;
           }
           case 'function': {
             const assigned = new Set();

@@ -26,6 +26,7 @@ element('docs-scroll');
 const sections = [{ id: 'ref-control', textContent: '반복과 조건문', hidden: false }, { id: 'ref-builtins', textContent: '범위와 합계', hidden: false }];
 const links = Object.fromEntries(sections.map(section => [section.id, { hidden: false }]));
 const document = {
+  body: element('body'),
   activeElement: launcher,
   querySelectorAll(selector) { return selector === '.reference-section' ? sections : []; },
   querySelector(selector) { return links[selector.match(/#(ref-[^"\]]+)/)?.[1]]; }
@@ -36,6 +37,7 @@ context.docs.toggleDocs(true, launcher);
 assert.equal(drawer.classList.contains('hidden'), false);
 assert.equal(launcher.classList.contains('hidden'), true);
 assert.equal(header.attrs['aria-expanded'], 'true');
+assert.equal(document.body.classList.contains('docs-open'), true);
 assert.equal(document.activeElement, drawer);
 search.value = '범위';
 context.docs.searchDocs();
@@ -48,5 +50,6 @@ assert.equal(empty.classList.contains('hidden'), false);
 context.docs.toggleDocs(false);
 assert.equal(drawer.classList.contains('hidden'), true);
 assert.equal(header.attrs['aria-expanded'], 'false');
+assert.equal(document.body.classList.contains('docs-open'), false);
 assert.equal(document.activeElement, launcher);
 console.log('플로팅 문서 접기·펼치기와 검색 동작 통과');

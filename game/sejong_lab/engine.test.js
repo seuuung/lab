@@ -76,6 +76,6 @@ async function main() {
       assert.ok(result.some(message => message.type === 'frame-ready'));
     } else assert.equal(result.at(-1).type, 'done', example.id);
   }
-  console.log(`세종어 엔진: 이전 문법, 자료구조, 입력, 그래픽, Python, 제한 및 예제 ${examples.length}개 통과`);
+  console.log(`한글 엔진: 이전 문법, 자료구조, 입력, 그래픽, Python, 제한 및 예제 ${examples.length}개 통과`);
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

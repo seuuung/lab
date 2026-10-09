@@ -26,6 +26,9 @@
 @media(max-width:620px){.docs-drawer{right:7px;bottom:7px;width:calc(100vw - 14px);height:calc(100dvh - 14px);border-radius:11px}.docs-drawer-head{padding:15px}.docs-drawer-head h2{font-size:17px}.docs-layout{display:flex;flex-direction:column}.docs-toc{flex:none;flex-direction:row;gap:5px;padding:9px 10px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;border-right:0;border-bottom:1px solid #293d3c}.docs-toc a{flex:none;font-size:10px;padding:8px 9px}.docs-scroll{flex:1}.reference-doc{padding:19px 18px 26px}.reference-section h3{font-size:20px}.docs-launcher{right:13px;bottom:max(13px,env(safe-area-inset-bottom))}}
 .docs-drawer-head button{width:44px;height:44px}.docs-toc a{display:flex;align-items:center;min-height:40px}
 .docs-scroll{min-height:0}
+@media(max-width:680px){.topbar{gap:8px}.brand,.nav-links{min-width:0}.working-topbar{gap:6px;margin-bottom:10px;padding:7px 0}.working-title{min-height:28px;gap:7px;overflow:hidden}.working-file{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.toolbar{flex-wrap:nowrap;overflow-x:auto;gap:6px;scrollbar-width:none;overscroll-behavior-x:contain;padding:2px 0 6px}.toolbar::-webkit-scrollbar{display:none}.toolbar .btn{min-height:44px;flex:none}.toolbar .btn-primary,.toolbar .btn-stop{position:sticky;left:0;z-index:2;min-width:110px;box-shadow:8px 0 12px #10191dcc}.mobile-view-tabs button{min-height:44px;font-size:13px}.code-editor{min-height:320px;height:clamp(320px,54vh,520px);height:clamp(320px,54dvh,520px)}.code-highlight,#source{font-size:16px;line-height:27px;padding:16px 11px 22px}.line-gutter{min-width:40px;font-size:12px;line-height:27px;padding:16px 8px 22px 5px}.input-form input{min-height:44px;font-size:16px}.input-form button{min-height:44px}.completion{max-width:calc(100% - 28px)}}
+@media(max-width:390px){.toolbar .btn-subtle span{display:inline}.nav-links{gap:8px}#header-docs{font-size:0}#header-docs span{font-size:19px;margin-left:0}.brand-label strong{font-size:14px}}
+@media(max-width:620px){body.docs-open{overflow:hidden}.docs-drawer{inset:auto 0 0;width:100vw;height:100vh;height:100dvh;border-radius:0;border-left:0;border-right:0}.docs-drawer-head{padding:15px;padding-top:max(15px,env(safe-area-inset-top))}.docs-search-wrap{padding:10px 15px}.docs-search-wrap label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.docs-search-wrap input{height:44px;font-size:16px}.docs-toc a{min-height:44px;font-size:12px}.docs-scroll{overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}.reference-section p{font-size:14px;line-height:1.72}.reference-section code,.reference-section pre code{font-size:12px}.reference-grid span{font-size:13px}.reference-api p{font-size:13px}.reference-doc{padding:20px 18px 30px}}
 </style>
 </head>
 <body>
@@ -83,17 +86,17 @@
         <section class="editor-panel panel" aria-label="한글 코드 편집기">
           <div class="panel-heading">
             <div class="filename-tab"><span class="tab-file-icon">ㅅ</span><span id="editor-tab-name">첫 인사.세종</span><span class="tab-circle"></span></div>
-            <div class="editor-controls"><span class="editor-language">세종어</span><span class="tag">UTF-8</span></div>
+            <div class="editor-controls"><span class="editor-language">한글</span><span class="tag">UTF-8</span></div>
           </div>
           <div class="code-editor" id="code-editor">
             <div class="line-gutter" id="line-numbers" aria-hidden="true">1</div>
             <div class="editor-input-wrap">
               <pre id="highlight" class="code-highlight" aria-hidden="true"></pre>
-              <textarea id="source" aria-label="세종어 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
+              <textarea id="source" aria-label="한글 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
             </div>
           </div>
           <div id="completion" class="completion hidden" role="listbox" aria-label="키워드 자동완성"></div>
-          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">세종어 0.2</span></div>
+          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">한글 0.2</span></div>
         </section>
 
         <section id="python-panel" class="python-panel panel hidden" aria-label="Python 코드 비교"><div class="panel-heading"><strong>Python 비교</strong><div><button id="copy-python" class="btn btn-subtle" type="button">복사</button><button id="close-python" class="btn btn-subtle" type="button">닫기</button></div></div><p id="python-warning" class="python-warning"></p><pre id="python-code" class="python-code"></pre></section>
@@ -103,7 +106,7 @@
           <div class="console-body" id="output-panel" role="tabpanel" aria-labelledby="tab-output">
             <div id="console-output" class="console-output"><div class="console-empty"><span class="empty-icon">↳</span><strong>무엇을 만들어 볼까요?</strong><p>왼쪽에 한글 코드를 작성한 다음<br><b>실행하기</b>를 눌러보세요.</p></div></div>
           </div>
-          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="세종어 그래픽 실행 결과"></canvas><p>세종어의 그리기 명령으로 만든 화면입니다.</p></div>
+          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="한글 그래픽 실행 결과"></canvas><p>한글 코드의 그리기 명령으로 만든 화면입니다.</p></div>
           <form id="input-form" class="input-form hidden"><label id="input-label" for="input-value">입력 값</label><div><input id="input-value" type="text" maxlength="2000" autocomplete="off"><button type="submit">확인</button><button id="input-cancel" type="button">취소</button></div></form>
           <div class="console-footer"><span id="run-info">실행할 준비가 되었습니다.</span><button id="clear-btn" title="실행 결과 지우기">지우기 <span>×</span></button></div>
         </section>
@@ -113,9 +116,9 @@
       <footer class="footer"><span>세종 개발실 <span class="footer-sep">/</span> 모든 글자는 가능성의 시작입니다.</span><span>2026 한글날 기념 프로젝트 · v0.2</span></footer>
     </main>
   </div>
-  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>세종어 문서</span><span aria-hidden="true">↗</span></button>
+  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>한글 문서</span><span aria-hidden="true">↗</span></button>
   <aside id="docs-drawer" class="docs-drawer hidden" aria-labelledby="docs-title" tabindex="-1">
-    <div class="docs-drawer-head"><div><span class="docs-eyebrow">SEJONG LANGUAGE · v0.2</span><h2 id="docs-title">세종어 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
+    <div class="docs-drawer-head"><div><span class="docs-eyebrow">HANGUL LANGUAGE · v0.2</span><h2 id="docs-title">한글 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
     <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="예: 범위, 함수, 원그리기" autocomplete="off"></div>
     <div class="docs-layout">
       <nav class="docs-toc" aria-label="문서 목차">
@@ -125,7 +128,7 @@
   <section class="reference-section" id="ref-start">
     <span class="reference-kicker">GUIDE / 01</span>
     <h3>시작하기</h3>
-    <p>세종어는 브라우저 안에서 실행되는 한글 프로그래밍 언어입니다. 코드를 작성하고 <strong>실행하기</strong>를 누르거나 <kbd>Ctrl</kbd> + <kbd>Enter</kbd>를 누르세요. Mac에서는 <kbd>⌘</kbd> + <kbd>Enter</kbd>를 사용합니다.</p>
+    <p>한글로 작성한 프로그램은 브라우저에서 바로 실행됩니다. <strong>실행하기</strong>를 누르거나 <kbd>Ctrl</kbd> + <kbd>Enter</kbd>를 누르세요. Mac에서는 <kbd>⌘</kbd> + <kbd>Enter</kbd>를 사용합니다.</p>
     <pre><code># 첫 번째 프로그램
 이름 = "세종"
 출력("안녕하세요, " + 이름 + "님!")</code></pre>
@@ -255,22 +258,22 @@
   <section class="reference-section" id="ref-python">
     <span class="reference-kicker">TOOLS / 10</span>
     <h3>Python 비교</h3>
-    <p><strong>Python 비교</strong> 버튼은 세종어 구문 트리에서 대응 코드를 생성합니다. 결과를 복사할 수 있으며 Python 실행 환경을 제공하지는 않습니다. <code>반복 … 각각 범위()</code>는 <code>for … in range()</code>로 변환됩니다.</p>
-    <p>Canvas·애니메이션 명령은 Python에서 실행되지 않아 주석으로 표시됩니다. 세종어의 문자열 <code>+</code> 자동 변환 등 Python과 다른 동작에는 경고가 표시됩니다.</p>
+    <p><strong>Python 비교</strong> 버튼은 한글 구문 트리에서 대응 코드를 생성합니다. 결과를 복사할 수 있으며 Python 실행 환경을 제공하지는 않습니다. <code>반복 … 각각 범위()</code>는 <code>for … in range()</code>로 변환됩니다.</p>
+    <p>Canvas·애니메이션 명령은 Python에서 실행되지 않아 주석으로 표시됩니다. 한글 코드의 문자열 <code>+</code> 자동 변환 등 Python과 다른 동작에는 경고가 표시됩니다.</p>
   </section>
 
   <section class="reference-section" id="ref-limits">
     <span class="reference-kicker">RUNTIME / 11</span>
     <h3>실행 제한과 보안</h3>
     <div class="reference-grid"><span>소스 길이</span><span>최대 100,000자</span><span>일반 실행</span><span>최대 3초, 60,000단계</span><span>함수 호출</span><span>재귀 깊이 40</span><span>콘솔</span><span>최대 250줄, 한 줄 2,000자</span><span>목록·사전</span><span>최대 5,000개 항목</span><span>그래픽</span><span>프레임당 최대 500명령</span></div>
-    <p>프로그램은 별도의 Web Worker에서 해석되며 사용자 코드를 JavaScript <code>eval</code>로 실행하지 않습니다. 세종어 코드에서 DOM, 파일, 네트워크, 브라우저 저장소에 직접 접근할 수 없습니다. 입력을 기다리거나 애니메이션이 실행되는 동안에는 3초 제한을 멈추며 중단 버튼으로 종료합니다.</p>
+    <p>프로그램은 별도의 Web Worker에서 해석되며 사용자 코드를 JavaScript <code>eval</code>로 실행하지 않습니다. 한글 코드에서 DOM, 파일, 네트워크, 브라우저 저장소에 직접 접근할 수 없습니다. 입력을 기다리거나 애니메이션이 실행되는 동안에는 3초 제한을 멈추며 중단 버튼으로 종료합니다.</p>
   </section>
 </article>
 </div>
     </div>
   </aside>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script id="sejong-runtime" type="text/plain">/* 세종어 실행기: 어휘 분석 -> AST -> 격리된 Worker 해석 */
+  <script id="sejong-runtime" type="text/plain">/* 한글 실행기: 어휘 분석 -> AST -> 격리된 Worker 해석 */
 (() => {
   'use strict';
   class SejongError extends Error {
@@ -768,7 +771,7 @@
           text = `${names[name] || name}(${node.args.map(arg => expr(arg)).join(', ')})`; break;
         }
         case 'unary': rank = 6; text = `${operators[node.op] || node.op}${node.op === '아니다' ? ' ' : ''}${expr(node.expr, rank)}`; break;
-        case 'binary': rank = priority[node.op]; text = `${expr(node.left, rank)} ${operators[node.op] || node.op} ${expr(node.right, rank + 1)}`; if (node.op === '그리고' || node.op === '또는') { text = `bool(${text})`; rank = 9; } if (node.op === '+' && (node.left.type === 'literal' && typeof node.left.value === 'string' || node.right.type === 'literal' && typeof node.right.value === 'string')) warnings.add('세종어의 문자열 + 자동 변환은 Python에서 str()이 필요할 수 있습니다.'); break;
+        case 'binary': rank = priority[node.op]; text = `${expr(node.left, rank)} ${operators[node.op] || node.op} ${expr(node.right, rank + 1)}`; if (node.op === '그리고' || node.op === '또는') { text = `bool(${text})`; rank = 9; } if (node.op === '+' && (node.left.type === 'literal' && typeof node.left.value === 'string' || node.right.type === 'literal' && typeof node.right.value === 'string')) warnings.add('한글 코드의 문자열 + 자동 변환은 Python에서 str()이 필요할 수 있습니다.'); break;
         default: throw Error('알 수 없는 AST');
       }
       return rank < parent ? `(${text})` : text;
@@ -786,7 +789,7 @@
           case 'expr': {
             const name = node.expr.callee.type === 'identifier' ? node.expr.callee.name : '';
             const converted = expr(node.expr);
-            result.push(pad + (unsupported.has(name) ? `# 세종어 전용: ${name}()` : converted)); break;
+            result.push(pad + (unsupported.has(name) ? `# 한글 전용: ${name}()` : converted)); break;
           }
           case 'function': {
             const assigned = new Set();
@@ -1112,7 +1115,7 @@
     pythonWorker.onmessage=event=>{
       const data=event.data;if(data.type==='python'){
         $('#python-code').textContent=data.code;
-        $('#python-warning').textContent=data.warnings.length?'주의: '+data.warnings.join(' · '):'세종어 AST를 Python으로 변환했습니다.';
+        $('#python-warning').textContent=data.warnings.length?'주의: '+data.warnings.join(' · '):'한글 코드의 구문 트리를 Python으로 변환했습니다.';
       }else if(data.type==='python-error'){
         $('#python-code').textContent='';$('#python-warning').textContent=`${data.line||'?'}번째 줄: ${data.message}`;
       }
@@ -1175,6 +1178,7 @@
     const drawer=$('#docs-drawer');
     if(open)docsReturnFocus=trigger;
     drawer.classList.toggle('hidden',!open);
+    document.body.classList.toggle('docs-open',open);
     $('#docs-toggle').classList.toggle('hidden',open);
     $('#docs-toggle').setAttribute('aria-expanded',String(open));
     $('#header-docs').setAttribute('aria-expanded',String(open));

@@ -63,17 +63,17 @@
         <section class="editor-panel panel" aria-label="한글 코드 편집기">
           <div class="panel-heading">
             <div class="filename-tab"><span class="tab-file-icon">ㅅ</span><span id="editor-tab-name">첫 인사.세종</span><span class="tab-circle"></span></div>
-            <div class="editor-controls"><span class="editor-language">세종어</span><span class="tag">UTF-8</span></div>
+            <div class="editor-controls"><span class="editor-language">한글</span><span class="tag">UTF-8</span></div>
           </div>
           <div class="code-editor" id="code-editor">
             <div class="line-gutter" id="line-numbers" aria-hidden="true">1</div>
             <div class="editor-input-wrap">
               <pre id="highlight" class="code-highlight" aria-hidden="true"></pre>
-              <textarea id="source" aria-label="세종어 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
+              <textarea id="source" aria-label="한글 코드 편집기" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off" autocorrect="off" aria-describedby="editor-tip"></textarea>
             </div>
           </div>
           <div id="completion" class="completion hidden" role="listbox" aria-label="키워드 자동완성"></div>
-          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">세종어 0.2</span></div>
+          <div class="editor-status"><div class="editor-status-left"><span id="cursor-pos">1행, 1열</span><span class="status-separator">·</span><span id="editor-lines">1줄</span><span class="status-separator">·</span><span>공백 4칸 들여쓰기</span></div><span class="status-right">한글 0.2</span></div>
         </section>
 
         <section id="python-panel" class="python-panel panel hidden" aria-label="Python 코드 비교"><div class="panel-heading"><strong>Python 비교</strong><div><button id="copy-python" class="btn btn-subtle" type="button">복사</button><button id="close-python" class="btn btn-subtle" type="button">닫기</button></div></div><p id="python-warning" class="python-warning"></p><pre id="python-code" class="python-code"></pre></section>
@@ -83,7 +83,7 @@
           <div class="console-body" id="output-panel" role="tabpanel" aria-labelledby="tab-output">
             <div id="console-output" class="console-output"><div class="console-empty"><span class="empty-icon">↳</span><strong>무엇을 만들어 볼까요?</strong><p>왼쪽에 한글 코드를 작성한 다음<br><b>실행하기</b>를 눌러보세요.</p></div></div>
           </div>
-          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="세종어 그래픽 실행 결과"></canvas><p>세종어의 그리기 명령으로 만든 화면입니다.</p></div>
+          <div class="graphic-body hidden" id="graphic-panel" role="tabpanel" aria-labelledby="tab-graphic"><canvas id="graphic-canvas" width="600" height="400" aria-label="한글 그래픽 실행 결과"></canvas><p>한글 코드의 그리기 명령으로 만든 화면입니다.</p></div>
           <form id="input-form" class="input-form hidden"><label id="input-label" for="input-value">입력 값</label><div><input id="input-value" type="text" maxlength="2000" autocomplete="off"><button type="submit">확인</button><button id="input-cancel" type="button">취소</button></div></form>
           <div class="console-footer"><span id="run-info">실행할 준비가 되었습니다.</span><button id="clear-btn" title="실행 결과 지우기">지우기 <span>×</span></button></div>
         </section>
@@ -93,9 +93,9 @@
       <footer class="footer"><span>세종 개발실 <span class="footer-sep">/</span> 모든 글자는 가능성의 시작입니다.</span><span>2026 한글날 기념 프로젝트 · v0.2</span></footer>
     </main>
   </div>
-  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>세종어 문서</span><span aria-hidden="true">↗</span></button>
+  <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>한글 문서</span><span aria-hidden="true">↗</span></button>
   <aside id="docs-drawer" class="docs-drawer hidden" aria-labelledby="docs-title" tabindex="-1">
-    <div class="docs-drawer-head"><div><span class="docs-eyebrow">SEJONG LANGUAGE · v0.2</span><h2 id="docs-title">세종어 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
+    <div class="docs-drawer-head"><div><span class="docs-eyebrow">HANGUL LANGUAGE · v0.2</span><h2 id="docs-title">한글 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
     <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="예: 범위, 함수, 원그리기" autocomplete="off"></div>
     <div class="docs-layout">
       <nav class="docs-toc" aria-label="문서 목차">

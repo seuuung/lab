@@ -7,6 +7,7 @@ const template = read('index.template.html');
 const app = read('app.js');
 const built = read('index.html');
 const docs = read('docs.reference.html');
+const css = read('styles.css');
 const normalized = text => text.replace(/\r\n?/g, '\n');
 for (const name of ['engine.js', 'app.js', 'styles.css', 'docs.reference.html']) assert.ok(normalized(built).includes(normalized(read(name))), `${name} 빌드 누락`);
 assert.ok(!/\/\*INLINE_(?:STYLE|RUNTIME|APP|DOCS)\*\//.test(built));
@@ -17,6 +18,10 @@ for (const match of app.matchAll(/\$\('#([^' ]+)'\)/g)) assert.ok(ids.includes(m
 for (const name of ['code', 'output', 'graphic']) assert.match(template, new RegExp(`data-view="${name}"`));
 assert.match(template, /id="docs-toggle"[^>]*aria-expanded="false"/);
 assert.match(template, /id="docs-drawer"[^>]*class="docs-drawer hidden"/);
+assert.doesNotMatch(template + docs, /세종어/);
+assert.match(css, /\.code-highlight,#source\{font-size:16px;line-height:27px/);
+assert.match(css, /\.docs-drawer\{inset:auto 0 0;width:100vw;height:100vh;height:100dvh/);
+assert.match(css, /\.docs-search-wrap input\{height:44px;font-size:16px/);
 const sections = [...docs.matchAll(/<section class="reference-section" id="([^"]+)"/g)].map(match=>match[1]);
 assert.equal(sections.length, 11);
 for (const id of sections) assert.match(template, new RegExp(`href="#${id}"`));

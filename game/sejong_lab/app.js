@@ -253,7 +253,7 @@
     pythonWorker.onmessage=event=>{
       const data=event.data;if(data.type==='python'){
         $('#python-code').textContent=data.code;
-        $('#python-warning').textContent=data.warnings.length?'주의: '+data.warnings.join(' · '):'세종어 AST를 Python으로 변환했습니다.';
+        $('#python-warning').textContent=data.warnings.length?'주의: '+data.warnings.join(' · '):'한글 코드의 구문 트리를 Python으로 변환했습니다.';
       }else if(data.type==='python-error'){
         $('#python-code').textContent='';$('#python-warning').textContent=`${data.line||'?'}번째 줄: ${data.message}`;
       }
@@ -316,6 +316,7 @@
     const drawer=$('#docs-drawer');
     if(open)docsReturnFocus=trigger;
     drawer.classList.toggle('hidden',!open);
+    document.body.classList.toggle('docs-open',open);
     $('#docs-toggle').classList.toggle('hidden',open);
     $('#docs-toggle').setAttribute('aria-expanded',String(open));
     $('#header-docs').setAttribute('aria-expanded',String(open));
