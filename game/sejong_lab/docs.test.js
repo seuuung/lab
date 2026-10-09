@@ -20,6 +20,7 @@ function element(id, hidden = false) {
 const launcher = element('docs-toggle');
 const drawer = element('docs-drawer', true);
 const header = element('header-docs');
+const menu = element('docs-menu-toggle');
 const search = element('docs-search');
 const empty = element('docs-empty', true);
 element('docs-scroll');
@@ -32,13 +33,16 @@ const document = {
   querySelector(selector) { return links[selector.match(/#(ref-[^"\]]+)/)?.[1]]; }
 };
 const context = { document, $: selector => elements[selector.slice(1)] };
-vm.runInNewContext(app.slice(start, end) + '\nthis.docs={toggleDocs,searchDocs};', context);
+vm.runInNewContext(app.slice(start, end) + '\nthis.docs={toggleDocs,toggleDocsMenu,searchDocs};', context);
 context.docs.toggleDocs(true, launcher);
 assert.equal(drawer.classList.contains('hidden'), false);
 assert.equal(launcher.classList.contains('hidden'), true);
 assert.equal(header.attrs['aria-expanded'], 'true');
 assert.equal(document.body.classList.contains('docs-open'), true);
 assert.equal(document.activeElement, drawer);
+context.docs.toggleDocsMenu(true);
+assert.equal(drawer.classList.contains('toc-open'), true);
+assert.equal(menu.attrs['aria-expanded'], 'true');
 search.value = '범위';
 context.docs.searchDocs();
 assert.deepEqual(sections.map(section => section.hidden), [true, false]);
@@ -49,6 +53,8 @@ context.docs.searchDocs();
 assert.equal(empty.classList.contains('hidden'), false);
 context.docs.toggleDocs(false);
 assert.equal(drawer.classList.contains('hidden'), true);
+assert.equal(drawer.classList.contains('toc-open'), false);
+assert.equal(menu.attrs['aria-expanded'], 'false');
 assert.equal(header.attrs['aria-expanded'], 'false');
 assert.equal(document.body.classList.contains('docs-open'), false);
 assert.equal(document.activeElement, launcher);

@@ -27,6 +27,7 @@
 @media(max-width:680px){.working-topbar{gap:10px;padding:11px 12px;margin-bottom:12px;background:#172621}.working-title{min-height:36px}.toolbar{padding-top:9px;padding-bottom:2px;gap:6px}.toolbar .btn-primary,.toolbar .btn-stop{margin-left:0}}
 @media(max-width:480px){.save-hint{display:none}}
 .docs-toc-label{display:none}
+.docs-menu-toggle{display:none}
 @media(max-width:620px){
   .docs-drawer{max-height:100dvh}
   .docs-drawer-head{min-height:68px;padding-left:max(15px,env(safe-area-inset-left));padding-right:max(15px,env(safe-area-inset-right))}
@@ -42,4 +43,25 @@
   .reference-section p,.reference-grid span{overflow-wrap:anywhere}
   .reference-section pre{max-width:100%;padding:12px;overflow-x:auto;overscroll-behavior-x:contain}
   .reference-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0 8px}
+}
+@media(max-width:820px),(max-height:600px){
+  body.docs-open{overflow:hidden}
+  .docs-drawer{inset:0;width:100vw;height:100vh;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+  .docs-drawer-head{min-height:60px;gap:8px;padding:max(8px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left))}
+  .docs-drawer-head>div{flex:1;min-width:0}
+  .docs-eyebrow{display:none}
+  .docs-drawer-head h2{margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:17px}
+  .docs-drawer-head .docs-menu-toggle{display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:66px;height:44px;padding:0 9px;font-size:12px;white-space:nowrap}
+  .docs-search-wrap{padding:8px max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left))}
+  .docs-search-wrap label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .docs-search-wrap input{height:44px;font-size:16px}
+  .docs-layout{position:relative;display:block;min-height:0;overflow:hidden}
+  .docs-toc{position:absolute;inset:0 auto auto 0;z-index:2;display:none;flex-direction:column;align-items:stretch;width:min(300px,100%);max-height:100%;padding:10px max(14px,env(safe-area-inset-left));overflow-x:hidden;overflow-y:auto;white-space:normal;scroll-snap-type:none;border:1px solid #426258;border-left:0;border-radius:0 0 12px 0;box-shadow:12px 18px 28px #0008}
+  .docs-drawer.toc-open .docs-toc{display:flex}
+  .docs-toc-label{display:none}
+  .docs-toc a{width:100%;min-height:44px;padding:11px 12px;font-size:14px;scroll-snap-align:none}
+  .docs-scroll{height:100%;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .reference-doc{padding:22px max(18px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+  .reference-section p{font-size:15px;line-height:1.75}
+  .reference-section code,.reference-section pre code{font-size:13px}
 }

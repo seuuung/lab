@@ -50,9 +50,10 @@
   function renderEditor() {
     const text=source.value;
     const lines=text.split('\n');
-    highlight.innerHTML=lines.map(renderCodeLine).join('\n')+'\n';
+    highlight.innerHTML=lines.map(renderCodeLine).join('\n')+(text.endsWith('\n')?'\u200b':'');
     gutter.textContent=lines.map((_,i)=>i+1).join('\n');
     $('#editor-lines').textContent=lines.length+'줄';
+    source.scrollTop=Math.min(source.scrollTop,Math.max(0,source.scrollHeight-source.clientHeight));
     updateCursor();
     syncScroll();
   }
@@ -312,9 +313,14 @@
     if(!copied)location.hash='code='+base64Encode(source.value);
   }
   let docsReturnFocus=null;
+  function toggleDocsMenu(open) {
+    $('#docs-drawer').classList.toggle('toc-open',open);
+    $('#docs-menu-toggle').setAttribute('aria-expanded',String(open));
+  }
   function toggleDocs(open, trigger=document.activeElement) {
     const drawer=$('#docs-drawer');
     if(open)docsReturnFocus=trigger;
+    toggleDocsMenu(false);
     drawer.classList.toggle('hidden',!open);
     document.body.classList.toggle('docs-open',open);
     $('#docs-toggle').classList.toggle('hidden',open);
@@ -401,10 +407,14 @@
     $('#header-docs').addEventListener('click',event=>toggleDocs($('#docs-drawer').classList.contains('hidden'),event.currentTarget));
     $('#docs-toggle').addEventListener('click',event=>toggleDocs(true,event.currentTarget));
     $('#docs-close').addEventListener('click',()=>toggleDocs(false));
-    $('#docs-search').addEventListener('input',searchDocs);
+    $('#docs-menu-toggle').addEventListener('click',()=>toggleDocsMenu(!$('#docs-drawer').classList.contains('toc-open')));
+    $('#docs-search').addEventListener('input',()=>{toggleDocsMenu(false);searchDocs();});
     $('.docs-toc').addEventListener('click',event=>{
       const link=event.target.closest('a[href^="#ref-"]');if(!link)return;
-      event.preventDefault();document.querySelector(link.getAttribute('href'))?.scrollIntoView({behavior:'smooth',block:'start'});
+      const section=document.querySelector(link.getAttribute('href'));if(!section)return;
+      event.preventDefault();toggleDocsMenu(false);
+      const scroll=$('#docs-scroll');
+      scroll.scrollTop+=section.getBoundingClientRect().top-scroll.getBoundingClientRect().top;
     });
     emptyConsole();
   }

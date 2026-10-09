@@ -72,6 +72,7 @@ Canvas 명령: `화면만들기`, `배경색`, `색상설정`, `원그리기`, `
 - `worker.test.js`: 입력 대기·종료·재시작·애니메이션 테스트
 - `static.test.js`: 단일 HTML 빌드와 화면 요소 점검
 - `docs.test.js`: 플로팅 문서 열기·닫기와 검색 동작 검사
+- `editor.test.js`: 코드 삭제 후 줄 번호와 스크롤 갱신 검사
 
 ```sh
 node engine.test.js
@@ -79,6 +80,7 @@ node worker.test.js
 python build.py
 node static.test.js
 node docs.test.js
+node editor.test.js
 ```
 
 ## 제한 사항
