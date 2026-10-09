@@ -46,7 +46,7 @@
       </section>
 
       <section class="working-topbar" aria-label="작업 공간 도구">
-        <div class="working-title"><span class="working-icon">{ }</span><span>나의 작업실</span><span class="working-crumb">/</span><span id="current-name" class="working-file">첫 인사.세종</span><span id="save-hint" class="save-hint">● 자동 저장됨</span></div>
+        <div class="working-title"><span class="working-icon" aria-hidden="true">{ }</span><div class="working-heading"><strong>나의 작업실</strong><span id="current-name" class="working-file">첫 인사.세종</span></div><span id="save-hint" class="save-hint">● 자동 저장됨</span></div>
         <div class="toolbar">
           <button id="reset-btn" class="btn btn-subtle" title="현재 예제 초기화"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>초기화</span></button>
           <button id="share-btn" class="btn btn-subtle" title="코드 공유 링크 복사"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2M8.7 13.4l6.6 4.2"/></svg><span>공유</span></button>
@@ -96,9 +96,10 @@
   <button id="docs-toggle" class="docs-launcher" type="button" aria-controls="docs-drawer" aria-expanded="false"><span class="docs-launcher-icon" aria-hidden="true">{ }</span><span>한글 문서</span><span aria-hidden="true">↗</span></button>
   <aside id="docs-drawer" class="docs-drawer hidden" aria-labelledby="docs-title" tabindex="-1">
     <div class="docs-drawer-head"><div><span class="docs-eyebrow">HANGUL LANGUAGE · v0.2</span><h2 id="docs-title">한글 개발 문서</h2></div><button id="docs-close" type="button" aria-label="개발 문서 접기">×</button></div>
-    <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="예: 범위, 함수, 원그리기" autocomplete="off"></div>
+    <div class="docs-search-wrap"><label for="docs-search">문서 검색</label><input id="docs-search" type="search" placeholder="문서 검색 · 예: 범위, 함수" autocomplete="off"></div>
     <div class="docs-layout">
       <nav class="docs-toc" aria-label="문서 목차">
+        <span class="docs-toc-label" aria-hidden="true">목차</span>
         <a href="#ref-start">시작하기</a><a href="#ref-syntax">기본 문법</a><a href="#ref-control">제어 흐름</a><a href="#ref-functions">함수와 범위</a><a href="#ref-collections">목록과 사전</a><a href="#ref-builtins">기본 함수</a><a href="#ref-input">입출력과 오류</a><a href="#ref-graphics">그래픽 API</a><a href="#ref-animation">애니메이션</a><a href="#ref-python">Python 비교</a><a href="#ref-limits">실행 제한</a>
       </nav>
       <div id="docs-scroll" class="docs-scroll"><p id="docs-empty" class="docs-empty hidden">검색 결과가 없습니다. 다른 문법이나 함수 이름을 입력해 보세요.</p>/*INLINE_DOCS*/</div>
